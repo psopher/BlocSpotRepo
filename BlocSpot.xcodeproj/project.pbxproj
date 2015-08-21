@@ -10,11 +10,14 @@
 		2D603F65C64F34B4FE8A76C8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74BDC0B70337A1F7601EC132 /* libPods.a */; };
 		57633F6D1B878E530044C331 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 57633F6C1B878E530044C331 /* main.m */; };
 		57633F701B878E530044C331 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 57633F6F1B878E530044C331 /* AppDelegate.m */; };
-		57633F731B878E530044C331 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57633F721B878E530044C331 /* ViewController.m */; };
-		57633F761B878E530044C331 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57633F741B878E530044C331 /* Main.storyboard */; };
+		57633F731B878E530044C331 /* BSMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57633F721B878E530044C331 /* BSMapViewController.m */; };
 		57633F781B878E530044C331 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57633F771B878E530044C331 /* Images.xcassets */; };
 		57633F7B1B878E530044C331 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57633F791B878E530044C331 /* LaunchScreen.xib */; };
 		57633F871B878E530044C331 /* BlocSpotTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 57633F861B878E530044C331 /* BlocSpotTests.m */; };
+		5781EE271B87A73B007829D4 /* BSLocationsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE261B87A73B007829D4 /* BSLocationsTableViewController.m */; };
+		5781EE2A1B87BF14007829D4 /* BSSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE291B87BF13007829D4 /* BSSearchViewController.m */; };
+		5781EE2D1B87BF37007829D4 /* BSCategoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE2C1B87BF37007829D4 /* BSCategoryTableViewController.m */; };
+		578D5ED41B87A05C00997A11 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 578D5ED31B87A05C00997A11 /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,14 +37,20 @@
 		57633F6C1B878E530044C331 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		57633F6E1B878E530044C331 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		57633F6F1B878E530044C331 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		57633F711B878E530044C331 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		57633F721B878E530044C331 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		57633F751B878E530044C331 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		57633F711B878E530044C331 /* BSMapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSMapViewController.h; sourceTree = "<group>"; };
+		57633F721B878E530044C331 /* BSMapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSMapViewController.m; sourceTree = "<group>"; };
 		57633F771B878E530044C331 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		57633F7A1B878E530044C331 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		57633F801B878E530044C331 /* BlocSpotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlocSpotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57633F851B878E530044C331 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57633F861B878E530044C331 /* BlocSpotTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlocSpotTests.m; sourceTree = "<group>"; };
+		5781EE251B87A73B007829D4 /* BSLocationsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSLocationsTableViewController.h; sourceTree = "<group>"; };
+		5781EE261B87A73B007829D4 /* BSLocationsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSLocationsTableViewController.m; sourceTree = "<group>"; };
+		5781EE281B87BF13007829D4 /* BSSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSSearchViewController.h; sourceTree = "<group>"; };
+		5781EE291B87BF13007829D4 /* BSSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSSearchViewController.m; sourceTree = "<group>"; };
+		5781EE2B1B87BF37007829D4 /* BSCategoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSCategoryTableViewController.h; sourceTree = "<group>"; };
+		5781EE2C1B87BF37007829D4 /* BSCategoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSCategoryTableViewController.m; sourceTree = "<group>"; };
+		578D5ED31B87A05C00997A11 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		74BDC0B70337A1F7601EC132 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3869DF7348542A1811CDEF1 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -51,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				578D5ED41B87A05C00997A11 /* MapKit.framework in Frameworks */,
 				2D603F65C64F34B4FE8A76C8 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,9 +100,14 @@
 			children = (
 				57633F6E1B878E530044C331 /* AppDelegate.h */,
 				57633F6F1B878E530044C331 /* AppDelegate.m */,
-				57633F711B878E530044C331 /* ViewController.h */,
-				57633F721B878E530044C331 /* ViewController.m */,
-				57633F741B878E530044C331 /* Main.storyboard */,
+				57633F711B878E530044C331 /* BSMapViewController.h */,
+				57633F721B878E530044C331 /* BSMapViewController.m */,
+				5781EE251B87A73B007829D4 /* BSLocationsTableViewController.h */,
+				5781EE261B87A73B007829D4 /* BSLocationsTableViewController.m */,
+				5781EE281B87BF13007829D4 /* BSSearchViewController.h */,
+				5781EE291B87BF13007829D4 /* BSSearchViewController.m */,
+				5781EE2B1B87BF37007829D4 /* BSCategoryTableViewController.h */,
+				5781EE2C1B87BF37007829D4 /* BSCategoryTableViewController.m */,
 				57633F771B878E530044C331 /* Images.xcassets */,
 				57633F791B878E530044C331 /* LaunchScreen.xib */,
 				57633F6A1B878E530044C331 /* Supporting Files */,
@@ -129,6 +144,7 @@
 		6670373624DE57DBE0403DBD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				578D5ED31B87A05C00997A11 /* MapKit.framework */,
 				74BDC0B70337A1F7601EC132 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -194,6 +210,11 @@
 				TargetAttributes = {
 					57633F661B878E530044C331 = {
 						CreatedOnToolsVersion = 6.4;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					57633F7F1B878E530044C331 = {
 						CreatedOnToolsVersion = 6.4;
@@ -225,7 +246,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57633F761B878E530044C331 /* Main.storyboard in Resources */,
 				57633F7B1B878E530044C331 /* LaunchScreen.xib in Resources */,
 				57633F781B878E530044C331 /* Images.xcassets in Resources */,
 			);
@@ -278,7 +298,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57633F731B878E530044C331 /* ViewController.m in Sources */,
+				5781EE271B87A73B007829D4 /* BSLocationsTableViewController.m in Sources */,
+				57633F731B878E530044C331 /* BSMapViewController.m in Sources */,
+				5781EE2D1B87BF37007829D4 /* BSCategoryTableViewController.m in Sources */,
+				5781EE2A1B87BF14007829D4 /* BSSearchViewController.m in Sources */,
 				57633F701B878E530044C331 /* AppDelegate.m in Sources */,
 				57633F6D1B878E530044C331 /* main.m in Sources */,
 			);
@@ -303,14 +326,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		57633F741B878E530044C331 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				57633F751B878E530044C331 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		57633F791B878E530044C331 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -410,6 +425,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = BlocSpot/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -421,6 +437,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = BlocSpot/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

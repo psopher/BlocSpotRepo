@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  BSSearchTableViewController.h
 //  BlocSpot
 //
 //  Created by Philip Sopher on 8/21/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface BSSearchViewController : UIViewController
 
 @end
-

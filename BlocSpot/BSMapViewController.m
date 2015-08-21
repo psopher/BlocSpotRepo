@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Bloc. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "BSMapViewController.h"
 
-@interface ViewController ()
+@interface BSMapViewController ()
 
 @end
 
-@implementation ViewController
+@implementation BSMapViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
