@@ -8,19 +8,20 @@
 
 #import "BSLocationsTableViewController.h"
 #import "BSMapViewController.h"
-#import "BSSearchViewController.h"
+#import "BSSearchTableViewController.h"
 #import "BSCategoryTableViewController.h"
+#import "BSCategoryTransitionAnimator.h"
 
 #define mapImage @"globe"
 #define categoryImage @"category"
 
-@interface BSLocationsTableViewController ()
+@interface BSLocationsTableViewController () <UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *mapButton;
 @property (nonatomic, strong) UIBarButtonItem *categoryButton;
 
 @property (strong, nonatomic) BSMapViewController *mapVC;
-@property (strong, nonatomic) BSSearchViewController *searchVC;
+@property (strong, nonatomic) BSSearchTableViewController *searchVC;
 @property (strong, nonatomic) BSCategoryTableViewController *categoryVC;
 
 @end
@@ -33,7 +34,7 @@
     
     if (self) {
         
-        self.title = NSLocalizedString(@"BlocSpot", @"BlocSpot");
+        self.title = NSLocalizedString(@"List", @"Locations List");
     }
     
     return self;
@@ -41,15 +42,54 @@
 
 - (void) viewDidLoad {
     
+    [super viewDidLoad];
+    
     [self createButtons];
     
 }
+
+#pragma mark - Table view data source
+
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+//    //array is your db, here we just need how many they are
+//    return 1;
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//    
+//    return [BTDataSource sharedInstance].conversations.count;
+//}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
+    UITableViewCell *cell = [[UITableViewCell alloc] init];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    return cell;
+}
+
+//- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
+//    return UITableViewCellAccessoryDisclosureIndicator;
+//}
+
+//- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+//    CGFloat padding = 20;
+//    CGFloat tableViewWidth = viewWidth - padding;
+//    
+//    BTConversation *item = [BTDataSource sharedInstance].conversations[indexPath.row];
+//    
+//    return [BTConversationsTableViewCell heightForMediaItem:item width:tableViewWidth];
+//}
 
 #pragma Dealing With Buttons for Navigation Bar
 
 - (void) searchPressed:(UIBarButtonItem *)sender {
     
-    self.searchVC = [[BSSearchViewController alloc] init];
+    self.searchVC = [[BSSearchTableViewController alloc] init];
     
     [self.navigationController pushViewController:self.searchVC animated:YES];
 }
@@ -64,6 +104,9 @@
 - (void) categoryPressed:(UIBarButtonItem *)sender {
     
     self.categoryVC = [[BSCategoryTableViewController alloc] init];
+    
+    self.categoryVC.transitioningDelegate = self;
+    self.categoryVC.modalPresentationStyle = UIModalPresentationCustom;
     
     [self.navigationController pushViewController:self.categoryVC animated:YES];
 }
@@ -86,5 +129,22 @@
     self.navigationItem.rightBarButtonItems = @[self.categoryButton, searchButton];
 }
 
+#pragma mark - UIViewControllerTransitioningDelegate
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source {
+    
+    BSCategoryTransitionAnimator *animator = [BSCategoryTransitionAnimator new];
+    animator.presenting = YES;
+//    animator.cellImageView = self.lastTappedImageView;
+    return animator;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    BSCategoryTransitionAnimator *animator = [BSCategoryTransitionAnimator new];
+//    animator.cellImageView = self.lastTappedImageView;
+    return animator;
+}
 
 @end

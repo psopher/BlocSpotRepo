@@ -10,4 +10,23 @@
 
 @implementation BSCategoryTableViewController
 
+- (instancetype) init {
+    
+    self = [super init];
+    
+    if (self) {
+        
+        self.title = NSLocalizedString(@"Category", @"Category View");
+    }
+    
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+
+}
+
 @end
