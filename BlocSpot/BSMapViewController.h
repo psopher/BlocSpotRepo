@@ -17,6 +17,8 @@
 
 @interface BSMapViewController : UIViewController <MKMapViewDelegate, CLLocationManagerDelegate>
 
+@property (nonatomic, strong) UIBarButtonItem *categoryButton;
+
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 

@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:2200 19th St.gpx">
+   </FileRef>
+   <FileRef
+      location = "group:Dolcezza 14.gpx">
+   </FileRef>
+   <FileRef
       location = "group:BlocSpot.xcodeproj">
    </FileRef>
    <FileRef

@@ -10,4 +10,7 @@
 
 @interface BSLocationsTableViewController : UITableViewController
 
+@property (nonatomic, strong) UIBarButtonItem *mapButton;
+@property (nonatomic, strong) UIBarButtonItem *categoryButton;
+
 @end

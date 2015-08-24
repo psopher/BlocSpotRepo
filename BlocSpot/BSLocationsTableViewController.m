@@ -17,9 +17,6 @@
 
 @interface BSLocationsTableViewController () <UIViewControllerTransitioningDelegate>
 
-@property (nonatomic, strong) UIBarButtonItem *mapButton;
-@property (nonatomic, strong) UIBarButtonItem *categoryButton;
-
 @property (strong, nonatomic) BSMapViewController *mapVC;
 @property (strong, nonatomic) BSSearchTableViewController *searchVC;
 @property (strong, nonatomic) BSCategoryTableViewController *categoryVC;

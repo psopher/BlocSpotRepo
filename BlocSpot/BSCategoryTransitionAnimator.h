@@ -12,5 +12,6 @@
 
 @property (nonatomic, assign) BOOL presenting;
 @property (nonatomic, weak) UIImageView *cellImageView;
+//@property (nonatomic, strong) UIBarButtonItem *catagoryButton;
 
 @end

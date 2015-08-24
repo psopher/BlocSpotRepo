@@ -15,8 +15,6 @@
 
 @interface BSMapViewController () <UIViewControllerTransitioningDelegate>
 
-@property (nonatomic, strong) UIBarButtonItem *categoryButton;
-
 @property (strong, nonatomic) BSSearchTableViewController *searchVC;
 @property (strong, nonatomic) BSCategoryTableViewController *categoryVC;
 
@@ -88,20 +86,14 @@
     [CLLocationManager authorizationStatus];
     NSLog(@"My device is located at %@", [self deviceLocation]);
     
-    //View Area
-//    MKCoordinateRegion region = { { 0.0, 0.0 }, { 0.0, 0.0 } };
-//    region.center.latitude = self.locationManager.location.coordinate.latitude;
-//    region.center.longitude = self.locationManager.location.coordinate.longitude;
-//    region.span.longitudeDelta = 0.005f;
-//    region.span.longitudeDelta = 0.005f;
-//    [self.mapView setRegion:region animated:YES];
-    
 }
 
 #pragma Setting Map View Zoom and User Location
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
+    
+    //When running on iphone
     MKCoordinateRegion mapRegion;
     mapRegion.center = mapView.userLocation.coordinate;
     mapRegion.span.latitudeDelta = 0.005;

@@ -8,6 +8,8 @@
 
 #import "BSCategoryTransitionAnimator.h"
 #import "BSCategoryTableViewController.h"
+#import "BSLocationsTableViewController.h"
+#import "BSMapViewController.h"
 
 @interface BSCategoryTransitionAnimator ()
 
