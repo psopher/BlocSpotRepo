@@ -21,6 +21,7 @@
 
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (nonatomic, strong) UIView *categoryView;
 
 @end
 

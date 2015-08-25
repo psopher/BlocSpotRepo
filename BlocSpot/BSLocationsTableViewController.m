@@ -32,6 +32,10 @@
     if (self) {
         
         self.title = NSLocalizedString(@"List", @"Locations List");
+        
+        self.searchVC = [[BSSearchTableViewController alloc] init];
+        self.mapVC = [[BSMapViewController alloc] init];
+        self.categoryVC = [[BSCategoryTableViewController alloc] init];
     }
     
     return self;
@@ -86,21 +90,15 @@
 
 - (void) searchPressed:(UIBarButtonItem *)sender {
     
-    self.searchVC = [[BSSearchTableViewController alloc] init];
-    
     [self.navigationController pushViewController:self.searchVC animated:YES];
 }
 
 - (void) mapPressed:(UIBarButtonItem *)sender {
     
-    self.mapVC = [[BSMapViewController alloc] init];
-    
     [self.navigationController pushViewController:self.mapVC animated:YES];
 }
 
 - (void) categoryPressed:(UIBarButtonItem *)sender {
-    
-    self.categoryVC = [[BSCategoryTableViewController alloc] init];
     
     self.categoryVC.transitioningDelegate = self;
     self.categoryVC.modalPresentationStyle = UIModalPresentationCustom;
@@ -128,20 +126,20 @@
 
 #pragma mark - UIViewControllerTransitioningDelegate
 
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                  presentingController:(UIViewController *)presenting
-                                                                      sourceController:(UIViewController *)source {
-    
-    BSCategoryTransitionAnimator *animator = [BSCategoryTransitionAnimator new];
-    animator.presenting = YES;
-//    animator.cellImageView = self.lastTappedImageView;
-    return animator;
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    BSCategoryTransitionAnimator *animator = [BSCategoryTransitionAnimator new];
-//    animator.cellImageView = self.lastTappedImageView;
-    return animator;
-}
+//- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+//                                                                  presentingController:(UIViewController *)presenting
+//                                                                      sourceController:(UIViewController *)source {
+//    
+//    BSCategoryTransitionAnimator *animator = [BSCategoryTransitionAnimator new];
+//    animator.presenting = YES;
+////    animator.cellImageView = self.lastTappedImageView;
+//    return animator;
+//}
+//
+//- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+//    BSCategoryTransitionAnimator *animator = [BSCategoryTransitionAnimator new];
+////    animator.cellImageView = self.lastTappedImageView;
+//    return animator;
+//}
 
 @end

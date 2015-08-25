@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+//@class BSCategoryTableViewController;
+
 @interface BSCategoryTransitionAnimator : NSObject <UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, assign) BOOL presenting;
-@property (nonatomic, weak) UIImageView *cellImageView;
+@property (nonatomic, weak) UIView *customCategoryView;
 //@property (nonatomic, strong) UIBarButtonItem *catagoryButton;
 
 @end

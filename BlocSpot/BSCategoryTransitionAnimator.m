@@ -40,7 +40,7 @@
         
         [transitionContext.containerView addSubview:toViewController.view];
         
-        CGRect startFrame = [transitionContext.containerView convertRect:self.cellImageView.bounds fromView:self.cellImageView];
+        CGRect startFrame = [transitionContext.containerView convertRect:self.customCategoryView.bounds fromView:self.customCategoryView];
         CGRect endFrame = categoryEndFrame;
         
         toViewController.view.frame = startFrame;
@@ -58,7 +58,7 @@
     else {
         BSCategoryTableViewController *categoryVC = (BSCategoryTableViewController *)fromViewController;
         
-        CGRect endFrame = [transitionContext.containerView convertRect:self.cellImageView.bounds fromView:self.cellImageView];
+        CGRect endFrame = [transitionContext.containerView convertRect:self.customCategoryView.bounds fromView:self.customCategoryView];
         CGRect imageStartFrame = [categoryVC.tableView convertRect:categoryVC.tableView.frame fromView:categoryVC.tableView];
         CGRect imageEndFrame = [transitionContext.containerView convertRect:endFrame toView:categoryVC.tableView];
         

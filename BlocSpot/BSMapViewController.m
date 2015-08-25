@@ -17,6 +17,8 @@
 
 @property (strong, nonatomic) BSSearchTableViewController *searchVC;
 @property (strong, nonatomic) BSCategoryTableViewController *categoryVC;
+@property (nonatomic) CGFloat yOriginCategoryView;
+@property (nonatomic) CGFloat yOriginBackgroundView;
 
 @end
 
@@ -31,8 +33,16 @@
         self.mapView = [[MKMapView alloc] init];
         [self.view addSubview:self.mapView];
         
+        self.categoryView = [[UIView alloc] init];
+        
+        self.categoryVC = [[BSCategoryTableViewController alloc] init];
+        self.searchVC = [[BSSearchTableViewController alloc] init];
+        
         self.title = NSLocalizedString(@"Map", @"Map View");
     }
+    
+    
+    [self.mapView addSubview:self.categoryView];
     
     return self;
 }
@@ -59,6 +69,11 @@
     [self.mapView setScrollEnabled:YES];
     
     [self createButtons];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissCategoryView)];
+    [self.view addGestureRecognizer:tap];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -102,12 +117,6 @@
     [mapView setRegion:mapRegion animated: YES];
 }
 
-//- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
-//{
-//    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 800, 800);
-//    [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
-//}
-
 - (NSString *)deviceLocation {
     return [NSString stringWithFormat:@"latitude: %f longitude: %f", self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.longitude];
 }
@@ -125,16 +134,20 @@
 
 - (void) searchPressed:(UIBarButtonItem *)sender {
     
-    self.searchVC = [[BSSearchTableViewController alloc] init];
-    
     [self.navigationController pushViewController:self.searchVC animated:YES];
 }
 
 - (void) categoryPressed:(UIBarButtonItem *)sender {
     
-    self.categoryVC = [[BSCategoryTableViewController alloc] init];
+    if (self.yOriginCategoryView <= self.yOriginBackgroundView) {
+        [self createCategoryView];
+        self.categoryVC.transitioningDelegate = self;
+        self.categoryVC.modalPresentationStyle = UIModalPresentationCustom;
+    } else {
+        [self dismissCategoryView];
+    };
     
-    [self.navigationController pushViewController:self.categoryVC animated:YES];
+//    [self.navigationController pushViewController:self.categoryVC animated:YES];
 }
 
 - (void) createButtons {
@@ -149,5 +162,58 @@
     self.navigationItem.rightBarButtonItems = @[self.categoryButton, searchButton];
 }
 
+- (void) createCategoryView {
+    // the first value puts the view in the center of the map view
+    // i made it 200 x 200
+    self.categoryView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryView.frame) / 2, CGRectGetMinY(self.mapView.frame) - 1000, 200, 200);
+    
+    self.categoryView.backgroundColor = [UIColor greenColor];
+    
+    NSLog(@"The category view frame is xOrigin %f, yOrigin %f, width %f, height %f", CGRectGetMinX(self.categoryView.frame), CGRectGetMinY(self.categoryView.frame), self.categoryView.frame.size.width, self.categoryView.frame.size.height);
+    
+    // 1.5 second long duration of animation,
+//    [UIView animateWithDuration:1.5 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options: 0 animations:^{
+    [UIView animateWithDuration:1.5 delay:0 options: 0 animations:^{
+        // this new value will drop it down with the spring damping (you can use the regular animateWithDuration method to do without that effect) to 200 below the top edge
+        self.categoryView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryView.frame) / 2, CGRectGetMinY(self.mapView.frame) + 150, 200, 200);
+    } completion: nil];
+    
+    // alternatively, you can nest some more animations in the completion or whatever you want so that more things happen as soon it completes.
+    
+    self.yOriginCategoryView = CGRectGetMinY(self.categoryView.frame);
+    self.yOriginBackgroundView = CGRectGetMinY(self.view.frame);
+    
+    NSLog(@"This method ran: createCategoryView");
+    NSLog(@"The category view frame is xOrigin %f, yOrigin %f, width %f, height %f", CGRectGetMinX(self.categoryView.frame), CGRectGetMinY(self.categoryView.frame), self.categoryView.frame.size.width, self.categoryView.frame.size.height);
+}
+
+-(void)dismissCategoryView {
+    
+    if (self.yOriginCategoryView > self.yOriginBackgroundView) {
+        [UIView animateWithDuration:1.5 delay:0 options: 0 animations:^{
+            self.categoryView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryView.frame) / 2, CGRectGetMinY(self.mapView.frame) - 1000, 200, 200);
+        } completion: nil];
+    }
+    self.yOriginCategoryView = CGRectGetMinY(self.categoryView.frame);
+    self.yOriginBackgroundView = CGRectGetMinY(self.view.frame);
+}
+
+#pragma mark - UIViewControllerTransitioningDelegate
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source {
+    
+    BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
+    animator.presenting = YES;
+    animator.customCategoryView = self.categoryVC;
+    return animator;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
+    animator.customCategoryView = self.categoryVC;
+    return animator;
+}
 
 @end
