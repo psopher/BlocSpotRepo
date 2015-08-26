@@ -10,11 +10,15 @@
 #import "BSSearchTableViewController.h"
 #import "BSCategoryTableViewController.h"
 #import "BSCategoryTransitionAnimator.h"
+#import "BSLocationsTableViewController.h"
+#import "BSDataSource.h"
 
 #define categoryImage @"category"
+#define listImage @"list"
 
 @interface BSMapViewController () <UIViewControllerTransitioningDelegate>
 
+@property (strong, nonatomic) BSLocationsTableViewController *locationsVC;
 @property (strong, nonatomic) BSSearchTableViewController *searchVC;
 @property (strong, nonatomic) BSCategoryTableViewController *categoryVC;
 @property (nonatomic) CGFloat yOriginCategoryView;
@@ -35,6 +39,7 @@
         
         self.categoryView = [[UIView alloc] init];
         
+        self.locationsVC = [[BSLocationsTableViewController alloc] init];
         self.categoryVC = [[BSCategoryTableViewController alloc] init];
         self.searchVC = [[BSSearchTableViewController alloc] init];
         
@@ -74,6 +79,8 @@
                                    initWithTarget:self
                                    action:@selector(dismissCategoryView)];
     [self.view addGestureRecognizer:tap];
+    
+    NSLog(@"This method ran: BSMapViewController viewDidLoad");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -90,6 +97,7 @@
     
     self.mapView.frame = CGRectMake(0, yOrigin, viewWidth, viewHeight);
     
+    NSLog(@"This method ran: BSMapViewController viewWillLayoutSubviews");
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -99,7 +107,9 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
     [CLLocationManager authorizationStatus];
+   
     NSLog(@"My device is located at %@", [self deviceLocation]);
+    NSLog(@"This method ran: BSMapViewController viewDidAppear");
     
 }
 
@@ -111,30 +121,56 @@
     //When running on iphone
     MKCoordinateRegion mapRegion;
     mapRegion.center = mapView.userLocation.coordinate;
-    mapRegion.span.latitudeDelta = 0.005;
-    mapRegion.span.longitudeDelta = 0.005;
+    mapRegion.span.latitudeDelta = 0.007;
+    mapRegion.span.longitudeDelta = 0.007;
     
     [mapView setRegion:mapRegion animated: YES];
+    
+    [BSDataSource sharedInstance].mapViewCurrent = self.mapView;
+    [BSDataSource sharedInstance].mapViewCurrentRegion = &(mapRegion);
+    
+    NSLog(@"This method ran: didUpdateUserLocation");
 }
 
 - (NSString *)deviceLocation {
+    
+    NSLog(@"This method ran: deviceLocation");
+    
     return [NSString stringWithFormat:@"latitude: %f longitude: %f", self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.longitude];
 }
 - (NSString *)deviceLat {
+    
+    NSLog(@"This method ran: deviceLat");
+    
     return [NSString stringWithFormat:@"%f", self.locationManager.location.coordinate.latitude];
 }
 - (NSString *)deviceLon {
+    
+    NSLog(@"This method ran: deviceLon");
+    
     return [NSString stringWithFormat:@"%f", self.locationManager.location.coordinate.longitude];
 }
 - (NSString *)deviceAlt {
+    
+    NSLog(@"This method ran: deviceAlt");
+    
     return [NSString stringWithFormat:@"%f", self.locationManager.location.altitude];
 }
 
 #pragma Dealing With Buttons for Navigation Bar
 
+- (void) listPressed:(UIBarButtonItem *)sender {
+
+    [self.navigationController pushViewController:self.locationsVC animated:YES];
+    
+    NSLog(@"This method ran: listPressed");
+}
+
 - (void) searchPressed:(UIBarButtonItem *)sender {
     
     [self.navigationController pushViewController:self.searchVC animated:YES];
+    
+    NSLog(@"This method ran: searchPressed");
 }
 
 - (void) categoryPressed:(UIBarButtonItem *)sender {
@@ -148,9 +184,16 @@
     };
     
 //    [self.navigationController pushViewController:self.categoryVC animated:YES];
+    
+    NSLog(@"This method ran: categoryPressed");
 }
 
 - (void) createButtons {
+    
+    self.listButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:listImage]
+                                                          style:UIBarButtonItemStylePlain
+                                                         target:self
+                                                         action:@selector(listPressed:)];
     
     self.categoryButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:categoryImage]
                                                           style:UIBarButtonItemStylePlain
@@ -159,7 +202,10 @@
     
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchPressed:)];
     
+    self.navigationItem.leftBarButtonItem = self.listButton;
     self.navigationItem.rightBarButtonItems = @[self.categoryButton, searchButton];
+    
+    NSLog(@"This method ran: createButtons");
 }
 
 - (void) createCategoryView {
@@ -196,6 +242,8 @@
     }
     self.yOriginCategoryView = CGRectGetMinY(self.categoryView.frame);
     self.yOriginBackgroundView = CGRectGetMinY(self.view.frame);
+    
+    NSLog(@"This method ran: dismissCategoryView");
 }
 
 #pragma mark - UIViewControllerTransitioningDelegate
@@ -207,12 +255,18 @@
     BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
     animator.presenting = YES;
     animator.customCategoryView = self.categoryVC;
+    
+    NSLog(@"This method ran: animationControllerForPresentedController");
+    
     return animator;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
     BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
     animator.customCategoryView = self.categoryVC;
+    
+    NSLog(@"This method ran: animationControllerForDismissedController");
+    
     return animator;
 }
 

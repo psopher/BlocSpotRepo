@@ -7,7 +7,7 @@
 //
 
 #import "BSLocationsTableViewController.h"
-#import "BSMapViewController.h"
+//#import "BSMapViewController.h"
 #import "BSSearchTableViewController.h"
 #import "BSCategoryTableViewController.h"
 #import "BSCategoryTransitionAnimator.h"
@@ -17,7 +17,7 @@
 
 @interface BSLocationsTableViewController () <UIViewControllerTransitioningDelegate>
 
-@property (strong, nonatomic) BSMapViewController *mapVC;
+//@property (strong, nonatomic) BSMapViewController *mapVC;
 @property (strong, nonatomic) BSSearchTableViewController *searchVC;
 @property (strong, nonatomic) BSCategoryTableViewController *categoryVC;
 
@@ -34,7 +34,7 @@
         self.title = NSLocalizedString(@"List", @"Locations List");
         
         self.searchVC = [[BSSearchTableViewController alloc] init];
-        self.mapVC = [[BSMapViewController alloc] init];
+//        self.mapVC = [[BSMapViewController alloc] init];
         self.categoryVC = [[BSCategoryTableViewController alloc] init];
     }
     
@@ -93,10 +93,10 @@
     [self.navigationController pushViewController:self.searchVC animated:YES];
 }
 
-- (void) mapPressed:(UIBarButtonItem *)sender {
-    
-    [self.navigationController pushViewController:self.mapVC animated:YES];
-}
+//- (void) mapPressed:(UIBarButtonItem *)sender {
+//    
+//    [self.navigationController pushViewController:self.mapVC animated:YES];
+//}
 
 - (void) categoryPressed:(UIBarButtonItem *)sender {
     
@@ -107,10 +107,10 @@
 }
 
 - (void) createButtons {
-    self.mapButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:mapImage]
-                                                     style:UIBarButtonItemStylePlain
-                                                    target:self
-                                                    action:@selector(mapPressed:)];
+//    self.mapButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:mapImage]
+//                                                     style:UIBarButtonItemStylePlain
+//                                                    target:self
+//                                                    action:@selector(mapPressed:)];
     
     self.categoryButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:categoryImage]
                                                      style:UIBarButtonItemStylePlain
@@ -119,7 +119,7 @@
     
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchPressed:)];
     
-    self.navigationItem.leftBarButtonItem = self.mapButton;
+//    self.navigationItem.leftBarButtonItem = self.mapButton;
     
     self.navigationItem.rightBarButtonItems = @[self.categoryButton, searchButton];
 }

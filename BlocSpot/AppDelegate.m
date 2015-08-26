@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "BSLocationsTableViewController.h"
+#import "BSMapViewController.h"
 
 @interface AppDelegate ()
 
@@ -19,7 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[BSLocationsTableViewController alloc] init]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[BSMapViewController alloc] init]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     

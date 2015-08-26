@@ -7,9 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
+#import <MapKit/MKAnnotation.h>
+#import <CoreLocation/CoreLocation.h>
+#import <CoreLocation/CLLocationManager.h>
+#import <AddressBook/AddressBook.h>
 
-@interface BSSearchTableViewController : UITableViewController <UISearchResultsUpdating, UISearchBarDelegate>
+@interface BSSearchTableViewController : UITableViewController <UISearchResultsUpdating, UISearchBarDelegate, UISearchDisplayDelegate, UISearchBarDelegate>
 
 @property (nonatomic, strong) UISearchController *searchController;
+@property (nonatomic, strong) UITableViewController *searchResultsController;
 
 @end

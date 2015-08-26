@@ -7,6 +7,19 @@
 //
 
 #import "BSSearchTableViewController.h"
+#import "BSMapViewController.h"
+#import "BSDataSource.h"
+
+@interface BSSearchTableViewController ()
+
+@property (nonatomic, strong) MKMapView *mapViewReference;
+@property (nonatomic, assign) MKCoordinateRegion *mapRegionReference;
+
+@property (nonatomic, strong) MKLocalSearch *localSearch;
+@property (nonatomic, strong) MKLocalSearchRequest *localSearchRequest;
+@property (nonatomic, strong) MKLocalSearchResponse *localSearchResponse;
+
+@end
 
 @implementation BSSearchTableViewController
 
@@ -15,6 +28,9 @@
     self = [super init];
     
     if (self) {
+        
+        self.mapViewReference = [[MKMapView alloc] init];
+        self.localSearchResponse = [[MKLocalSearchResponse alloc] init];
         
         self.title = NSLocalizedString(@"Search", @"Search View");
     }
@@ -26,11 +42,15 @@
     
     [super viewDidLoad];
     
+    self.mapViewReference = [BSDataSource sharedInstance].mapViewCurrent;
+    self.mapRegionReference = [BSDataSource sharedInstance].mapViewCurrentRegion;
+    
 //    [self initializeTableContent];
     
     [self initializeSearchController];
     
     [self styleTableView];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,14 +73,14 @@
 - (void)initializeSearchController {
     
     //instantiate a search results controller for presenting the search/filter results (will be presented on top of the parent table view)
-    UITableViewController *searchResultsController = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.searchResultsController = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
     
-    searchResultsController.tableView.dataSource = self;
+    self.searchResultsController.tableView.dataSource = self;
     
-    searchResultsController.tableView.delegate = self;
+    self.searchResultsController.tableView.delegate = self;
     
     //instantiate a UISearchController - passing in the search results controller table
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:searchResultsController];
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:self.searchResultsController];
     
     //this view controller can be covered by theUISearchController's view (i.e. search/filter table)
     self.definesPresentationContext = YES;
@@ -88,6 +108,54 @@
     [[self tableView] setSectionIndexColor:[UIColor colorWithRed:100.0f/255.0f green:100.0f/255.0f blue:100.0f/255.0f alpha:1.0f]];
     
     [[self tableView] setSectionIndexBackgroundColor:[UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1.0f]];
+}
+
+#pragma Search Methods
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    // Cancel any previous searches.
+//    [localsearch cancel];
+    
+    // Perform a new search.
+    self.localSearchRequest = [[MKLocalSearchRequest alloc] init];
+    self.localSearchRequest.naturalLanguageQuery = self.searchController.searchBar.text;
+    self.localSearchRequest.region = self.mapViewReference.region;
+    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    self.localSearch = [[MKLocalSearch alloc] initWithRequest:self.localSearchRequest];
+    
+    [self.localSearch startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error){
+        
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        
+        if (error != nil) {
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Map Error",nil)
+                                        message:[error localizedDescription]
+                                       delegate:nil
+                              cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil] show];
+            return;
+        }
+        
+        if ([response.mapItems count] == 0) {
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No Results",nil)
+                                        message:nil
+                                       delegate:nil
+                              cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil] show];
+            return;
+        }
+        
+        self.localSearchResponse = response;
+        
+        [self.searchResultsController.tableView reloadData];
+    }];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    
+}
+
+-(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    
 }
 
 //#pragma mark - UITableViewDataSource methods
