@@ -44,6 +44,7 @@
     
     self.mapViewReference = [BSDataSource sharedInstance].mapViewCurrent;
     self.mapRegionReference = [BSDataSource sharedInstance].mapViewCurrentRegion;
+    self.mapViewReference.region = *(self.mapRegionReference);
     
 //    [self initializeTableContent];
     
@@ -74,6 +75,14 @@
     
     //instantiate a search results controller for presenting the search/filter results (will be presented on top of the parent table view)
     self.searchResultsController = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:self.searchResultsController];
+    
+    //this ViewController will be responsible for implementing UISearchResultsDialog protocol method(s) - so handling what happens when user types into the search bar
+    self.searchController.searchResultsUpdater = self;
+    
+    
+    //this ViewController will be responsisble for implementing UISearchBarDelegate protocol methods(s)
+    self.searchController.searchBar.delegate = self;
     
     self.searchResultsController.tableView.dataSource = self;
     
@@ -94,13 +103,6 @@
     //add the UISearchController's search bar to the header of this table
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
-    
-    //this ViewController will be responsible for implementing UISearchResultsDialog protocol method(s) - so handling what happens when user types into the search bar
-    self.searchController.searchResultsUpdater = self;
-    
-    
-    //this ViewController will be responsisble for implementing UISearchBarDelegate protocol methods(s)
-    self.searchController.searchBar.delegate = self;
 }
 
 - (void)styleTableView {
@@ -114,7 +116,7 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     // Cancel any previous searches.
-//    [localsearch cancel];
+    [self.localSearch cancel];
     
     // Perform a new search.
     self.localSearchRequest = [[MKLocalSearchRequest alloc] init];
@@ -123,6 +125,8 @@
     
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     self.localSearch = [[MKLocalSearch alloc] initWithRequest:self.localSearchRequest];
+    
+    self.localSearchResponse = [[MKLocalSearchResponse alloc] init];
     
     [self.localSearch startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error){
         
@@ -148,79 +152,84 @@
         
         [self.searchResultsController.tableView reloadData];
     }];
+    
+    NSLog(@"This method ran: searchBarSearchButtonClicked");
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    
+    // Cancel any previous searches.
+    [self.localSearch cancel];
+    
+    NSLog(@"This method ran: searchBarTextDidBeginEditing");
     
 }
 
 -(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
     
+    NSLog(@"This method ran: searchBarTextDidEndEditing");
+    
 }
 
-//#pragma mark - UITableViewDataSource methods
-//
+#pragma mark - UITableViewDataSource methods
+
 //- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 //    
 //    return [self.tableSections count];
 //}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    
-//    NSDictionary *sectionItems = [self.tableSectionsAndItems objectAtIndex:section];
-//    
-//    NSArray *namesForSection = [sectionItems objectForKey:[self.tableSections objectAtIndex:section]];
-//    
-//    return [namesForSection count];
-//}
-//
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    NSLog(@"The number of rows in the search view should be %lu", (unsigned long)[self.localSearchResponse.mapItems count]);
+    
+    return [self.localSearchResponse.mapItems count];
+}
+
 //- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 //    
 //    return [self.tableSections objectAtIndex:section];
 //}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    
-//    static NSString *CellReuseId = @"ReuseCell";
-//    
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellReuseId];
-//    
-//    if(cell == nil) {
-//        
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellReuseId];
-//    }
-//    
-//    
-//    NSDictionary *sectionItems = [self.tableSectionsAndItems objectAtIndex:indexPath.section];
-//    
-//    NSArray *namesForSection = [sectionItems objectForKey:[self.tableSections objectAtIndex:indexPath.section]];
-//    
-//    cell.textLabel.text = [namesForSection objectAtIndex:indexPath.row];
-//    
-//    
-//    //show accessory disclosure indicators on cells only when user has typed into the search box
-//    if(self.searchController.searchBar.text.length > 0) {
-//        
-//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//    }
-//    
-//    return cell;
-//}
-//
-//#pragma mark - UITableViewDelegate methods
-//
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    
-//    NSDictionary *sectionItems = [self.tableSectionsAndItems objectAtIndex:indexPath.section];
-//    
-//    NSArray *namesForSection = [sectionItems objectForKey:[self.tableSections objectAtIndex:indexPath.section]];
-//    
-//    NSString *selectedItem = [namesForSection objectAtIndex:indexPath.row];
-//    
-//    //
-//    NSLog(@"User selected %@", selectedItem);
-//}
-//
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *IDENTIFIER = @"SearchResultsCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:IDENTIFIER];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:IDENTIFIER];
+    }
+    
+    MKMapItem *item = self.localSearchResponse.mapItems[indexPath.row];
+    
+    cell.textLabel.text = item.name;
+    cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
+    
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    MKMapItem *item = self.localSearchResponse.mapItems[indexPath.row];
+    [self.mapViewReference addAnnotation:item.placemark];
+    [self.mapViewReference selectAnnotation:item.placemark animated:YES];
+    
+    [self.mapViewReference setCenterCoordinate:item.placemark.location.coordinate animated:YES];
+    
+    [self.mapViewReference setUserTrackingMode:MKUserTrackingModeNone];
+
+    [BSDataSource sharedInstance].mapViewCurrent = self.mapViewReference;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"searchCreatedMapAnnotation"
+                                                            object:nil];
+    });
+    
+    [self dismissViewControllerAnimated: NO completion:nil];
+    [self.navigationController popToRootViewControllerAnimated:YES]; //takes you to root of navigation
+    
+}
 //- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
 //    
 //    //only show section index titles if there is no text in the search bar
@@ -235,7 +244,7 @@
 //        return nil;
 //    }
 //}
-//
+
 //- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 //{
 //    //background color of section
@@ -249,52 +258,9 @@
 
 #pragma mark - UISearchResultsUpdating
 
--(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-//
-//    //get search text from user input
-//    NSString *searchText = [self.searchController.searchBar text];
-//    
-//    //exit if there is no search text (i.e. user tapped on the search bar and did not enter text yet)
-//    if(![searchText length] > 0) {
-//        
-//        return;
-//    }
-//    //handle when there is search text entered by the user
-//    else {
-//        
-//        //based on the user's search, we will update the contents of the tableSections and tableSectionsAndItems properties
-//        [self.tableSections removeAllObjects];
-//        
-//        [self.tableSectionsAndItems removeAllObjects];
-//        
-//        
-//        NSString *firstSearchCharacter = [searchText substringToIndex:1];
-//        
-//        //handle when user taps into search bear and there is no text entered yet
-//        if([searchText length] == 0) {
-//            
-//            self.tableSections = [[Item fetchDistinctItemGroupsInManagedObjectContext:self.managedObjectContext] mutableCopy];
-//            
-//            self.tableSectionsAndItems = [[Item fetchItemNamesByGroupInManagedObjectContext:self.managedObjectContext] mutableCopy];
-//        }
-//        //handle when user types in one or more characters in the search bar
-//        else if(searchText.length > 0) {
-//            
-//            //the table section will always be based off of the first letter of the group
-//            NSString *upperCaseFirstSearchCharacter = [firstSearchCharacter uppercaseString];
-//            
-//            self.tableSections = [[[NSArray alloc] initWithObjects:upperCaseFirstSearchCharacter, nil] mutableCopy];
-//            
-//            
-//            //there will only be one section (based on the first letter of the search text) - but the property requires an array for cases when there are multiple sections
-//            NSDictionary *namesByGroup = [Item fetchItemNamesByGroupFilteredBySearchText:searchText inManagedObjectContext:self.managedObjectContext];
-//            
-//            self.tableSectionsAndItems = [[[NSArray alloc] initWithObjects:namesByGroup, nil] mutableCopy];
-//        }
-//        
-//        //now that the tableSections and tableSectionsAndItems properties are updated, reload the UISearchController's tableview
-//        [((UITableViewController *)self.searchController.searchResultsController).tableView reloadData];
-//    }
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    
 }
 
 #pragma mark - UISearchBarDelegate methods

@@ -80,6 +80,11 @@
                                    action:@selector(dismissCategoryView)];
     [self.view addGestureRecognizer:tap];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadMapView:)
+                                                 name:@"searchCreatedMapAnnotation"
+                                               object:nil];
+    
     NSLog(@"This method ran: BSMapViewController viewDidLoad");
 }
 
@@ -155,6 +160,16 @@
     NSLog(@"This method ran: deviceAlt");
     
     return [NSString stringWithFormat:@"%f", self.locationManager.location.altitude];
+}
+
+#pragma Calling new notifications into the map view
+
+- (void) reloadMapView:(NSNotification *)notification {
+    
+    self.mapView = [BSDataSource sharedInstance].mapViewCurrent;
+    
+    NSLog(@"This method fired: reloadMapView");
+    
 }
 
 #pragma Dealing With Buttons for Navigation Bar

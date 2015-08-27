@@ -13,9 +13,11 @@
 #import <CoreLocation/CLLocationManager.h>
 #import <AddressBook/AddressBook.h>
 
-@interface BSSearchTableViewController : UITableViewController <UISearchResultsUpdating, UISearchBarDelegate, UISearchDisplayDelegate, UISearchBarDelegate>
+@interface BSSearchTableViewController : UITableViewController <UISearchResultsUpdating, UISearchBarDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UISearchControllerDelegate>
 
 @property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) UITableViewController *searchResultsController;
+
+//@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end
