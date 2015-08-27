@@ -88,9 +88,6 @@
     
     self.searchResultsController.tableView.delegate = self;
     
-    //instantiate a UISearchController - passing in the search results controller table
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:self.searchResultsController];
-    
     //this view controller can be covered by theUISearchController's view (i.e. search/filter table)
     self.definesPresentationContext = YES;
     
@@ -226,7 +223,6 @@
                                                             object:nil];
     });
     
-    [self dismissViewControllerAnimated: NO completion:nil];
     [self.navigationController popToRootViewControllerAnimated:YES]; //takes you to root of navigation
     
 }
@@ -260,7 +256,7 @@
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
-    
+    NSLog(@"This method ran: updateSearchResultsForSearchController");
 }
 
 #pragma mark - UISearchBarDelegate methods
@@ -274,6 +270,8 @@
 //    self.tableSections = [[Item fetchDistinctItemGroupsInManagedObjectContext:self.managedObjectContext] mutableCopy];
 //    
 //    self.tableSectionsAndItems = [[Item fetchItemNamesByGroupInManagedObjectContext:self.managedObjectContext] mutableCopy];
+    
+    NSLog(@"This method ran: searchBarCancelButtonClicked");
 }
 
 @end

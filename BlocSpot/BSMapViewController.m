@@ -15,6 +15,7 @@
 
 #define categoryImage @"category"
 #define listImage @"list"
+#define currentLocationImage @"globe"
 
 @interface BSMapViewController () <UIViewControllerTransitioningDelegate>
 
@@ -101,6 +102,10 @@
     CGFloat viewHeight = [UIScreen mainScreen].bounds.size.height - yOrigin;
     
     self.mapView.frame = CGRectMake(0, yOrigin, viewWidth, viewHeight);
+    
+    CGFloat padding = 40;
+    
+    self.refreshCurrentLocationButton.frame = CGRectMake(self.mapView.frame.size.width - padding, self.mapView.frame.size.height - padding, 22, 22);
     
     NSLog(@"This method ran: BSMapViewController viewWillLayoutSubviews");
 }
@@ -203,6 +208,13 @@
     NSLog(@"This method ran: categoryPressed");
 }
 
+- (void) refreshCurrentLocationPressed:(UIBarButtonItem *)sender {
+    
+    [self mapView:self.mapView didUpdateUserLocation:self.mapView.userLocation];
+    
+    NSLog(@"This method ran: refreshCurrentLocationPressed");
+}
+
 - (void) createButtons {
     
     self.listButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:listImage]
@@ -219,6 +231,16 @@
     
     self.navigationItem.leftBarButtonItem = self.listButton;
     self.navigationItem.rightBarButtonItems = @[self.categoryButton, searchButton];
+    
+    self.refreshCurrentLocationButton = [[UIButton alloc] init];
+    
+    UIImage *resetLocationImage = [UIImage imageNamed:currentLocationImage];
+    [self.refreshCurrentLocationButton setImage:resetLocationImage forState:UIControlStateNormal];
+//    self.refreshCurrentLocationButton.backgroundColor = [UIColor cyanColor];
+    
+    [self.refreshCurrentLocationButton addTarget:self action:@selector(refreshCurrentLocationPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.mapView addSubview:self.refreshCurrentLocationButton];
     
     NSLog(@"This method ran: createButtons");
 }

@@ -19,6 +19,7 @@
 
 @property (nonatomic, strong) UIBarButtonItem *categoryButton;
 @property (nonatomic, strong) UIBarButtonItem *listButton;
+@property (nonatomic, strong) UIButton *refreshCurrentLocationButton;
 
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
