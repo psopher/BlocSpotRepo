@@ -44,7 +44,6 @@
     
     self.mapViewReference = [BSDataSource sharedInstance].mapViewCurrent;
     self.mapRegionReference = [BSDataSource sharedInstance].mapViewCurrentRegion;
-    self.mapViewReference.region = *(self.mapRegionReference);
     
 //    [self initializeTableContent];
     
