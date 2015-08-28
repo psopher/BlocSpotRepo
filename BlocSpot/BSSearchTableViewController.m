@@ -111,43 +111,6 @@
 #pragma Search Methods
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    // Cancel any previous searches.
-    [self.localSearch cancel];
-    
-    // Perform a new search.
-    self.localSearchRequest = [[MKLocalSearchRequest alloc] init];
-    self.localSearchRequest.naturalLanguageQuery = self.searchController.searchBar.text;
-    self.localSearchRequest.region = self.mapViewReference.region;
-    
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    self.localSearch = [[MKLocalSearch alloc] initWithRequest:self.localSearchRequest];
-    
-    self.localSearchResponse = [[MKLocalSearchResponse alloc] init];
-    
-    [self.localSearch startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error){
-        
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        
-        if (error != nil) {
-            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Map Error",nil)
-                                        message:[error localizedDescription]
-                                       delegate:nil
-                              cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil] show];
-            return;
-        }
-        
-        if ([response.mapItems count] == 0) {
-            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No Results",nil)
-                                        message:nil
-                                       delegate:nil
-                              cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil] show];
-            return;
-        }
-        
-        self.localSearchResponse = response;
-        
-        [self.searchResultsController.tableView reloadData];
-    }];
     
     NSLog(@"This method ran: searchBarSearchButtonClicked");
 }
@@ -253,8 +216,47 @@
 
 #pragma mark - UISearchResultsUpdating
 
+
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
+    if (self.searchController.searchBar.text.length > 0) {
+        // Perform a new search.
+        self.localSearchRequest = [[MKLocalSearchRequest alloc] init];
+        self.localSearchRequest.naturalLanguageQuery = self.searchController.searchBar.text;
+        self.localSearchRequest.region = self.mapViewReference.region;
+    
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        self.localSearch = [[MKLocalSearch alloc] initWithRequest:self.localSearchRequest];
+    
+        self.localSearchResponse = [[MKLocalSearchResponse alloc] init];
+    
+
+        [self.localSearch startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error){
+        
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        
+            if (error != nil) {
+                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Map Error",nil)
+                                            message:[error localizedDescription]
+                                           delegate:nil
+                                  cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil] show];
+                return;
+            }
+        
+            if ([response.mapItems count] == 0) {
+                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No Results",nil)
+                                            message:nil
+                                           delegate:nil
+                                  cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil] show];
+                return;
+            }
+        
+            self.localSearchResponse = response;
+        
+            [self.searchResultsController.tableView reloadData];
+        }];
+    };
+    
     NSLog(@"This method ran: updateSearchResultsForSearchController");
 }
 
