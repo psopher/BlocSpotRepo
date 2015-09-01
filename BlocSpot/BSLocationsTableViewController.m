@@ -9,7 +9,7 @@
 #import "BSLocationsTableViewController.h"
 //#import "BSMapViewController.h"
 #import "BSSearchTableViewController.h"
-#import "BSCategoryTableViewController.h"
+#import "BSCategoryTableView.h"
 #import "BSCategoryTransitionAnimator.h"
 
 #define mapImage @"globe"
@@ -19,7 +19,7 @@
 
 //@property (strong, nonatomic) BSMapViewController *mapVC;
 @property (strong, nonatomic) BSSearchTableViewController *searchVC;
-@property (strong, nonatomic) BSCategoryTableViewController *categoryVC;
+@property (strong, nonatomic) BSCategoryTableView *categoryVC;
 
 @end
 
@@ -35,7 +35,7 @@
         
         self.searchVC = [[BSSearchTableViewController alloc] init];
 //        self.mapVC = [[BSMapViewController alloc] init];
-        self.categoryVC = [[BSCategoryTableViewController alloc] init];
+        self.categoryVC = [[BSCategoryTableView alloc] init];
     }
     
     return self;
@@ -100,10 +100,10 @@
 
 - (void) categoryPressed:(UIBarButtonItem *)sender {
     
-    self.categoryVC.transitioningDelegate = self;
-    self.categoryVC.modalPresentationStyle = UIModalPresentationCustom;
+//    self.categoryVC.transitioningDelegate = self;
+//    self.categoryVC.modalPresentationStyle = UIModalPresentationCustom;
     
-    [self.navigationController pushViewController:self.categoryVC animated:YES];
+//    [self.navigationController pushViewController:self.categoryVC animated:YES];
 }
 
 - (void) createButtons {

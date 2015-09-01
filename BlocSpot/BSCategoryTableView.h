@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BSCategoryTableViewController : UITableViewController
+@interface BSCategoryTableView : UITableView <UITableViewDataSource, UITableViewDelegate>
 
 @end

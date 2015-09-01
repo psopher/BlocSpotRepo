@@ -15,6 +15,8 @@
 
 #define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
+@class BSCategoryTableView;
+
 @interface BSMapViewController : UIViewController <MKMapViewDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *categoryButton;
@@ -23,7 +25,7 @@
 
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (nonatomic, strong) UIView *categoryView;
+@property (nonatomic, strong) BSCategoryTableView *categoryTableView;
 
 @end
 

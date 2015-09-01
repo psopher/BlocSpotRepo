@@ -8,7 +8,7 @@
 
 #import "BSMapViewController.h"
 #import "BSSearchTableViewController.h"
-#import "BSCategoryTableViewController.h"
+#import "BSCategoryTableView.h"
 #import "BSCategoryTransitionAnimator.h"
 #import "BSLocationsTableViewController.h"
 #import "BSDataSource.h"
@@ -21,7 +21,7 @@
 
 @property (strong, nonatomic) BSLocationsTableViewController *locationsVC;
 @property (strong, nonatomic) BSSearchTableViewController *searchVC;
-@property (strong, nonatomic) BSCategoryTableViewController *categoryVC;
+@property (strong, nonatomic) BSCategoryTableView *categoryVC;
 @property (nonatomic) CGFloat yOriginCategoryView;
 @property (nonatomic) CGFloat yOriginBackgroundView;
 
@@ -38,17 +38,17 @@
         self.mapView = [[MKMapView alloc] init];
         [self.view addSubview:self.mapView];
         
-        self.categoryView = [[UIView alloc] init];
+        self.categoryTableView = [[BSCategoryTableView alloc] init];
         
         self.locationsVC = [[BSLocationsTableViewController alloc] init];
-        self.categoryVC = [[BSCategoryTableViewController alloc] init];
+        self.categoryVC = [[BSCategoryTableView alloc] init];
         self.searchVC = [[BSSearchTableViewController alloc] init];
         
         self.title = NSLocalizedString(@"Map", @"Map View");
     }
     
     
-    [self.mapView addSubview:self.categoryView];
+    [self.mapView addSubview:self.categoryTableView];
     
     return self;
 }
@@ -75,11 +75,6 @@
     [self.mapView setScrollEnabled:YES];
     
     [self createButtons];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-                                   initWithTarget:self
-                                   action:@selector(dismissCategoryView)];
-    [self.view addGestureRecognizer:tap];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadMapView:)
@@ -197,8 +192,8 @@
     
     if (self.yOriginCategoryView <= self.yOriginBackgroundView) {
         [self createCategoryView];
-        self.categoryVC.transitioningDelegate = self;
-        self.categoryVC.modalPresentationStyle = UIModalPresentationCustom;
+//        self.categoryVC.transitioningDelegate = self;
+//        self.categoryVC.modalPresentationStyle = UIModalPresentationCustom;
     } else {
         [self dismissCategoryView];
     };
@@ -248,36 +243,36 @@
 - (void) createCategoryView {
     // the first value puts the view in the center of the map view
     // i made it 200 x 200
-    self.categoryView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryView.frame) / 2, CGRectGetMinY(self.mapView.frame) - 1000, 200, 200);
+    self.categoryTableView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryTableView.frame) / 2, CGRectGetMinY(self.mapView.frame) - 1000, 200, 200);
     
-    self.categoryView.backgroundColor = [UIColor greenColor];
+    self.categoryTableView.backgroundColor = [UIColor whiteColor];
     
-    NSLog(@"The category view frame is xOrigin %f, yOrigin %f, width %f, height %f", CGRectGetMinX(self.categoryView.frame), CGRectGetMinY(self.categoryView.frame), self.categoryView.frame.size.width, self.categoryView.frame.size.height);
+    NSLog(@"The category view frame is xOrigin %f, yOrigin %f, width %f, height %f", CGRectGetMinX(self.categoryTableView.frame), CGRectGetMinY(self.categoryTableView.frame), self.categoryTableView.frame.size.width, self.categoryTableView.frame.size.height);
     
     // 1.5 second long duration of animation,
 //    [UIView animateWithDuration:1.5 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options: 0 animations:^{
     [UIView animateWithDuration:1.5 delay:0 options: 0 animations:^{
         // this new value will drop it down with the spring damping (you can use the regular animateWithDuration method to do without that effect) to 200 below the top edge
-        self.categoryView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryView.frame) / 2, CGRectGetMinY(self.mapView.frame) + 150, 200, 200);
+        self.categoryTableView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryTableView.frame) / 2, CGRectGetMinY(self.mapView.frame) + 150, 200, 200);
     } completion: nil];
     
     // alternatively, you can nest some more animations in the completion or whatever you want so that more things happen as soon it completes.
     
-    self.yOriginCategoryView = CGRectGetMinY(self.categoryView.frame);
+    self.yOriginCategoryView = CGRectGetMinY(self.categoryTableView.frame);
     self.yOriginBackgroundView = CGRectGetMinY(self.view.frame);
     
     NSLog(@"This method ran: createCategoryView");
-    NSLog(@"The category view frame is xOrigin %f, yOrigin %f, width %f, height %f", CGRectGetMinX(self.categoryView.frame), CGRectGetMinY(self.categoryView.frame), self.categoryView.frame.size.width, self.categoryView.frame.size.height);
+    NSLog(@"The category view frame is xOrigin %f, yOrigin %f, width %f, height %f", CGRectGetMinX(self.categoryTableView.frame), CGRectGetMinY(self.categoryTableView.frame), self.categoryTableView.frame.size.width, self.categoryTableView.frame.size.height);
 }
 
 -(void)dismissCategoryView {
     
     if (self.yOriginCategoryView > self.yOriginBackgroundView) {
         [UIView animateWithDuration:1.5 delay:0 options: 0 animations:^{
-            self.categoryView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryView.frame) / 2, CGRectGetMinY(self.mapView.frame) - 1000, 200, 200);
+            self.categoryTableView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryTableView.frame) / 2, CGRectGetMinY(self.mapView.frame) - 1000, 200, 200);
         } completion: nil];
     }
-    self.yOriginCategoryView = CGRectGetMinY(self.categoryView.frame);
+    self.yOriginCategoryView = CGRectGetMinY(self.categoryTableView.frame);
     self.yOriginBackgroundView = CGRectGetMinY(self.view.frame);
     
     NSLog(@"This method ran: dismissCategoryView");
@@ -285,26 +280,26 @@
 
 #pragma mark - UIViewControllerTransitioningDelegate
 
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                  presentingController:(UIViewController *)presenting
-                                                                      sourceController:(UIViewController *)source {
-    
-    BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
-    animator.presenting = YES;
-    animator.customCategoryView = self.categoryVC;
-    
-    NSLog(@"This method ran: animationControllerForPresentedController");
-    
-    return animator;
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
-    animator.customCategoryView = self.categoryVC;
-    
-    NSLog(@"This method ran: animationControllerForDismissedController");
-    
-    return animator;
-}
+//- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+//                                                                  presentingController:(UIViewController *)presenting
+//                                                                      sourceController:(UIViewController *)source {
+//    
+//    BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
+//    animator.presenting = YES;
+//    animator.customCategoryView = self.categoryVC;
+//    
+//    NSLog(@"This method ran: animationControllerForPresentedController");
+//    
+//    return animator;
+//}
+//
+//- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+//    BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
+//    animator.customCategoryView = self.categoryVC;
+//    
+//    NSLog(@"This method ran: animationControllerForDismissedController");
+//    
+//    return animator;
+//}
 
 @end
