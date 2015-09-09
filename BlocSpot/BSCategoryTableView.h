@@ -9,5 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface BSCategoryTableView : UITableView <UITableViewDataSource, UITableViewDelegate>
+{
+    NSMutableArray *_displayedObjects;
+}
+
+@property (nonatomic, retain) NSMutableArray *displayedObjects;
 
 @end

@@ -241,9 +241,15 @@
 }
 
 - (void) createCategoryView {
-    // the first value puts the view in the center of the map view
-    // i made it 200 x 200
-    self.categoryTableView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryTableView.frame) / 2, CGRectGetMinY(self.mapView.frame) - 1000, 200, 200);
+    
+    CGFloat widthPadding = 30;
+    CGFloat heightPadding = 60;
+    
+    CGFloat categoryViewWidth = self.mapView.frame.size.width - widthPadding - widthPadding;
+    
+    CGFloat categoryViewHeight = self.mapView.frame.size.height - heightPadding - heightPadding;
+    
+    self.categoryTableView.frame = CGRectMake(widthPadding, heightPadding - 1000, categoryViewWidth, categoryViewHeight);
     
     self.categoryTableView.backgroundColor = [UIColor whiteColor];
     
@@ -253,7 +259,7 @@
 //    [UIView animateWithDuration:1.5 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options: 0 animations:^{
     [UIView animateWithDuration:1.5 delay:0 options: 0 animations:^{
         // this new value will drop it down with the spring damping (you can use the regular animateWithDuration method to do without that effect) to 200 below the top edge
-        self.categoryTableView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryTableView.frame) / 2, CGRectGetMinY(self.mapView.frame) + 150, 200, 200);
+        self.categoryTableView.frame = CGRectMake(widthPadding, heightPadding, categoryViewWidth, categoryViewHeight);
     } completion: nil];
     
     // alternatively, you can nest some more animations in the completion or whatever you want so that more things happen as soon it completes.
