@@ -7,6 +7,9 @@
 //
 
 #import "BSCategoryTableView.h"
+#import "BSDataSource.h"
+
+#define addRowsImage @"plus"
 
 @interface BSCategoryTableView ()
 
@@ -31,7 +34,8 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
         self.dataSource = self;
         self.delegate = self;
         
-        self.headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0,0,self.bounds.size.width,40)];
+//        self.headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0,0,self.bounds.size.width,40)];
+//        self.headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(40, 2, self.bounds.size.width - 80, 20)];
         
     }
     
@@ -42,12 +46,17 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
 {
 //    [super viewDidLoad];
     
-    [self registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:headerReuseIdentifier];
+    [[BSDataSource sharedInstance] addObserver:self forKeyPath:@"categoryItems" options:0 context:nil];
     
 //    [[self navigationItem] setRightBarButtonItem:addButton];
 //    [addButton release];
     
 
+}
+
+- (void) dealloc
+{
+    [[BSDataSource sharedInstance] removeObserver:self forKeyPath:@"categoryItems"];
 }
 
 #pragma mark -
@@ -108,7 +117,7 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
 //    }
 //}
 //
-- (void)add
+- (void)add:(UIButton *)sender
 {
 //    MyDetailController *controller = [[MyDetailController alloc]
 //                                      initWithStyle:UITableViewStyleGrouped];
@@ -125,6 +134,8 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
 //    
 //    [book release];
 //    [controller release];
+    
+    NSLog(@"This Method was called: BSCategoryTableView add");
 }
 
 
@@ -150,20 +161,32 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
     
     self.headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:headerReuseIdentifier];
     
-    CGFloat widthPadding = 40;
+    self.headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0,0,self.bounds.size.width,40)];
     
-    self.headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(widthPadding, 2, self.frame.size.width - widthPadding - widthPadding, 20)];
+    CGFloat widthPadding = 12;
+    CGFloat buttonWidth = 40;
+    
+    self.headerLabel = [[UILabel alloc] init];
+    self.addButton = [[UIButton alloc] init];
+    
+    [self.headerView.contentView addSubview:self.headerLabel];
+    [self.headerView.contentView addSubview:self.addButton];
+                        
+    self.headerLabel.frame = CGRectMake(widthPadding, 10, self.frame.size.width - buttonWidth - widthPadding, 20);
     self.headerLabel.text = @"Choose Category";
     self.headerLabel.backgroundColor = [UIColor clearColor];
     self.headerLabel.textColor=[UIColor blackColor];
     self.headerLabel.font = [UIFont boldSystemFontOfSize:15];
-    [self.headerView.contentView addSubview:self.headerLabel];
     
     //  Configure the Add button
-//    self.addButton = [[UIButton alloc]
-//                      initWithFrame:CGRectMake(self.headerLabel.frame.size.width + widthPadding, 0, widthPadding, self.headerLabel.frame.size.height)
-//                      target:self
-//                      action:@selector(add)];
+    self.addButton.frame = CGRectMake(self.headerLabel.frame.size.width + widthPadding, 10, buttonWidth, self.headerLabel.frame.size.height);
+    
+    UIImage *addButtonImage = [UIImage imageNamed:addRowsImage];
+    [self.addButton setImage:addButtonImage forState:UIControlStateNormal];
+    
+    [self.addButton addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.addButton.backgroundColor = [UIColor clearColor];
     
     NSLog(@"This Method was called: BSCategoryTableView viewForHeaderInSection");
     
@@ -172,11 +195,14 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
 
 
 
-- (CGFloat)tableView:(UITableView *)tableView tableViewHeightForHeaderInSection:(NSInteger)section {
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    
+    
+    [BSDataSource sharedInstance].headerHeight = 40;
     
     NSLog(@"This Method was called: BSCategoryTableView tableViewHeightForHeaderInSection");
     
-    return 40.f;
+    return [BSDataSource sharedInstance].headerHeight;
 }
 
 
@@ -189,9 +215,11 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
+    [BSDataSource sharedInstance].numberOfCells = 4;
+    
     NSLog(@"This Method was called: BSCategoryTableView numberOfRowsInSection");
     
-    return 4;
+    return [BSDataSource sharedInstance].numberOfCells;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -206,6 +234,76 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
     NSLog(@"This Method was called: BSCategoryTableView cellForRowAtIndexPath");
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [BSDataSource sharedInstance].cellHeight = 60;
+    
+    return [BSDataSource sharedInstance].cellHeight;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell* cellCheck = [tableView
+                                  cellForRowAtIndexPath:indexPath];
+    
+    if (cellCheck.accessoryType == UITableViewCellAccessoryNone) {
+        cellCheck.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        cellCheck.accessoryType = UITableViewCellAccessoryNone;
+    }
+}
+
+#pragma Swipe to Delete Methods
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        BSCategoryData *item = [BSDataSource sharedInstance].categoryItems[indexPath.row];
+        [[BSDataSource sharedInstance] deleteMediaItem:item];
+    }
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (object == [BSDataSource sharedInstance] && [keyPath isEqualToString:@"categoryItems"]) {
+            // We know categoryitems changed.  Let's see what kind of change it is.
+            int kindOfChange = [change[NSKeyValueChangeKindKey] intValue];
+        
+            if (kindOfChange == NSKeyValueChangeSetting) {
+                // Someone set a brand new images array
+                [self reloadData];
+            } else if (kindOfChange == NSKeyValueChangeInsertion ||
+                       kindOfChange == NSKeyValueChangeRemoval ||
+                       kindOfChange == NSKeyValueChangeReplacement) {
+                // We have an incremental change: inserted, deleted, or replaced images
+                
+                // Get a list of the index (or indices) that changed
+                NSIndexSet *indexSetOfChanges = change[NSKeyValueChangeIndexesKey];
+                
+                // Convert this NSIndexSet to an NSArray of NSIndexPaths (which is what the table view animation methods require)
+                NSMutableArray *indexPathsThatChanged = [NSMutableArray array];
+                [indexSetOfChanges enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:idx inSection:0];
+                    [indexPathsThatChanged addObject:newIndexPath];
+                }];
+                
+                // Call `beginUpdates` to tell the table view we're about to make changes
+                [self beginUpdates];
+                
+                // Tell the table view what the changes are
+                if (kindOfChange == NSKeyValueChangeInsertion) {
+                    [self insertRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
+                } else if (kindOfChange == NSKeyValueChangeRemoval) {
+                    [self deleteRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
+                } else if (kindOfChange == NSKeyValueChangeReplacement) {
+                    [self reloadRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+                
+                // Tell the table view that we're done telling it about changes, and to complete the animation
+                [self endUpdates];
+            }
+    }
 }
 
 @end

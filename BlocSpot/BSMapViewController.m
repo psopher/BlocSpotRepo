@@ -247,7 +247,9 @@
     
     CGFloat categoryViewWidth = self.mapView.frame.size.width - widthPadding - widthPadding;
     
-    CGFloat categoryViewHeight = self.mapView.frame.size.height - heightPadding - heightPadding;
+//    CGFloat categoryViewHeight = self.mapView.frame.size.height - heightPadding - heightPadding;
+    
+    CGFloat categoryViewHeight = [BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*[BSDataSource sharedInstance].numberOfCells;
     
     self.categoryTableView.frame = CGRectMake(widthPadding, heightPadding - 1000, categoryViewWidth, categoryViewHeight);
     

@@ -13,12 +13,21 @@
 #import <CoreLocation/CLLocationManager.h>
 #import <AddressBook/AddressBook.h>
 
+@class BSCategoryData;
+
 @interface BSDataSource : NSObject
 
 +(instancetype) sharedInstance;
 - (void) saveToDisk;
+- (void) deleteMediaItem:(BSCategoryData *)item;
+
+@property (strong, nonatomic) NSMutableArray *categoryItems;
 
 @property MKMapView *mapViewCurrent;
 @property MKCoordinateRegion *mapViewCurrentRegion;
+
+@property (nonatomic) CGFloat headerHeight;
+@property (nonatomic) CGFloat cellHeight;
+@property (nonatomic) CGFloat numberOfCells;
 
 @end

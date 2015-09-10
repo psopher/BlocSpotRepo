@@ -7,6 +7,14 @@
 //
 
 #import "BSDataSource.h"
+#import "BSCategoryData.h"
+
+@interface BSDataSource ()
+{
+    NSMutableArray *_categoryItems;
+}
+@end
+
 
 @implementation BSDataSource
 
@@ -37,6 +45,41 @@
     
     
     NSLog(@"This method ran: saveToDisk");
+}
+
+#pragma Saving to Disk and Persisting Data
+
+
+
+#pragma mark - Key/Value Observing for Swipe to Delete
+
+- (NSUInteger) countOfCategoryItems {
+    return self.categoryItems.count;
+}
+
+- (id) objectInCategoryItemsAtIndex:(NSUInteger)index {
+    return [self.categoryItems objectAtIndex:index];
+}
+
+- (NSArray *) categoryItemsAtIndexes:(NSIndexSet *)indexes {
+    return [self.categoryItems objectsAtIndexes:indexes];
+}
+
+- (void) insertObject:(BSCategoryData *)object inCategoryItemsAtIndex:(NSUInteger)index {
+    [_categoryItems insertObject:object atIndex:index];
+}
+
+- (void) removeObjectFromCategoryItemsAtIndex:(NSUInteger)index {
+    [_categoryItems removeObjectAtIndex:index];
+}
+
+- (void) replaceObjectInCategoryItemsAtIndex:(NSUInteger)index withObject:(id)object {
+    [_categoryItems replaceObjectAtIndex:index withObject:object];
+}
+
+- (void) deleteMediaItem:(BSCategoryData *)item {
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"categoryItems"];
+    [mutableArrayWithKVO removeObject:item];
 }
 
 @end

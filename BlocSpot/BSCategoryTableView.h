@@ -14,5 +14,8 @@
 }
 
 @property (nonatomic, retain) NSMutableArray *displayedObjects;
+//@property (nonatomic, strong) NSNumber *headerHeight;
+//@property (nonatomic, strong) NSNumber *cellHeight;
+//@property (nonatomic, strong) NSNumber *numberOfCells;
 
 @end
