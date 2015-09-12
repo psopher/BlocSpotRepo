@@ -32,6 +32,7 @@
     
     if (self) {
         
+//        self.categoryItems = [NSMutableArray new];
         self.mapViewCurrent = [[MKMapView alloc] init];
         
     }
@@ -54,6 +55,7 @@
 #pragma mark - Key/Value Observing for Swipe to Delete
 
 - (NSUInteger) countOfCategoryItems {
+    
     return self.categoryItems.count;
 }
 
@@ -79,7 +81,12 @@
 
 - (void) deleteMediaItem:(BSCategoryData *)item {
     NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"categoryItems"];
+    
+    NSLog(@"The number of items in deleteMediaItem1 is: %lu", (unsigned long)self.categoryItems.count);
+    
     [mutableArrayWithKVO removeObject:item];
+    
+    NSLog(@"The number of items in deleteMediaItem2 is: %lu", (unsigned long)self.categoryItems.count);
 }
 
 @end

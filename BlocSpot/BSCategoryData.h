@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BSCategoryData : NSObject
+@interface BSCategoryData : NSObject <NSCoding>
+
+@property (strong, nonatomic) NSMutableArray* categories;
+@property (strong, nonatomic) NSString* categoryName;
+
+-(instancetype)initWithCategoryName:(NSString *)categoryName categories:(NSMutableArray *)categories;
 
 @end

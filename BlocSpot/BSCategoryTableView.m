@@ -8,6 +8,7 @@
 
 #import "BSCategoryTableView.h"
 #import "BSDataSource.h"
+#import "BSCategoryData.h"
 
 #define addRowsImage @"plus"
 
@@ -34,8 +35,27 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
         self.dataSource = self;
         self.delegate = self;
         
-//        self.headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0,0,self.bounds.size.width,40)];
-//        self.headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(40, 2, self.bounds.size.width - 80, 20)];
+        NSMutableArray *categoriesArray = [@[@""] mutableCopy];
+        NSString *noCategoryAssignedName = @"No Category Assigned";
+        
+        BSCategoryData *categoryDataArray = [[BSCategoryData alloc] initWithCategoryName:noCategoryAssignedName categories:categoriesArray];
+        
+        [BSDataSource sharedInstance].categories = categoryDataArray;
+        
+        [BSDataSource sharedInstance].categoryItems = [NSMutableArray new];
+        [[BSDataSource sharedInstance].categoryItems addObject:[BSDataSource sharedInstance].categories.categoryName];
+        
+       
+        NSMutableArray *categoriesArray2 = [@[@""] mutableCopy];
+        NSString *CategoryAssignedNameRestaurants = @"Restaurants";
+        
+        BSCategoryData *categoryDataArray2 = [[BSCategoryData alloc] initWithCategoryName:CategoryAssignedNameRestaurants categories:categoriesArray2];
+        
+        [BSDataSource sharedInstance].categories = categoryDataArray2;
+        
+        [[BSDataSource sharedInstance].categoryItems addObject:[BSDataSource sharedInstance].categories.categoryName];
+        
+        NSLog(@"the category items array looks like this: %@", [BSDataSource sharedInstance].categoryItems);
         
     }
     
@@ -44,14 +64,12 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
 
 - (void)viewDidLoad
 {
-//    [super viewDidLoad];
+    
+    [self registerClass:[UITableViewCell class] forCellReuseIdentifier:@"categoryCell"];
     
     [[BSDataSource sharedInstance] addObserver:self forKeyPath:@"categoryItems" options:0 context:nil];
     
-//    [[self navigationItem] setRightBarButtonItem:addButton];
-//    [addButton release];
-    
-
+    NSLog(@"This Method was called: BSCategoryTableView viewDidLoad");
 }
 
 - (void) dealloc
@@ -215,22 +233,25 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    [BSDataSource sharedInstance].numberOfCells = 4;
+    NSLog(@"the number of cells is %lu", (unsigned long)[[BSDataSource sharedInstance].categoryItems count]);
     
     NSLog(@"This Method was called: BSCategoryTableView numberOfRowsInSection");
     
-    return [BSDataSource sharedInstance].numberOfCells;
+    return [[BSDataSource sharedInstance].categoryItems count];
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"category"];
+    
+    [super cellForRowAtIndexPath:indexPath];
+    
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"categoryCell"];
         
     if (cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"category"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"categoryCell"];
     }
     
-    [cell.textLabel setText:@"apple"];
-    
+    [cell.textLabel setText:[BSDataSource sharedInstance].categoryItems[indexPath.row]];
+
     NSLog(@"This Method was called: BSCategoryTableView cellForRowAtIndexPath");
     
     return cell;
@@ -244,6 +265,7 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     UITableViewCell* cellCheck = [tableView
                                   cellForRowAtIndexPath:indexPath];
     
@@ -252,17 +274,30 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
     } else {
         cellCheck.accessoryType = UITableViewCellAccessoryNone;
     }
+    
+    cellCheck.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 #pragma Swipe to Delete Methods
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    NSLog(@"The number of items in commitEditingStyle is: %lu", (unsigned long)[BSDataSource sharedInstance].categoryItems.count);
+    NSLog(@"numberOfRowsInSection: %ld", (long)[self tableView:self numberOfRowsInSection:0]);
+    
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         BSCategoryData *item = [BSDataSource sharedInstance].categoryItems[indexPath.row];
         [[BSDataSource sharedInstance] deleteMediaItem:item];
+        
+        [self reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"numberOfRowsChanged"
+                                                                object:nil];
+        });
     }
+    
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -289,8 +324,16 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
                 }];
                 
                 // Call `beginUpdates` to tell the table view we're about to make changes
+                
+                NSLog(@"numberOfRowsInSection: %ld", (long)[self tableView:self numberOfRowsInSection:0]);
+                
+                NSLog(@"indexPathsThatChanged is: %@", indexPathsThatChanged);
+                NSLog(@"indexPathsThatChanged is: %@", [BSDataSource sharedInstance].categoryItems);
+                
                 [self beginUpdates];
                 
+                NSLog(@"numberOfRowsInSection: %ld", (long)[self tableView:self numberOfRowsInSection:0]);
+
                 // Tell the table view what the changes are
                 if (kindOfChange == NSKeyValueChangeInsertion) {
                     [self insertRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -300,10 +343,17 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
                     [self reloadRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
                 
+                NSLog(@"numberOfRowsInSection: %ld", (long)[self tableView:self numberOfRowsInSection:0]);
+                NSLog(@"indexPathsThatChanged is: %@", indexPathsThatChanged);
+                NSLog(@"indexPathsThatChanged is: %@", [BSDataSource sharedInstance].categoryItems);
+                
                 // Tell the table view that we're done telling it about changes, and to complete the animation
+                
                 [self endUpdates];
             }
     }
+    
+    NSLog(@"This method Did Run: observeValueForKeyPath");
 }
 
 @end

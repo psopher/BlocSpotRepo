@@ -17,7 +17,6 @@
 		5781EE271B87A73B007829D4 /* BSLocationsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE261B87A73B007829D4 /* BSLocationsTableViewController.m */; };
 		5781EE2A1B87BF14007829D4 /* BSSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE291B87BF13007829D4 /* BSSearchTableViewController.m */; };
 		5781EE2D1B87BF37007829D4 /* BSCategoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE2C1B87BF37007829D4 /* BSCategoryTableView.m */; };
-		5781EE301B8A2837007829D4 /* BSCategoryTransitionAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE2F1B8A2837007829D4 /* BSCategoryTransitionAnimator.m */; };
 		5781EE331B8E0D7C007829D4 /* BSDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE321B8E0D7C007829D4 /* BSDataSource.m */; };
 		5781EE361BA1F4B6007829D4 /* BSCategoryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE351BA1F4B6007829D4 /* BSCategoryData.m */; };
 		578D5ED41B87A05C00997A11 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 578D5ED31B87A05C00997A11 /* MapKit.framework */; };
@@ -53,8 +52,6 @@
 		5781EE291B87BF13007829D4 /* BSSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSSearchTableViewController.m; sourceTree = "<group>"; };
 		5781EE2B1B87BF37007829D4 /* BSCategoryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSCategoryTableView.h; sourceTree = "<group>"; };
 		5781EE2C1B87BF37007829D4 /* BSCategoryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSCategoryTableView.m; sourceTree = "<group>"; };
-		5781EE2E1B8A2837007829D4 /* BSCategoryTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSCategoryTransitionAnimator.h; sourceTree = "<group>"; };
-		5781EE2F1B8A2837007829D4 /* BSCategoryTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSCategoryTransitionAnimator.m; sourceTree = "<group>"; };
 		5781EE311B8E0D7C007829D4 /* BSDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSDataSource.h; sourceTree = "<group>"; };
 		5781EE321B8E0D7C007829D4 /* BSDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSDataSource.m; sourceTree = "<group>"; };
 		5781EE341BA1F4B6007829D4 /* BSCategoryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSCategoryData.h; sourceTree = "<group>"; };
@@ -117,12 +114,9 @@
 				5781EE291B87BF13007829D4 /* BSSearchTableViewController.m */,
 				5781EE2B1B87BF37007829D4 /* BSCategoryTableView.h */,
 				5781EE2C1B87BF37007829D4 /* BSCategoryTableView.m */,
-				5781EE2E1B8A2837007829D4 /* BSCategoryTransitionAnimator.h */,
-				5781EE2F1B8A2837007829D4 /* BSCategoryTransitionAnimator.m */,
 				5781EE311B8E0D7C007829D4 /* BSDataSource.h */,
 				5781EE321B8E0D7C007829D4 /* BSDataSource.m */,
-				5781EE341BA1F4B6007829D4 /* BSCategoryData.h */,
-				5781EE351BA1F4B6007829D4 /* BSCategoryData.m */,
+				5781EE371BA470C6007829D4 /* Data Model */,
 				57633F771B878E530044C331 /* Images.xcassets */,
 				57633F791B878E530044C331 /* LaunchScreen.xib */,
 				57633F6A1B878E530044C331 /* Supporting Files */,
@@ -154,6 +148,15 @@
 				57633F851B878E530044C331 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5781EE371BA470C6007829D4 /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				5781EE341BA1F4B6007829D4 /* BSCategoryData.h */,
+				5781EE351BA1F4B6007829D4 /* BSCategoryData.m */,
+			);
+			name = "Data Model";
 			sourceTree = "<group>";
 		};
 		6670373624DE57DBE0403DBD /* Frameworks */ = {
@@ -315,7 +318,6 @@
 			files = (
 				5781EE271B87A73B007829D4 /* BSLocationsTableViewController.m in Sources */,
 				5781EE331B8E0D7C007829D4 /* BSDataSource.m in Sources */,
-				5781EE301B8A2837007829D4 /* BSCategoryTransitionAnimator.m in Sources */,
 				57633F731B878E530044C331 /* BSMapViewController.m in Sources */,
 				5781EE2D1B87BF37007829D4 /* BSCategoryTableView.m in Sources */,
 				5781EE361BA1F4B6007829D4 /* BSCategoryData.m in Sources */,

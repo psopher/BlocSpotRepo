@@ -9,7 +9,6 @@
 #import "BSMapViewController.h"
 #import "BSSearchTableViewController.h"
 #import "BSCategoryTableView.h"
-#import "BSCategoryTransitionAnimator.h"
 #import "BSLocationsTableViewController.h"
 #import "BSDataSource.h"
 
@@ -77,8 +76,11 @@
     [self createButtons];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reloadMapView:)
-                                                 name:@"searchCreatedMapAnnotation"
+                                             selector:@selector(reloadMapView:)name:@"searchCreatedMapAnnotation"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadCategoryView:)name:@"numberOfRowsChanged"
                                                object:nil];
     
     NSLog(@"This method ran: BSMapViewController viewDidLoad");
@@ -247,9 +249,7 @@
     
     CGFloat categoryViewWidth = self.mapView.frame.size.width - widthPadding - widthPadding;
     
-//    CGFloat categoryViewHeight = self.mapView.frame.size.height - heightPadding - heightPadding;
-    
-    CGFloat categoryViewHeight = [BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*[BSDataSource sharedInstance].numberOfCells;
+    CGFloat categoryViewHeight = [BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*[[BSDataSource sharedInstance].categoryItems count];
     
     self.categoryTableView.frame = CGRectMake(widthPadding, heightPadding - 1000, categoryViewWidth, categoryViewHeight);
     
@@ -271,6 +271,22 @@
     
     NSLog(@"This method ran: createCategoryView");
     NSLog(@"The category view frame is xOrigin %f, yOrigin %f, width %f, height %f", CGRectGetMinX(self.categoryTableView.frame), CGRectGetMinY(self.categoryTableView.frame), self.categoryTableView.frame.size.width, self.categoryTableView.frame.size.height);
+}
+
+- (void) reloadCategoryView:(NSNotification *)notification {
+    
+    
+    CGFloat widthPadding = 30;
+    CGFloat heightPadding = 60;
+    
+    CGFloat categoryViewWidth = self.mapView.frame.size.width - widthPadding - widthPadding;
+    
+    CGFloat categoryViewHeight = [BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*[[BSDataSource sharedInstance].categoryItems count];
+    
+    self.categoryTableView.frame = CGRectMake(widthPadding, heightPadding, categoryViewWidth, categoryViewHeight);
+    
+    NSLog(@"This method fired: reloadCategoryView");
+    
 }
 
 -(void)dismissCategoryView {

@@ -10,7 +10,6 @@
 //#import "BSMapViewController.h"
 #import "BSSearchTableViewController.h"
 #import "BSCategoryTableView.h"
-#import "BSCategoryTransitionAnimator.h"
 
 #define mapImage @"globe"
 #define categoryImage @"category"

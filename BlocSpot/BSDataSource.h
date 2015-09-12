@@ -22,12 +22,13 @@
 - (void) deleteMediaItem:(BSCategoryData *)item;
 
 @property (strong, nonatomic) NSMutableArray *categoryItems;
+@property (strong, nonatomic) BSCategoryData *categories;
+//@property (strong, nonatomic) BSCategoryData *categories2;
 
 @property MKMapView *mapViewCurrent;
 @property MKCoordinateRegion *mapViewCurrentRegion;
 
 @property (nonatomic) CGFloat headerHeight;
 @property (nonatomic) CGFloat cellHeight;
-@property (nonatomic) CGFloat numberOfCells;
 
 @end
