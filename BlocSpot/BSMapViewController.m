@@ -24,7 +24,6 @@
 @property (nonatomic) CGFloat yOriginCategoryView;
 @property (nonatomic) CGFloat yOriginBackgroundView;
 @property (strong, nonatomic) MKPolygon *transparentGreyPolygon;
-@property (nonatomic, strong) UITapGestureRecognizer *tap;
 
 @end
 
@@ -76,9 +75,6 @@
     [self.mapView setMapType:MKMapTypeStandard];
     [self.mapView setZoomEnabled:YES];
     [self.mapView setScrollEnabled:YES];
-    
-    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
-    [self.mapView addGestureRecognizer:self.tap];
     
     [self createButtons];
     
@@ -270,7 +266,7 @@
     
     CGFloat categoryViewWidth = self.mapView.frame.size.width - widthPadding - widthPadding;
     
-    CGFloat categoryViewHeight = [BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*[[BSDataSource sharedInstance].categoryItems count];
+    CGFloat categoryViewHeight = MIN([BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*[[BSDataSource sharedInstance].categoryItems count], [BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*5);
     
     self.categoryTableView.frame = CGRectMake(widthPadding, heightPadding - 1000, categoryViewWidth, categoryViewHeight);
     
@@ -334,13 +330,6 @@
     
     
     NSLog(@"This method ran: dismissCategoryView");
-}
-
-- (void) tapFired:(UITapGestureRecognizer *)recognizer {
-    if (recognizer.state == UIGestureRecognizerStateRecognized && self.transparentGreyPolygon) {
-        [self dismissCategoryView];
-    }
-    NSLog(@"This method ran: tapFired");
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay

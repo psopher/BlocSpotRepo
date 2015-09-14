@@ -18,7 +18,7 @@
 @property (nonatomic, strong) UIButton *addButton;
 @property (nonatomic, strong) UILabel *headerLabel;
 @property (nonatomic, assign) NSIndexPath* replaceIndex;
-@property (nonatomic, strong) UITableViewCell *cell;
+//@property (nonatomic, strong) UITableViewCell *cell;
 
 @end
 
@@ -36,6 +36,9 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
         
         self.dataSource = self;
         self.delegate = self;
+        
+        self.layer.cornerRadius = 5;
+        self.layer.masksToBounds = YES;
         
         NSMutableArray *categoriesArray = [@[@""] mutableCopy];
         NSString *noCategoryAssignedName = @"No Category Assigned";
@@ -59,7 +62,7 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
         
         NSLog(@"the category items array looks like this: %@", [BSDataSource sharedInstance].categoryItems);
         
-        
+        //Text Field for newly added cells
         self.textField = [[UITextField alloc] init];
         self.textField.returnKeyType = UIReturnKeyDone;
         self.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
@@ -68,6 +71,12 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
         self.textField.backgroundColor = [UIColor colorWithWhite:220/255.0f alpha:1];
         self.textField.delegate = self;
         
+        //Category colors array
+        [BSDataSource sharedInstance].colors = @[[[UIColor redColor]colorWithAlphaComponent:0.7],
+                                                 [[UIColor purpleColor]colorWithAlphaComponent:0.5],
+                                                 [[UIColor blueColor]colorWithAlphaComponent:0.5],
+                                                 [[UIColor orangeColor]colorWithAlphaComponent:0.5],
+                                                 [[UIColor greenColor]colorWithAlphaComponent:0.5]];
     }
     
     return self;
@@ -159,29 +168,44 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
     
     [super cellForRowAtIndexPath:indexPath];
     
-    self.cell = [tableView dequeueReusableCellWithIdentifier:@"categoryCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"categoryCell"];
         
-    if (self.cell == nil){
-        self.cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"categoryCell"];
+    if (cell == nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"categoryCell"];
     }
     
-    [self.cell.textLabel setText:[BSDataSource sharedInstance].categoryItems[indexPath.row]];
+    [cell.textLabel setText:[BSDataSource sharedInstance].categoryItems[indexPath.row]];
     
     
     CGFloat widthPadding = 10;
     CGFloat heightPadding = 5;
     
-    if ([self.cell.textLabel.text  isEqual: @"New Category"]) {
-        self.textField.frame=CGRectMake(widthPadding, heightPadding, self.cell.frame.size.width - widthPadding - widthPadding, self.cell.frame.size.height - heightPadding - heightPadding);
+    if ([cell.textLabel.text  isEqual: @"New Category"]) {
+        self.textField.frame=CGRectMake(widthPadding, heightPadding, cell.frame.size.width - widthPadding - widthPadding, cell.frame.size.height - heightPadding - heightPadding);
         
         self.replaceIndex = indexPath;
         
-        [self.cell addSubview:self.textField];
+        [cell addSubview:self.textField];
     }
+    
+    NSInteger i = indexPath.row % 5;
+    
+    if (i == 0) {
+        cell.contentView.backgroundColor = [BSDataSource sharedInstance].colors[i];
+    } else if (i == 1) {
+        cell.contentView.backgroundColor = [BSDataSource sharedInstance].colors[i];
+    } else if (i == 2) {
+        cell.contentView.backgroundColor = [BSDataSource sharedInstance].colors[i];
+    } else if (i == 3) {
+        cell.contentView.backgroundColor = [BSDataSource sharedInstance].colors[i];
+    } else if (i == 4) {
+        cell.contentView.backgroundColor = [BSDataSource sharedInstance].colors[i];
+    }
+
 
     NSLog(@"This Method was called: BSCategoryTableView cellForRowAtIndexPath");
     
-    return self.cell;
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -201,6 +225,8 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
     } else {
         cellCheck.accessoryType = UITableViewCellAccessoryNone;
     }
+    
+//    cellCheck.accessoryView.backgroundColor = cellCheck.backgroundColor;
     
     cellCheck.selectionStyle = UITableViewCellSelectionStyleNone;
 }
