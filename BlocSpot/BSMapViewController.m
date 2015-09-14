@@ -23,6 +23,8 @@
 @property (strong, nonatomic) BSCategoryTableView *categoryVC;
 @property (nonatomic) CGFloat yOriginCategoryView;
 @property (nonatomic) CGFloat yOriginBackgroundView;
+@property (strong, nonatomic) MKPolygon *transparentGreyPolygon;
+@property (nonatomic, strong) UITapGestureRecognizer *tap;
 
 @end
 
@@ -44,6 +46,8 @@
         self.searchVC = [[BSSearchTableViewController alloc] init];
         
         self.title = NSLocalizedString(@"Map", @"Map View");
+        
+        self.transparentGreyPolygon = [[MKPolygon alloc] init];
     }
     
     
@@ -72,6 +76,9 @@
     [self.mapView setMapType:MKMapTypeStandard];
     [self.mapView setZoomEnabled:YES];
     [self.mapView setScrollEnabled:YES];
+    
+    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
+    [self.mapView addGestureRecognizer:self.tap];
     
     [self createButtons];
     
@@ -244,6 +251,20 @@
 
 - (void) createCategoryView {
     
+    //Create Transparent Gray Background
+    
+    MKMapRect worldRect = MKMapRectWorld;
+    MKMapPoint point1 = MKMapRectWorld.origin;
+    MKMapPoint point2 = MKMapPointMake(point1.x+worldRect.size.width,point1.y);
+    MKMapPoint point3 = MKMapPointMake(point2.x, point2.y+worldRect.size.height);
+    MKMapPoint point4 = MKMapPointMake(point1.x, point3.y);
+    
+    MKMapPoint points[4] = {point1,point2,point3,point4};
+    self.transparentGreyPolygon = [MKPolygon polygonWithPoints:points count:4];
+    
+    [self.mapView addOverlay:self.transparentGreyPolygon];
+    
+    
     CGFloat widthPadding = 30;
     CGFloat heightPadding = 60;
     
@@ -259,9 +280,11 @@
     
     // 1.5 second long duration of animation,
 //    [UIView animateWithDuration:1.5 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options: 0 animations:^{
-    [UIView animateWithDuration:1.5 delay:0 options: 0 animations:^{
+    [UIView animateWithDuration:0.5 delay:0 options: 0 animations:^{
         // this new value will drop it down with the spring damping (you can use the regular animateWithDuration method to do without that effect) to 200 below the top edge
+        
         self.categoryTableView.frame = CGRectMake(widthPadding, heightPadding, categoryViewWidth, categoryViewHeight);
+        
     } completion: nil];
     
     // alternatively, you can nest some more animations in the completion or whatever you want so that more things happen as soon it completes.
@@ -295,15 +318,40 @@
 
 -(void)dismissCategoryView {
     
+    
     if (self.yOriginCategoryView > self.yOriginBackgroundView) {
         [UIView animateWithDuration:1.5 delay:0 options: 0 animations:^{
             self.categoryTableView.frame = CGRectMake(CGRectGetMidX(self.mapView.frame) - CGRectGetWidth(self.categoryTableView.frame) / 2, CGRectGetMinY(self.mapView.frame) - 1000, 200, 200);
+            
+            //Dismiss Transparent Gray Background
+            [self.mapView removeOverlay:self.transparentGreyPolygon];
+            
         } completion: nil];
     }
     self.yOriginCategoryView = CGRectGetMinY(self.categoryTableView.frame);
     self.yOriginBackgroundView = CGRectGetMinY(self.view.frame);
     
+    
+    
     NSLog(@"This method ran: dismissCategoryView");
+}
+
+- (void) tapFired:(UITapGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateRecognized && self.transparentGreyPolygon) {
+        [self dismissCategoryView];
+    }
+    NSLog(@"This method ran: tapFired");
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    if (![overlay isKindOfClass:[MKPolygon class]]) {
+        return nil;
+    }
+    MKPolygon *polygon = (MKPolygon *)overlay;
+    MKPolygonRenderer *renderer = [[MKPolygonRenderer alloc] initWithPolygon:polygon];
+    renderer.fillColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.7];
+    return renderer;
 }
 
 #pragma mark - UIViewControllerTransitioningDelegate
