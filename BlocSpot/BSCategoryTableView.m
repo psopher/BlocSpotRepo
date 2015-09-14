@@ -17,6 +17,8 @@
 @property (nonatomic, strong) UITableViewHeaderFooterView *headerView;
 @property (nonatomic, strong) UIButton *addButton;
 @property (nonatomic, strong) UILabel *headerLabel;
+@property (nonatomic, assign) NSIndexPath* replaceIndex;
+@property (nonatomic, strong) UITableViewCell *cell;
 
 @end
 
@@ -57,6 +59,15 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
         
         NSLog(@"the category items array looks like this: %@", [BSDataSource sharedInstance].categoryItems);
         
+        
+        self.textField = [[UITextField alloc] init];
+        self.textField.returnKeyType = UIReturnKeyDone;
+        self.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+        self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+        self.textField.placeholder = NSLocalizedString(@"Type Category Name Here", @"Placeholder text for new category name");
+        self.textField.backgroundColor = [UIColor colorWithWhite:220/255.0f alpha:1];
+        self.textField.delegate = self;
+        
     }
     
     return self;
@@ -76,102 +87,6 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
 {
     [[BSDataSource sharedInstance] removeObserver:self forKeyPath:@"categoryItems"];
 }
-
-#pragma mark -
-#pragma Adding a row
-
-//  Creates a new nav controller with an instance of MyDetailController as
-//  its root view controller, and runs it as a modal view controller. By
-//  default, that causes the detail view to be animated as sliding up from
-//  the bottom of the screen. And because the detail controller is the root
-//  view controller, there's no back button.
-//
-
-//- (void)dealloc
-//{
-//    [_displayedObjects release];
-//    
-//    [super dealloc];
-//}
-//
-////  Lazily initializes array of displayed objects
-////
-//- (NSMutableArray *)displayedObjects
-//{
-//    if (_displayedObjects == nil)
-//    {
-//        _displayedObjects = [[NSMutableArray alloc] initWithObjects:
-//                             [Book bookWithTitle:@"Middlemarch"
-//                                          author:@"Eliot, George"
-//                                            year:1874
-//                                   imageFilePath:@"Eliot.jpg"],
-//                             [Book bookWithTitle:@"War and Peace"
-//                                          author:@"Tolstoy, Leo"
-//                                            year:1869
-//                                   imageFilePath:@"Tolstoy.jpg"],
-//                             [Book bookWithTitle:@"Mansfield Park"
-//                                          author:@"Austen, Jane"
-//                                            year:1814
-//                                   imageFilePath:@"Austen.jpg"],
-//                             [Book bookWithTitle:@"The New Atlantis"
-//                                          author:@"Bacon, Francis"
-//                                            year:1627
-//                                   imageFilePath:@"Bacon.jpg"],
-//                             [Book bookWithTitle:@"The Old Man and the Sea"
-//                                          author:@"Hemingway, Ernest"
-//                                            year:1952
-//                                   imageFilePath:@"Hemingway.jpg"],
-//                             nil];
-//    }
-//    
-//    return _displayedObjects;
-//}
-//
-//- (void)addObject:(id)anObject
-//{
-//    if (anObject != nil)
-//    {
-//        [[self displayedObjects] addObject:anObject];
-//    }
-//}
-//
-- (void)add:(UIButton *)sender
-{
-//    MyDetailController *controller = [[MyDetailController alloc]
-//                                      initWithStyle:UITableViewStyleGrouped];
-//    
-//    id book = [[Book alloc] init];
-//    [controller setBook:book];
-//    [controller setListController:self];
-//    
-//    UINavigationController *newNavController = [[UINavigationController alloc]
-//                                                initWithRootViewController:controller];
-//    
-//    [[self navigationController] presentModalViewController:newNavController
-//                                                   animated:YES];
-//    
-//    [book release];
-//    [controller release];
-    
-    NSLog(@"This Method was called: BSCategoryTableView add");
-}
-
-
-//- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
-//    [super setEditing:editing animated:animated];
-//    [self.tableView setEditing:editing animated:animated]; // not needed if super is a UITableViewController
-//    
-//    NSMutableArray* paths = [[NSMutableArray alloc] init];
-//    
-//    // fill paths of insertion rows here
-//    
-//    if( editing )
-//        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
-//    else
-//        [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
-//    
-//    [paths release];
-//}
 
 #pragma TableView DataSource and Delegate Methods
 
@@ -244,17 +159,29 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
     
     [super cellForRowAtIndexPath:indexPath];
     
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"categoryCell"];
+    self.cell = [tableView dequeueReusableCellWithIdentifier:@"categoryCell"];
         
-    if (cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"categoryCell"];
+    if (self.cell == nil){
+        self.cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"categoryCell"];
     }
     
-    [cell.textLabel setText:[BSDataSource sharedInstance].categoryItems[indexPath.row]];
+    [self.cell.textLabel setText:[BSDataSource sharedInstance].categoryItems[indexPath.row]];
+    
+    
+    CGFloat widthPadding = 10;
+    CGFloat heightPadding = 5;
+    
+    if ([self.cell.textLabel.text  isEqual: @"New Category"]) {
+        self.textField.frame=CGRectMake(widthPadding, heightPadding, self.cell.frame.size.width - widthPadding - widthPadding, self.cell.frame.size.height - heightPadding - heightPadding);
+        
+        self.replaceIndex = indexPath;
+        
+        [self.cell addSubview:self.textField];
+    }
 
     NSLog(@"This Method was called: BSCategoryTableView cellForRowAtIndexPath");
     
-    return cell;
+    return self.cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -287,11 +214,35 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
     NSLog(@"numberOfRowsInSection: %ld", (long)[self tableView:self numberOfRowsInSection:0]);
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        //Getting rid of check mark accessory
+        
+        for (NSInteger i = indexPath.row; i < [[BSDataSource sharedInstance].categoryItems count]; i++) {
+            NSIndexPath *currentIndex = [NSIndexPath indexPathForRow:i inSection:indexPath.section];
+            UITableViewCell* cellCheck = [tableView
+                                          cellForRowAtIndexPath:currentIndex];
+            
+            NSIndexPath *nextIndex = [NSIndexPath indexPathForRow:i+1 inSection:indexPath.section];
+            UITableViewCell* nextCell = [tableView
+                                         cellForRowAtIndexPath:(nextIndex)];
+            
+            if (cellCheck.accessoryType == UITableViewCellAccessoryCheckmark && nextCell.accessoryType == UITableViewCellAccessoryNone) {
+                cellCheck.accessoryType = UITableViewCellAccessoryNone;
+            } else if (cellCheck.accessoryType == UITableViewCellAccessoryNone && nextCell.accessoryType == UITableViewCellAccessoryCheckmark) {
+                cellCheck.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
+        }
+        
+        
         // Delete the row from the data source
         BSCategoryData *item = [BSDataSource sharedInstance].categoryItems[indexPath.row];
-        [[BSDataSource sharedInstance] deleteMediaItem:item];
+        [[BSDataSource sharedInstance] deleteCategoryItem:item];
+        
+       
+//        NSInteger nextIndexInt = [indexPath indexAtPosition:indexPath.length+1];
         
         [self reloadData];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:@"numberOfRowsChanged"
                                                                 object:nil];
@@ -355,5 +306,71 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
     
     NSLog(@"This method Did Run: observeValueForKeyPath");
 }
+
+#pragma Adding a row
+
+- (void)add:(UIButton *)sender
+{
+    NSMutableArray *categoriesArray = [@[@""] mutableCopy];
+    NSString *addCategoryPlaceHolderName = @"New Category";
+    
+    BSCategoryData *item = [[BSCategoryData alloc] initWithCategoryName:addCategoryPlaceHolderName categories:categoriesArray];
+    
+    [[BSDataSource sharedInstance] addCategoryItem:item];
+    
+//    [self reloadData];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"numberOfRowsChanged"
+                                                            object:nil];
+    });
+    
+    NSLog(@"indexPathsThatChanged is: %@", [BSDataSource sharedInstance].categoryItems);
+    
+    [self reloadData];
+    
+    NSLog(@"This Method was called: BSCategoryTableView add");
+}
+
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    
+    NSInteger index = self.replaceIndex.row;
+    
+    NSMutableArray *categoriesArray = [@[@""] mutableCopy];
+    NSString *newCategoryName = textField.text;
+    
+    BSCategoryData *item = [[BSCategoryData alloc] initWithCategoryName:newCategoryName categories:categoriesArray];
+    
+    [[BSDataSource sharedInstance] replaceCategoryItem:item index:index];
+    
+    [self.textField removeFromSuperview];
+    self.textField.text = nil;
+    
+    [self reloadData];
+    
+    NSLog(@"After replacing a cell CategoryItems is: %@", [BSDataSource sharedInstance].categoryItems);
+    
+    return NO;
+}
+
+//- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+//    [super setEditing:editing animated:animated];
+//    [self.tableView setEditing:editing animated:animated]; // not needed if super is a UITableViewController
+//
+//    NSMutableArray* paths = [[NSMutableArray alloc] init];
+//
+//    // fill paths of insertion rows here
+//
+//    if( editing )
+//        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
+//    else
+//        [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
+//
+//    [paths release];
+//}
 
 @end

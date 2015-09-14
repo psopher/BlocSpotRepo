@@ -281,9 +281,13 @@
     
     CGFloat categoryViewWidth = self.mapView.frame.size.width - widthPadding - widthPadding;
     
-    CGFloat categoryViewHeight = [BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*[[BSDataSource sharedInstance].categoryItems count];
+    CGFloat categoryViewHeight = MIN([BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*[[BSDataSource sharedInstance].categoryItems count], [BSDataSource sharedInstance].headerHeight + [BSDataSource sharedInstance].cellHeight*5);
     
     self.categoryTableView.frame = CGRectMake(widthPadding, heightPadding, categoryViewWidth, categoryViewHeight);
+    
+    //Scroll to bottom of tableview
+    CGPoint offset = CGPointMake(0, self.categoryTableView.contentSize.height -     self.categoryTableView.frame.size.height);
+    [self.categoryTableView setContentOffset:offset animated:YES];
     
     NSLog(@"This method fired: reloadCategoryView");
     

@@ -8,14 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BSCategoryTableView : UITableView <UITableViewDataSource, UITableViewDelegate>
+@interface BSCategoryTableView : UITableView <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 {
     NSMutableArray *_displayedObjects;
 }
 
 @property (nonatomic, retain) NSMutableArray *displayedObjects;
-//@property (nonatomic, strong) NSNumber *headerHeight;
-//@property (nonatomic, strong) NSNumber *cellHeight;
-//@property (nonatomic, strong) NSNumber *numberOfCells;
+@property (nonatomic, strong) UITextField *textField;
 
 @end

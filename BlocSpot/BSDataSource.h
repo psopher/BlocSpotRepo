@@ -19,7 +19,11 @@
 
 +(instancetype) sharedInstance;
 - (void) saveToDisk;
-- (void) deleteMediaItem:(BSCategoryData *)item;
+
+- (void) deleteCategoryItem:(BSCategoryData *)item;
+- (void) addCategoryItem:(BSCategoryData *)item;
+- (void) replaceCategoryItem:(BSCategoryData *)item index:(NSInteger )index;
+
 
 @property (strong, nonatomic) NSMutableArray *categoryItems;
 @property (strong, nonatomic) BSCategoryData *categories;

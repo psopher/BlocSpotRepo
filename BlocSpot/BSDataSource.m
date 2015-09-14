@@ -79,14 +79,31 @@
     [_categoryItems replaceObjectAtIndex:index withObject:object];
 }
 
-- (void) deleteMediaItem:(BSCategoryData *)item {
+- (void) deleteCategoryItem:(BSCategoryData *)item {
     NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"categoryItems"];
     
-    NSLog(@"The number of items in deleteMediaItem1 is: %lu", (unsigned long)self.categoryItems.count);
+    NSLog(@"The number of items in deleteCategoryItem1 is: %lu", (unsigned long)self.categoryItems.count);
     
     [mutableArrayWithKVO removeObject:item];
     
-    NSLog(@"The number of items in deleteMediaItem2 is: %lu", (unsigned long)self.categoryItems.count);
+    NSLog(@"The number of items in deleteCategoryItem2 is: %lu", (unsigned long)self.categoryItems.count);
+}
+
+- (void) addCategoryItem:(BSCategoryData *)item {
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"categoryItems"];
+    
+    NSLog(@"The number of items in addCategoryItem1 is: %lu", (unsigned long)self.categoryItems.count);
+    
+    [mutableArrayWithKVO addObject:item.categoryName];
+    
+    NSLog(@"The number of items in addCategoryItem2 is: %lu", (unsigned long)self.categoryItems.count);
+}
+
+- (void) replaceCategoryItem:(BSCategoryData *)item index:(NSInteger )index{
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"categoryItems"];
+    
+    [mutableArrayWithKVO replaceObjectAtIndex:index withObject:item.categoryName];
+
 }
 
 @end
