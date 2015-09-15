@@ -10,6 +10,7 @@
 #import "BSMapViewController.h"
 #import "BSDataSource.h"
 
+
 @interface BSSearchTableViewController ()
 
 @property (nonatomic, strong) MKMapView *mapViewReference;

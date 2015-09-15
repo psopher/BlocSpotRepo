@@ -11,10 +11,13 @@
 #import "BSCategoryTableView.h"
 #import "BSLocationsTableViewController.h"
 #import "BSDataSource.h"
+#import "MKAnnotationViewSubclass.h"
+#import "MKAnnotationCalloutView.h"
 
 #define categoryImage @"category"
 #define listImage @"list"
 #define currentLocationImage @"globe"
+#define annotationImage @"heart"
 
 @interface BSMapViewController () <UIViewControllerTransitioningDelegate>
 
@@ -24,6 +27,9 @@
 @property (nonatomic) CGFloat yOriginCategoryView;
 @property (nonatomic) CGFloat yOriginBackgroundView;
 @property (strong, nonatomic) MKPolygon *transparentGreyPolygon;
+@property (strong, nonatomic) UIPopoverPresentationController *annotationPopover;
+@property (strong, nonatomic) MKAnnotationViewSubclass *MKAnnotationViewSubclass;
+@property (strong, nonatomic) MKAnnotationCalloutView* annotationCalloutView;
 
 @end
 
@@ -47,6 +53,9 @@
         self.title = NSLocalizedString(@"Map", @"Map View");
         
         self.transparentGreyPolygon = [[MKPolygon alloc] init];
+        
+        self.MKAnnotationViewSubclass = [[MKAnnotationViewSubclass alloc] init];
+        self.annotationCalloutView = [[MKAnnotationCalloutView alloc] init];
     }
     
     
@@ -343,28 +352,62 @@
     return renderer;
 }
 
-#pragma mark - UIViewControllerTransitioningDelegate
+#pragma mark - MKAnnotationView
 
-//- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-//                                                                  presentingController:(UIViewController *)presenting
-//                                                                      sourceController:(UIViewController *)source {
-//    
-//    BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
-//    animator.presenting = YES;
-//    animator.customCategoryView = self.categoryVC;
-//    
-//    NSLog(@"This method ran: animationControllerForPresentedController");
-//    
-//    return animator;
-//}
-//
-//- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-//    BSCategoryTransitionAnimator *animator = [[BSCategoryTransitionAnimator alloc] init];
-//    animator.customCategoryView = self.categoryVC;
-//    
-//    NSLog(@"This method ran: animationControllerForDismissedController");
-//    
-//    return animator;
-//}
+//- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
+- (MKAnnotationViewSubclass *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[MKUserLocation class]])
+    {
+        return nil;
+    }
+    else if ([annotation isKindOfClass:[MKPlacemark class]]) // use whatever annotation class you used when creating the annotation
+    {
+        static NSString * const identifier = @"MyCustomAnnotation";
+        
+//        MKAnnotationView* annotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+//        
+//        if (annotationView)
+//        {
+//            annotationView.annotation = annotation;
+//        }
+//        else
+//        {
+//            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation
+//                                                          reuseIdentifier:identifier];
+//        }
+//        
+//        annotationView.canShowCallout = NO;
+//        annotationView.image = [UIImage imageNamed:annotationImage];
+//        
+//        return annotationView;
+        
+        self.MKAnnotationViewSubclass = [mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        if (self.MKAnnotationViewSubclass)
+        {
+            self.MKAnnotationViewSubclass.annotation = annotation;
+        }
+        else
+        {
+            self.MKAnnotationViewSubclass = [[MKAnnotationViewSubclass alloc] initWithAnnotation:annotation
+                                                          reuseIdentifier:identifier];
+        }
+        
+        self.MKAnnotationViewSubclass.canShowCallout = NO;
+        self.MKAnnotationViewSubclass.image = [UIImage imageNamed:annotationImage];
+        
+        return self.MKAnnotationViewSubclass;
+
+    }
+    
+    return nil;
+}
+
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationViewSubclass *)view
+{
+
+    [view addSubview:self.annotationCalloutView];
+    
+}
 
 @end

@@ -19,6 +19,8 @@
 		5781EE2D1B87BF37007829D4 /* BSCategoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE2C1B87BF37007829D4 /* BSCategoryTableView.m */; };
 		5781EE331B8E0D7C007829D4 /* BSDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE321B8E0D7C007829D4 /* BSDataSource.m */; };
 		5781EE361BA1F4B6007829D4 /* BSCategoryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE351BA1F4B6007829D4 /* BSCategoryData.m */; };
+		5781EE3A1BA89EB2007829D4 /* MKAnnotationCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE391BA89EB1007829D4 /* MKAnnotationCalloutView.m */; };
+		5781EE3D1BA8B598007829D4 /* MKAnnotationViewSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE3C1BA8B598007829D4 /* MKAnnotationViewSubclass.m */; };
 		578D5ED41B87A05C00997A11 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 578D5ED31B87A05C00997A11 /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +58,10 @@
 		5781EE321B8E0D7C007829D4 /* BSDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSDataSource.m; sourceTree = "<group>"; };
 		5781EE341BA1F4B6007829D4 /* BSCategoryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSCategoryData.h; sourceTree = "<group>"; };
 		5781EE351BA1F4B6007829D4 /* BSCategoryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSCategoryData.m; sourceTree = "<group>"; };
+		5781EE381BA89EB1007829D4 /* MKAnnotationCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKAnnotationCalloutView.h; sourceTree = "<group>"; };
+		5781EE391BA89EB1007829D4 /* MKAnnotationCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKAnnotationCalloutView.m; sourceTree = "<group>"; };
+		5781EE3B1BA8B598007829D4 /* MKAnnotationViewSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKAnnotationViewSubclass.h; sourceTree = "<group>"; };
+		5781EE3C1BA8B598007829D4 /* MKAnnotationViewSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKAnnotationViewSubclass.m; sourceTree = "<group>"; };
 		578D5ED31B87A05C00997A11 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		74BDC0B70337A1F7601EC132 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3869DF7348542A1811CDEF1 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -108,6 +114,10 @@
 				57633F6F1B878E530044C331 /* AppDelegate.m */,
 				57633F711B878E530044C331 /* BSMapViewController.h */,
 				57633F721B878E530044C331 /* BSMapViewController.m */,
+				5781EE3B1BA8B598007829D4 /* MKAnnotationViewSubclass.h */,
+				5781EE3C1BA8B598007829D4 /* MKAnnotationViewSubclass.m */,
+				5781EE381BA89EB1007829D4 /* MKAnnotationCalloutView.h */,
+				5781EE391BA89EB1007829D4 /* MKAnnotationCalloutView.m */,
 				5781EE251B87A73B007829D4 /* BSLocationsTableViewController.h */,
 				5781EE261B87A73B007829D4 /* BSLocationsTableViewController.m */,
 				5781EE281B87BF13007829D4 /* BSSearchTableViewController.h */,
@@ -319,11 +329,13 @@
 				5781EE271B87A73B007829D4 /* BSLocationsTableViewController.m in Sources */,
 				5781EE331B8E0D7C007829D4 /* BSDataSource.m in Sources */,
 				57633F731B878E530044C331 /* BSMapViewController.m in Sources */,
+				5781EE3D1BA8B598007829D4 /* MKAnnotationViewSubclass.m in Sources */,
 				5781EE2D1B87BF37007829D4 /* BSCategoryTableView.m in Sources */,
 				5781EE361BA1F4B6007829D4 /* BSCategoryData.m in Sources */,
 				5781EE2A1B87BF14007829D4 /* BSSearchTableViewController.m in Sources */,
 				57633F701B878E530044C331 /* AppDelegate.m in Sources */,
 				57633F6D1B878E530044C331 /* main.m in Sources */,
+				5781EE3A1BA89EB2007829D4 /* MKAnnotationCalloutView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
