@@ -30,6 +30,7 @@
 @property (strong, nonatomic) UIPopoverPresentationController *annotationPopover;
 @property (strong, nonatomic) MKAnnotationViewSubclass *MKAnnotationViewSubclass;
 @property (strong, nonatomic) MKAnnotationCalloutView* annotationCalloutView;
+@property (assign, nonatomic) CGPoint calloutStartPoint;
 
 @end
 
@@ -115,6 +116,11 @@
     CGFloat padding = 40;
     
     self.refreshCurrentLocationButton.frame = CGRectMake(self.mapView.frame.size.width - padding, self.mapView.frame.size.height - padding, 22, 22);
+    
+    
+    
+    self.calloutStartPoint = CGPointMake(self.mapView.bounds.size.width/4, self.mapView.bounds.size.height/4);
+//    self.annotationCalloutView.frame = CGRectMake(self.calloutStartPoint.x, self.calloutStartPoint.y, self.mapView.bounds.size.width/2, self.mapView.bounds.size.height/4);
     
     NSLog(@"This method ran: BSMapViewController viewWillLayoutSubviews");
 }
@@ -354,7 +360,6 @@
 
 #pragma mark - MKAnnotationView
 
-//- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 - (MKAnnotationViewSubclass *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
     if ([annotation isKindOfClass:[MKUserLocation class]])
@@ -364,23 +369,6 @@
     else if ([annotation isKindOfClass:[MKPlacemark class]]) // use whatever annotation class you used when creating the annotation
     {
         static NSString * const identifier = @"MyCustomAnnotation";
-        
-//        MKAnnotationView* annotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
-//        
-//        if (annotationView)
-//        {
-//            annotationView.annotation = annotation;
-//        }
-//        else
-//        {
-//            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation
-//                                                          reuseIdentifier:identifier];
-//        }
-//        
-//        annotationView.canShowCallout = NO;
-//        annotationView.image = [UIImage imageNamed:annotationImage];
-//        
-//        return annotationView;
         
         self.MKAnnotationViewSubclass = [mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         if (self.MKAnnotationViewSubclass)
@@ -406,8 +394,14 @@
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationViewSubclass *)view
 {
 
-    [view addSubview:self.annotationCalloutView];
+    if(![view.annotation isKindOfClass:[MKUserLocation class]]) {
+        self.annotationCalloutView.frame = CGRectMake(self.calloutStartPoint.x, self.calloutStartPoint.y, self.mapView.bounds.size.width/2, self.mapView.bounds.size.height/4);
+        self.annotationCalloutView.backgroundColor = [UIColor whiteColor];
+        [view.superview addSubview:self.annotationCalloutView];
+    }
     
+    NSLog(@"This method ran: didSelectAnnotationView");
 }
+
 
 @end

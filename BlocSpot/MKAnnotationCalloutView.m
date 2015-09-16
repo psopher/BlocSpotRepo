@@ -10,6 +10,17 @@
 
 @implementation MKAnnotationCalloutView
 
-
+- (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event
+{
+    UIView* hitView = [super hitTest:point withEvent:event];
+    if (hitView != self)
+    {
+        [self removeFromSuperview];
+    }
+    
+    NSLog(@"This method ran: MKAnnotationCalloutView hitTest");
+    
+    return hitView;
+}
 
 @end
