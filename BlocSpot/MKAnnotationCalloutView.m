@@ -23,16 +23,46 @@
     
     if (self) {
         
+        self.layer.cornerRadius = 5;
+        self.layer.masksToBounds = YES;
+        
         self.headerView = [[UIView alloc] init];
-        self.headerView.backgroundColor = [[UIColor lightGrayColor]colorWithAlphaComponent:0.7];
+        self.headerView.backgroundColor = [UIColor whiteColor];
         self.textView = [[UITextView alloc] init];
-        self.textView.backgroundColor = [[UIColor lightGrayColor]colorWithAlphaComponent:0.7];
+        self.textView.backgroundColor = [UIColor whiteColor];
         self.buttonsView = [[UIView alloc] init];
-        self.buttonsView.backgroundColor = [[UIColor lightGrayColor]colorWithAlphaComponent:0.7];
+        self.buttonsView.backgroundColor = [UIColor whiteColor];
         
         [self addSubview:self.headerView];
         [self addSubview:self.textView];
         [self addSubview:self.buttonsView];
+        
+        self.heartButton = [[UIButton alloc] init];
+        self.heartButtonImage = [UIImage imageNamed:heartImage];
+        self.visitedButtonImage = [UIImage imageNamed:visitedImage];
+        [self.heartButton setImage:self.heartButtonImage forState:UIControlStateNormal];
+        
+        [self.heartButton addTarget:self action:@selector(heartButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.directionsButton = [[UIButton alloc] init];
+        UIImage *directionsButtonImage = [UIImage imageNamed:directionsImage];
+        [self.directionsButton setImage:directionsButtonImage forState:UIControlStateNormal];
+        [self.directionsButton addTarget:self action:@selector(directionsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.shareButton = [[UIButton alloc] init];
+        UIImage *shareButtonImage = [UIImage imageNamed:shareImage];
+        [self.shareButton setImage:shareButtonImage forState:UIControlStateNormal];
+        [self.shareButton addTarget:self action:@selector(shareButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.trashButton = [[UIButton alloc] init];
+        UIImage *trashButtonImage = [UIImage imageNamed:trashImage];
+        [self.trashButton setImage:trashButtonImage forState:UIControlStateNormal];
+        [self.trashButton addTarget:self action:@selector(trashButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.headerView addSubview:self.heartButton];
+        [self.buttonsView addSubview:self.directionsButton];
+        [self.buttonsView addSubview:self.shareButton];
+        [self.buttonsView addSubview:self.trashButton];
         
     }
 
@@ -43,17 +73,70 @@
     
     [super layoutSubviews];
     
-    CGFloat viewWidth = self.bounds.size.width;
+    CGFloat widthPadding = 5;
+    CGFloat heightPadding = 5;
+    CGFloat viewWidth = self.bounds.size.width - widthPadding - widthPadding;
     CGFloat headerHeight = self.bounds.size.height/5;
-    CGFloat headerTextPadding = 1;
-    CGFloat textViewHeight = (headerHeight*3) - headerTextPadding;
+    CGFloat headerTextPadding = heightPadding*2;
+    CGFloat textViewHeight = ((headerHeight-heightPadding)*3) - heightPadding;
     
-    self.headerView.frame = CGRectMake(0, 0, viewWidth, headerHeight);
-    self.textView.frame = CGRectMake(0, self.headerView.frame.size.height + 1, viewWidth, textViewHeight);
-    self.buttonsView.frame = CGRectMake(0, headerHeight*4, viewWidth, headerHeight);
+    self.headerView.frame = CGRectMake(widthPadding, heightPadding, viewWidth, headerHeight);
+    self.textView.frame = CGRectMake(widthPadding, self.headerView.frame.size.height + headerTextPadding, viewWidth, textViewHeight);
+    self.buttonsView.frame = CGRectMake(widthPadding, headerHeight*4 - heightPadding, viewWidth, headerHeight);
+    
+    CGFloat directionsButtonStartX = self.buttonsView.bounds.size.width/2;
+    CGFloat buttonPaddingY = 5;
+    CGFloat buttonWidth = self.buttonsView.bounds.size.width/6;
+    CGFloat buttonHeight= self.buttonsView.bounds.size.height - buttonPaddingY - buttonPaddingY;
+    CGFloat shareButtonStartX = directionsButtonStartX + buttonWidth;
+    CGFloat trashButtonStartX = shareButtonStartX + buttonWidth;
+    
+    self.directionsButton.frame = CGRectMake(directionsButtonStartX, buttonPaddingY, buttonWidth, buttonHeight);
+    self.shareButton.frame = CGRectMake(shareButtonStartX, buttonPaddingY, buttonWidth, buttonHeight);
+    self.trashButton.frame = CGRectMake(trashButtonStartX, buttonPaddingY, buttonWidth, buttonHeight);
     
     
+    CGFloat heartButtonStartX = trashButtonStartX;
+    CGFloat heartButtonWidth = self.headerView.bounds.size.width/6;
+    CGFloat heartButtonHeight= self.headerView.bounds.size.height - buttonPaddingY - buttonPaddingY;
     
+    self.heartButton.frame = CGRectMake(heartButtonStartX, buttonPaddingY, heartButtonWidth, heartButtonHeight);
+    
+}
+
+#pragma Buttons Pressed
+
+- (void) heartButtonPressed:(UIBarButtonItem *)sender {
+    
+//    if ([self.heartButton.imageView.image  isEqual: self.heartButtonImage]) {
+//        UIImage *visitedButtonImage = [UIImage imageNamed:visitedImage];
+//        [self.heartButton setImage:visitedButtonImage forState:UIControlStateNormal];
+//    } else {
+//        [self.heartButton setImage:self.heartButtonImage forState:UIControlStateNormal];
+//    }
+    
+    if ([self.heartButton.imageView.image  isEqual: self.heartButtonImage]) {
+        [self.heartButton setImage:self.visitedButtonImage forState:UIControlStateNormal];
+    } else {
+        [self.heartButton setImage:self.heartButtonImage forState:UIControlStateNormal];
+    }
+    
+    NSLog(@"This method ran: heartButtonPressed");
+}
+
+- (void) directionsButtonPressed:(UIBarButtonItem *)sender {
+    
+    NSLog(@"This method ran: directionsButtonPressed");
+}
+
+- (void) shareButtonPressed:(UIBarButtonItem *)sender {
+    
+    NSLog(@"This method ran: shareButtonPressed");
+}
+
+- (void) trashButtonPressed:(UIBarButtonItem *)sender {
+    
+    NSLog(@"This method ran: trashButtonPressed");
 }
 
 #pragma Makes the callout disappear when a different spot on the map is tapped
@@ -61,7 +144,7 @@
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event
 {
     UIView* hitView = [super hitTest:point withEvent:event];
-    if (hitView != self)
+    if (hitView != self && hitView != self.headerView && hitView != self.textView && hitView != self.buttonsView && hitView != self.heartButton && hitView != self.directionsButton && hitView != self.shareButton && hitView != self.trashButton)
     {
         [self removeFromSuperview];
     }

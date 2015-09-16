@@ -23,6 +23,9 @@
 @property (nonatomic, strong) UIButton* shareButton;
 @property (nonatomic, strong) UIButton* trashButton;
 
+@property (nonatomic, strong) UIImage* heartButtonImage;
+@property (nonatomic, strong) UIImage* visitedButtonImage;
+
 - (instancetype) init;
 
 @end

@@ -256,7 +256,6 @@
     
     UIImage *resetLocationImage = [UIImage imageNamed:currentLocationImage];
     [self.refreshCurrentLocationButton setImage:resetLocationImage forState:UIControlStateNormal];
-//    self.refreshCurrentLocationButton.backgroundColor = [UIColor cyanColor];
     
     [self.refreshCurrentLocationButton addTarget:self action:@selector(refreshCurrentLocationPressed:) forControlEvents:UIControlEventTouchUpInside];
     
