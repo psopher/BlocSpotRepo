@@ -119,8 +119,9 @@
     
     
     
-    self.calloutStartPoint = CGPointMake(self.mapView.bounds.size.width/4, self.mapView.bounds.size.height/4);
-//    self.annotationCalloutView.frame = CGRectMake(self.calloutStartPoint.x, self.calloutStartPoint.y, self.mapView.bounds.size.width/2, self.mapView.bounds.size.height/4);
+    self.calloutStartPoint = CGPointMake(self.mapView.bounds.size.width/10, self.mapView.bounds.size.height/10);
+    self.annotationCalloutView.frame = CGRectMake(self.calloutStartPoint.x, self.calloutStartPoint.y, (self.mapView.bounds.size.width/5)*4, (self.mapView.bounds.size.height/2) - self.calloutStartPoint.y);
+    self.annotationCalloutView.backgroundColor = [UIColor whiteColor];
     
     NSLog(@"This method ran: BSMapViewController viewWillLayoutSubviews");
 }
@@ -360,7 +361,8 @@
 
 #pragma mark - MKAnnotationView
 
-- (MKAnnotationViewSubclass *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
+//- (MKAnnotationViewSubclass *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
+- (MKAnnotationViewSubclass *)mapView:(MKMapView *)mapView viewForAnnotation:(MKPlacemark*)annotation
 {
     if ([annotation isKindOfClass:[MKUserLocation class]])
     {
@@ -393,10 +395,13 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationViewSubclass *)view
 {
-
+    
     if(![view.annotation isKindOfClass:[MKUserLocation class]]) {
-        self.annotationCalloutView.frame = CGRectMake(self.calloutStartPoint.x, self.calloutStartPoint.y, self.mapView.bounds.size.width/2, self.mapView.bounds.size.height/4);
-        self.annotationCalloutView.backgroundColor = [UIColor whiteColor];
+        CGPoint touchPoint = view.center;
+        CLLocationCoordinate2D location =
+        [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+        [mapView setCenterCoordinate:location animated:YES];
+        
         [view.superview addSubview:self.annotationCalloutView];
     }
     

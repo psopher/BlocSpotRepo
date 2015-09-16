@@ -12,7 +12,7 @@
 
 @interface MKAnnotationCalloutView : UIView
 
-@property (nonatomic, strong) id <MKAnnotation> annotation;
-
+//@property (nonatomic, strong) id <MKAnnotation> annotation;
+@property (nonatomic, strong) MKPlacemark* annotation;
 
 @end

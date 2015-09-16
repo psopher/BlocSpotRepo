@@ -13,6 +13,6 @@
 @interface MKAnnotationViewSubclass : MKAnnotationView
 
 @property (strong, nonatomic) MKAnnotationCalloutView *annotationCallout;
-
+@property(nonatomic, readonly) CLLocationCoordinate2D coordinate;
 
 @end
