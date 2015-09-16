@@ -228,6 +228,10 @@
     
     [self mapView:self.mapView didUpdateUserLocation:self.mapView.userLocation];
     
+    if (self.annotationCalloutView) {
+        [self.annotationCalloutView removeFromSuperview];
+    }
+    
     NSLog(@"This method ran: refreshCurrentLocationPressed");
 }
 
@@ -407,6 +411,5 @@
     
     NSLog(@"This method ran: didSelectAnnotationView");
 }
-
 
 @end
