@@ -121,7 +121,7 @@
     
     self.calloutStartPoint = CGPointMake(self.mapView.bounds.size.width/10, self.mapView.bounds.size.height/10);
     self.annotationCalloutView.frame = CGRectMake(self.calloutStartPoint.x, self.calloutStartPoint.y, (self.mapView.bounds.size.width/5)*4, (self.mapView.bounds.size.height/2) - self.calloutStartPoint.y);
-    self.annotationCalloutView.backgroundColor = [UIColor whiteColor];
+    self.annotationCalloutView.backgroundColor = [UIColor lightGrayColor];
     
     NSLog(@"This method ran: BSMapViewController viewWillLayoutSubviews");
 }
