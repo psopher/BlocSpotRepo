@@ -102,6 +102,16 @@
     [self.textView addSubview:self.commentButton];
     
     //Buttons View
+    self.selectCategoryButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.selectCategoryButton.backgroundColor = [BSDataSource sharedInstance].colors[0];
+    NSString *baseString = [NSString stringWithFormat:@"%@", [BSDataSource sharedInstance].categoryItems[0]];
+    NSRange range = [baseString rangeOfString:baseString];
+    NSMutableAttributedString *selectCategoryString = [[NSMutableAttributedString alloc] initWithString:baseString];
+    [selectCategoryString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:11] range:range];
+    [selectCategoryString addAttribute:NSKernAttributeName value:@1.3 range:range];
+    [self.selectCategoryButton setAttributedTitle:selectCategoryString forState:UIControlStateNormal];
+    [self.selectCategoryButton addTarget:self action:@selector(selectCategoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
     self.directionsButton = [[UIButton alloc] init];
     UIImage *directionsButtonImage = [UIImage imageNamed:directionsImage];
     [self.directionsButton setImage:directionsButtonImage forState:UIControlStateNormal];
@@ -117,6 +127,7 @@
     [self.trashButton setImage:trashButtonImage forState:UIControlStateNormal];
     [self.trashButton addTarget:self action:@selector(trashButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
+    [self.buttonsView addSubview:self.selectCategoryButton];
     [self.buttonsView addSubview:self.directionsButton];
     [self.buttonsView addSubview:self.shareButton];
     [self.buttonsView addSubview:self.trashButton];
@@ -128,12 +139,13 @@
     //Header View
     CGFloat heartButtonStartX = (self.headerView.bounds.size.width/6)*5;
     CGFloat heartButtonWidth = self.headerView.bounds.size.width/6;
+    CGFloat buttonPaddingX = 5;
     CGFloat buttonPaddingY = 5;
     CGFloat heartButtonHeight= self.headerView.bounds.size.height - buttonPaddingY - buttonPaddingY;
     
     self.heartButton.frame = CGRectMake(heartButtonStartX, buttonPaddingY, heartButtonWidth, heartButtonHeight);
     
-    CGFloat headerLabelStartX = buttonPaddingY;
+    CGFloat headerLabelStartX = buttonPaddingX;
     CGFloat headerLabelStartY = buttonPaddingY;
     CGFloat headerLabelWidth = (self.headerView.bounds.size.width/6)*5 - buttonPaddingY;
     CGFloat headerLabelHeight = self.headerView.bounds.size.height - buttonPaddingY - buttonPaddingY;
@@ -163,6 +175,14 @@
     self.textView.textContainer.exclusionPaths = @[buttonPath];
     
     //Buttons View
+    
+    CGFloat selectCategoryButtonStartX = buttonPaddingX;
+    CGFloat selectCategoryButtonStartY = buttonPaddingY;
+    CGFloat selectCategoryButtonWidth = (self.buttonsView.bounds.size.width/6)*3;
+    CGFloat selectCategoryButtonHeight = self.buttonsView.bounds.size.height - buttonPaddingY - buttonPaddingY;
+    
+    self.selectCategoryButton.frame =  CGRectMake(selectCategoryButtonStartX, selectCategoryButtonStartY, selectCategoryButtonWidth, selectCategoryButtonHeight);
+    
     CGFloat directionsButtonStartX = self.buttonsView.bounds.size.width/2;
     CGFloat buttonWidth = self.buttonsView.bounds.size.width/6;
     CGFloat buttonHeight= self.buttonsView.bounds.size.height - buttonPaddingY - buttonPaddingY;
@@ -210,6 +230,11 @@
     NSLog(@"This method ran: commentButtonPressed");
 }
 
+- (void) selectCategoryButtonPressed:(UIBarButtonItem *)sender {
+    
+    NSLog(@"This method ran: selectCategoryButtonPressed");
+}
+
 - (void) directionsButtonPressed:(UIBarButtonItem *)sender {
     
     NSLog(@"This method ran: directionsButtonPressed");
@@ -230,7 +255,7 @@
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event
 {
     UIView* hitView = [super hitTest:point withEvent:event];
-    if (hitView != self && hitView != self.headerView && hitView != self.textView && hitView != self.buttonsView && hitView != self.heartButton && hitView != self.commentButton && hitView != self.directionsButton && hitView != self.shareButton && hitView != self.trashButton)
+    if (hitView != self && hitView != self.headerView && hitView != self.textView && hitView != self.buttonsView && hitView != self.heartButton && hitView != self.commentButton && hitView != self.selectCategoryButton && hitView != self.directionsButton && hitView != self.shareButton && hitView != self.trashButton)
     {
         [self removeFromSuperview];
     }

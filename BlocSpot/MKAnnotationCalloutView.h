@@ -30,9 +30,11 @@
 
 @property (nonatomic, strong) UIButton* heartButton;
 @property (nonatomic, strong) UIButton *commentButton;
+@property (nonatomic, strong) UIButton* selectCategoryButton;
 @property (nonatomic, strong) UIButton* directionsButton;
 @property (nonatomic, strong) UIButton* shareButton;
 @property (nonatomic, strong) UIButton* trashButton;
+
 
 @property (nonatomic, strong) UIImage* heartButtonImage;
 @property (nonatomic, strong) UIImage* visitedButtonImage;
