@@ -7,6 +7,7 @@
 //
 
 #import "MKAnnotationCalloutView.h"
+#import "BSDataSource.h"
 
 #define directionsImage @"directions"
 #define shareImage @"share"
@@ -29,7 +30,7 @@
         
         [self initializingViews];
         
-        [self initializingButtons];
+        [self initializingSubviews];
         
     }
 
@@ -42,7 +43,7 @@
     
     [self viewLayouts];
     
-    [self buttonLayouts];
+    [self subviewLayouts];
     
 }
 
@@ -79,18 +80,28 @@
     
 }
 
--(void)initializingButtons {
+-(void)initializingSubviews {
     
+    //Header View
     self.heartButton = [[UIButton alloc] init];
     self.heartButtonImage = [UIImage imageNamed:heartImage];
     self.visitedButtonImage = [UIImage imageNamed:visitedImage];
     [self.heartButton setImage:self.heartButtonImage forState:UIControlStateNormal];
     [self.heartButton addTarget:self action:@selector(heartButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
+    self.headerLabel = [[UILabel alloc] init];
+    
+    [self.headerView addSubview:self.heartButton];
+    [self.headerView addSubview:self.headerLabel];
+    
+    //Text View
     self.commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.commentButton setAttributedTitle:[self commentAttributedString] forState:UIControlStateNormal];
     [self.commentButton addTarget:self action:@selector(commentButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
+    [self.textView addSubview:self.commentButton];
+    
+    //Buttons View
     self.directionsButton = [[UIButton alloc] init];
     UIImage *directionsButtonImage = [UIImage imageNamed:directionsImage];
     [self.directionsButton setImage:directionsButtonImage forState:UIControlStateNormal];
@@ -106,25 +117,33 @@
     [self.trashButton setImage:trashButtonImage forState:UIControlStateNormal];
     [self.trashButton addTarget:self action:@selector(trashButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.headerView addSubview:self.heartButton];
-    [self.textView addSubview:self.commentButton];
     [self.buttonsView addSubview:self.directionsButton];
     [self.buttonsView addSubview:self.shareButton];
     [self.buttonsView addSubview:self.trashButton];
     
 }
 
--(void)buttonLayouts {
+-(void)subviewLayouts {
     
-    //header buttons
+    //Header View
     CGFloat heartButtonStartX = (self.headerView.bounds.size.width/6)*5;
     CGFloat heartButtonWidth = self.headerView.bounds.size.width/6;
     CGFloat buttonPaddingY = 5;
     CGFloat heartButtonHeight= self.headerView.bounds.size.height - buttonPaddingY - buttonPaddingY;
     
     self.heartButton.frame = CGRectMake(heartButtonStartX, buttonPaddingY, heartButtonWidth, heartButtonHeight);
+    
+    CGFloat headerLabelStartX = buttonPaddingY;
+    CGFloat headerLabelStartY = buttonPaddingY;
+    CGFloat headerLabelWidth = (self.headerView.bounds.size.width/6)*5 - buttonPaddingY;
+    CGFloat headerLabelHeight = self.headerView.bounds.size.height - buttonPaddingY - buttonPaddingY;
+    
+    self.headerLabel.text = self.headerText;
+    
+    self.headerLabel.frame = CGRectMake(headerLabelStartX, headerLabelStartY, headerLabelWidth, headerLabelHeight);
+    
 
-    //textView buttons
+    //Text View
     if (self.isWritingComment) {
         self.textView.backgroundColor = [UIColor colorWithRed:0.933 green:0.933 blue:0.933 alpha:1]; /*#eeeeee*/
         self.commentButton.backgroundColor = [UIColor colorWithRed:0.345 green:0.318 blue:0.424 alpha:1]; /*#58516c*/
@@ -134,8 +153,6 @@
     } else {
         self.textView.backgroundColor = [UIColor colorWithRed:0.898 green:0.898 blue:0.898 alpha:1]; /*#e5e5e5*/
         self.commentButton.backgroundColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1]; /*#999999*/
-        
-//        self.commentButton.frame = CGRectMake(10, 10, 80, 20);
     }
     
     CGSize buttonSize = self.commentButton.frame.size;
@@ -147,7 +164,7 @@
     
     self.textView.textContainer.exclusionPaths = @[buttonPath];
     
-    //buttonsView Buttons
+    //Buttons View
     CGFloat directionsButtonStartX = self.buttonsView.bounds.size.width/2;
     CGFloat buttonWidth = self.buttonsView.bounds.size.width/6;
     CGFloat buttonHeight= self.buttonsView.bounds.size.height - buttonPaddingY - buttonPaddingY;
