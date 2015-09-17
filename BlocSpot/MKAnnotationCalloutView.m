@@ -199,6 +199,7 @@
     
     if (self.isWritingComment) {
         [self.textView resignFirstResponder];
+        self.commentButton.frame = CGRectMake(CGRectGetWidth(self.textView.bounds) - 100, self.textView.bounds.size.height - 30, 0, 0);
         self.textView.userInteractionEnabled = YES;
         [self.delegate textViewDidPressCommentButton:self];
     } else {
