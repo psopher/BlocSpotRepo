@@ -138,8 +138,6 @@
     CGFloat headerLabelWidth = (self.headerView.bounds.size.width/6)*5 - buttonPaddingY;
     CGFloat headerLabelHeight = self.headerView.bounds.size.height - buttonPaddingY - buttonPaddingY;
     
-    self.headerLabel.text = self.headerText;
-    
     self.headerLabel.frame = CGRectMake(headerLabelStartX, headerLabelStartY, headerLabelWidth, headerLabelHeight);
     
 

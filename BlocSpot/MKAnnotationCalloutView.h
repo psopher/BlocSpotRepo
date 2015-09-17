@@ -38,7 +38,7 @@
 @property (nonatomic, strong) UIImage* visitedButtonImage;
 
 @property (nonatomic, strong) UILabel* headerLabel;
-@property (nonatomic, strong) NSString* headerText;
+//@property (nonatomic, strong) NSString* headerText;
 
 @property (nonatomic, weak) NSObject <MKAnnotationCalloutViewDelegate> *delegate;
 @property (nonatomic, assign) BOOL isWritingComment;

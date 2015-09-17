@@ -371,7 +371,7 @@
     {
         return nil;
     }
-    else if ([annotation isKindOfClass:[MKPlacemark class]]) // use whatever annotation class you used when creating the annotation
+    else if ([annotation isKindOfClass:[MKPointAnnotation class]]) // use whatever annotation class you used when creating the annotation
     {
         static NSString * const identifier = @"MyCustomAnnotation";
         
@@ -400,39 +400,44 @@
 {
     
     if(![view.annotation isKindOfClass:[MKUserLocation class]]) {
+
         CGPoint touchPoint = view.center;
         CLLocationCoordinate2D location =
         [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
         [mapView setCenterCoordinate:location animated:YES];
         
-        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+//        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+//        
+//        CLLocation *newLocation = [[CLLocation alloc]initWithLatitude:location.latitude
+//                                                            longitude:location.longitude];
+//        
+//        [geocoder reverseGeocodeLocation:newLocation
+//                       completionHandler:^(NSArray *placemarks, NSError *error) {
+//                           
+//                           if (error) {
+//                               NSLog(@"Geocode failed with error: %@", error);
+//                               return;
+//                           }
+//                           
+//                           if (placemarks && placemarks.count > 0)
+//                           {
+//                               CLPlacemark *placemark = placemarks[0];
+//                               
+//                               self.annotationCalloutView.headerLabel.text = [placemark name];
+//                               
+//                               NSLog(@"Placemark name is: %@", [placemark name]);
+//                               NSLog(@"Annotation Header Text is: %@", self.annotationCalloutView.headerLabel.text);
+//                           }
+//                           
+//                       }];
         
-        CLLocation *newLocation = [[CLLocation alloc]initWithLatitude:location.latitude
-                                                            longitude:location.longitude];
+        self.annotationCalloutView.headerLabel.text = [view.annotation title];
         
-        [geocoder reverseGeocodeLocation:newLocation
-                       completionHandler:^(NSArray *placemarks, NSError *error) {
-                           
-                           if (error) {
-                               NSLog(@"Geocode failed with error: %@", error);
-                               return;
-                           }
-                           
-                           if (placemarks && placemarks.count > 0)
-                           {
-                               CLPlacemark *placemark = placemarks[0];
-                               
-                               self.annotationCalloutView.headerText = [placemark name];
-                               
-                               NSLog(@"Placemark name is: %@", [placemark name]);
-                               NSLog(@"Annotation Header Text is: %@", self.annotationCalloutView.headerText);
-                           }
-                           
-                       }];
-        
-        NSLog(@"Annotation Header Text is: %@", self.annotationCalloutView.headerText);
+        NSLog(@"Annotation Header Text is: %@", self.annotationCalloutView.headerLabel.text);
         
         [view.superview addSubview:self.annotationCalloutView];
+        
+
     }
     
     NSLog(@"This method ran: didSelectAnnotationView");

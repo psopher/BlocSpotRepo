@@ -172,10 +172,21 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     MKMapItem *item = self.localSearchResponse.mapItems[indexPath.row];
-    [self.mapViewReference addAnnotation:item.placemark];
-    [self.mapViewReference selectAnnotation:item.placemark animated:YES];
+//    MKAnnotation* annotation = [[MKAnnotation alloc] init];
+//    annotation setcoo
+//    CLPlacemark* placemark = [[CLPlacemark alloc] init];
+    MKPointAnnotation* annotation = [[MKPointAnnotation alloc] init];
+    annotation.title = item.placemark.name;
+    annotation.coordinate = item.placemark.location.coordinate;
     
-    [self.mapViewReference setCenterCoordinate:item.placemark.location.coordinate animated:YES];
+    
+//    item.placemark.title = item.placemark.name;
+    
+    
+    [self.mapViewReference addAnnotation:annotation];
+    [self.mapViewReference selectAnnotation:annotation animated:YES];
+    
+    [self.mapViewReference setCenterCoordinate:annotation.coordinate animated:YES];
     
     [self.mapViewReference setUserTrackingMode:MKUserTrackingModeNone];
 
