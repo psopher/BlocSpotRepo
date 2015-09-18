@@ -61,8 +61,8 @@
     self.buttonsView.backgroundColor = [UIColor whiteColor];
     
     self.selectCategoryTableView = [[BSSelectCategoryTableView alloc] init];
-    self.selectCategoryTableView.dataSource = self.selectCategoryTableView;
-    self.selectCategoryTableView.delegate = self.selectCategoryTableView;
+//    self.selectCategoryTableView.dataSource = self.selectCategoryTableView;
+//    self.selectCategoryTableView.delegate = self.selectCategoryTableView;
     
     self.layer.cornerRadius = 5;
     self.layer.masksToBounds = YES;
@@ -273,6 +273,19 @@
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event
 {
     UIView* hitView = [super hitTest:point withEvent:event];
+    
+    NSLog(@"hitView at point X: %f Y: %f", point.x, point.y);
+    
+//    if (hitView == self.selectCategoryTableView) {
+    
+        NSLog(@"buttonsView was selected and its frame is start X: %f start Y: %f width: %f height: %f", CGRectGetMinX(self.buttonsView.frame), CGRectGetMinY(self.buttonsView.frame), self.buttonsView.bounds.size.width, self.buttonsView.bounds.size.height);
+    
+        NSLog(@"buttonsView was selected and its frame is start X: %f start Y: %f width: %f height: %f", CGRectGetMinX(self.selectCategoryButton.frame), CGRectGetMinY(self.selectCategoryButton.frame), self.selectCategoryButton.bounds.size.width, self.selectCategoryButton.bounds.size.height);
+    
+        NSLog(@"TableView was selected and its frame is start X: %f start Y: %f width: %f height: %f", CGRectGetMinX(self.selectCategoryTableView.frame), CGRectGetMinY(self.selectCategoryTableView.frame), self.selectCategoryTableView.bounds.size.width, self.selectCategoryTableView.bounds.size.height);
+//    }
+
+    
     if (hitView != self && hitView != self.headerView && hitView != self.textView && hitView != self.buttonsView && hitView != self.heartButton && hitView != self.commentButton && hitView != self.selectCategoryButton && hitView != self.selectCategoryTableView && hitView != self.directionsButton && hitView != self.shareButton && hitView != self.trashButton)
     {
         [self removeFromSuperview];
@@ -288,6 +301,8 @@
     if (hitView != self.selectCategoryTableView && hitView != self.selectCategoryButton) {
         self.selectCategoryTableView.frame = CGRectMake(0, 0, 0, 0);
     }
+    
+    NSLog(@"TableView was selected and its frame is start X: %f start Y: %f width: %f height: %f", CGRectGetMinX(self.selectCategoryTableView.frame), CGRectGetMinY(self.selectCategoryTableView.frame), self.selectCategoryTableView.bounds.size.width, self.selectCategoryTableView.bounds.size.height);
     
     NSLog(@"This method ran: MKAnnotationCalloutView hitTest");
     
