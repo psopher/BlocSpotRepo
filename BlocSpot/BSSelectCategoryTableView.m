@@ -19,8 +19,8 @@
         self.dataSource = self;
         self.delegate = self;
         
-        self.layer.cornerRadius = 5;
-        self.layer.masksToBounds = YES;
+//        self.layer.cornerRadius = 5;
+//        self.layer.masksToBounds = YES;
     }
     
     return self;
