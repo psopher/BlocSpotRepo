@@ -13,6 +13,7 @@
 #import "BSDataSource.h"
 #import "MKAnnotationViewSubclass.h"
 #import "MKAnnotationCalloutView.h"
+#import "BSSelectCategoryTableView.h"
 
 #define categoryImage @"category"
 #define listImage @"list"
@@ -94,6 +95,10 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadCategoryView:)name:@"numberOfRowsChanged"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadCustomCallout:)name:@"categoryChanged"
                                                object:nil];
     
     NSLog(@"This method ran: BSMapViewController viewDidLoad");
@@ -329,6 +334,23 @@
     
     NSLog(@"This method fired: reloadCategoryView");
     
+}
+
+- (void) reloadCustomCallout:(NSNotification *)notification {
+
+    
+    self.annotationCalloutView.selectCategoryButton.backgroundColor = [BSDataSource sharedInstance].colors[[BSDataSource sharedInstance].selectedCategoryIndex];
+    
+    NSString *baseString = [NSString stringWithFormat:@"%@", [BSDataSource sharedInstance].categoryItems[[BSDataSource sharedInstance].selectedCategoryIndex]];
+    NSRange range = [baseString rangeOfString:baseString];
+    NSMutableAttributedString *selectCategoryString = [[NSMutableAttributedString alloc] initWithString:baseString];
+    [selectCategoryString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:11] range:range];
+    [selectCategoryString addAttribute:NSKernAttributeName value:@1.3 range:range];
+    [self.annotationCalloutView.selectCategoryButton setAttributedTitle:selectCategoryString forState:UIControlStateNormal];
+    
+    self.annotationCalloutView.selectCategoryTableView.frame = CGRectMake(0, 0, 0, 0);
+    
+    NSLog(@"This method fired: reloadCustomCallout");
 }
 
 -(void)dismissCategoryView {

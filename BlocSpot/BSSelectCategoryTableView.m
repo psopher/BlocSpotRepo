@@ -19,6 +19,7 @@
         self.dataSource = self;
         self.delegate = self;
         
+        [BSDataSource sharedInstance].selectedCategoryIndex = 0;
 //        self.layer.cornerRadius = 5;
 //        self.layer.masksToBounds = YES;
     }
@@ -89,16 +90,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    UITableViewCell* cellCheck = [tableView
+    UITableViewCell* cell = [tableView
                                   cellForRowAtIndexPath:indexPath];
     
-    if (cellCheck.accessoryType == UITableViewCellAccessoryNone) {
-        cellCheck.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else {
-        cellCheck.accessoryType = UITableViewCellAccessoryNone;
-    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    cellCheck.selectionStyle = UITableViewCellSelectionStyleNone;
+    [BSDataSource sharedInstance].selectedCategoryIndex = indexPath.row;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"categoryChanged"
+                                                            object:nil];
+    });
     
     NSLog(@"This Method was called: BSSelectCategoryTableView didSelectRowAtIndexPath");
 }

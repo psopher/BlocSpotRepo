@@ -37,4 +37,6 @@
 
 @property (nonatomic) CGFloat selectCategoryCellHeight;
 
+@property (nonatomic, assign) NSInteger selectedCategoryIndex;
+
 @end

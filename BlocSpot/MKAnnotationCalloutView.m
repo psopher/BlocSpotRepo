@@ -61,8 +61,6 @@
     self.buttonsView.backgroundColor = [UIColor whiteColor];
     
     self.selectCategoryTableView = [[BSSelectCategoryTableView alloc] init];
-//    self.selectCategoryTableView.dataSource = self.selectCategoryTableView;
-//    self.selectCategoryTableView.delegate = self.selectCategoryTableView;
     
     self.layer.cornerRadius = 5;
     self.layer.masksToBounds = YES;
@@ -112,8 +110,8 @@
     
     //Buttons View
     self.selectCategoryButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.selectCategoryButton.backgroundColor = [BSDataSource sharedInstance].colors[0];
-    NSString *baseString = [NSString stringWithFormat:@"%@", [BSDataSource sharedInstance].categoryItems[0]];
+    self.selectCategoryButton.backgroundColor = [BSDataSource sharedInstance].colors[[BSDataSource sharedInstance].selectedCategoryIndex];
+    NSString *baseString = [NSString stringWithFormat:@"%@", [BSDataSource sharedInstance].categoryItems[[BSDataSource sharedInstance].selectedCategoryIndex]];
     NSRange range = [baseString rangeOfString:baseString];
     NSMutableAttributedString *selectCategoryString = [[NSMutableAttributedString alloc] initWithString:baseString];
     [selectCategoryString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:11] range:range];
@@ -276,21 +274,8 @@
     
     NSLog(@"hitView at point X: %f Y: %f", point.x, point.y);
     
-//    if (hitView == self.selectCategoryTableView) {
-    
-//        NSLog(@"buttonsView was selected and its frame is start X: %f start Y: %f width: %f height: %f", CGRectGetMinX(self.buttonsView.frame), CGRectGetMinY(self.buttonsView.frame), self.buttonsView.bounds.size.width, self.buttonsView.bounds.size.height);
-//    
-//        NSLog(@"buttonsView was selected and its frame is start X: %f start Y: %f width: %f height: %f", CGRectGetMinX(self.selectCategoryButton.frame), CGRectGetMinY(self.selectCategoryButton.frame), self.selectCategoryButton.bounds.size.width, self.selectCategoryButton.bounds.size.height);
-//    
-//        NSLog(@"TableView was selected and its frame is start X: %f start Y: %f width: %f height: %f", CGRectGetMinX(self.selectCategoryTableView.frame), CGRectGetMinY(self.selectCategoryTableView.frame), self.selectCategoryTableView.bounds.size.width, self.selectCategoryTableView.bounds.size.height);
-//    }
     NSLog(@"TableView was selected and its frame is start X: %f start Y: %f width: %f height: %f", CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), self.bounds.size.width, self.bounds.size.height);
-
     
-//    if (hitView != self && hitView != self.headerView && hitView != self.textView && hitView != self.buttonsView && hitView != self.heartButton && hitView != self.commentButton && hitView != self.selectCategoryButton && hitView != self.selectCategoryTableView && hitView != self.directionsButton && hitView != self.shareButton && hitView != self.trashButton && hitView)
-//    {
-//
-//    }
     if (point.x > self.bounds.size.width || point.x < 0 || point.y > self.bounds.size.height || point.y < 0){
         [self removeFromSuperview];
     }
@@ -303,13 +288,6 @@
     }
     if ([self point:point outsideViewsFrame:self.selectCategoryTableView] && [self point:point outsideViewsFrame:self.selectCategoryButton]){
         self.selectCategoryTableView.frame = CGRectMake(0, 0, 0, 0);
-    }
-//    if (point.x > self.selectCategoryTableView.frame.size.width || point.x < self.selectCategoryTableView.frame.origin.x || point.y > self.selectCategoryTableView.frame.size.height || point.y < self.selectCategoryTableView.frame.origin.y){
-//        self.selectCategoryTableView.frame = CGRectMake(0, 0, 0, 0);
-//    }
-    
-    if (hitView != self.selectCategoryTableView && hitView != self.selectCategoryButton) {
-//        self.selectCategoryTableView.frame = CGRectMake(0, 0, 0, 0);
     }
     
     NSLog(@"TableView was selected and its frame is start X: %f start Y: %f width: %f height: %f", CGRectGetMinX(self.selectCategoryTableView.frame), CGRectGetMinY(self.selectCategoryTableView.frame), self.selectCategoryTableView.bounds.size.width, self.selectCategoryTableView.bounds.size.height);
