@@ -22,6 +22,7 @@
 		5781EE3A1BA89EB2007829D4 /* MKAnnotationCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE391BA89EB1007829D4 /* MKAnnotationCalloutView.m */; };
 		5781EE3D1BA8B598007829D4 /* MKAnnotationViewSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE3C1BA8B598007829D4 /* MKAnnotationViewSubclass.m */; };
 		578D5ED41B87A05C00997A11 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 578D5ED31B87A05C00997A11 /* MapKit.framework */; };
+		57F65F631BAB6D08004DE07B /* BSSelectCategoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 57F65F621BAB6D08004DE07B /* BSSelectCategoryTableView.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,8 @@
 		5781EE3B1BA8B598007829D4 /* MKAnnotationViewSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKAnnotationViewSubclass.h; sourceTree = "<group>"; };
 		5781EE3C1BA8B598007829D4 /* MKAnnotationViewSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKAnnotationViewSubclass.m; sourceTree = "<group>"; };
 		578D5ED31B87A05C00997A11 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		57F65F611BAB6D08004DE07B /* BSSelectCategoryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSSelectCategoryTableView.h; sourceTree = "<group>"; };
+		57F65F621BAB6D08004DE07B /* BSSelectCategoryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSSelectCategoryTableView.m; sourceTree = "<group>"; };
 		74BDC0B70337A1F7601EC132 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3869DF7348542A1811CDEF1 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,6 +121,8 @@
 				5781EE3C1BA8B598007829D4 /* MKAnnotationViewSubclass.m */,
 				5781EE381BA89EB1007829D4 /* MKAnnotationCalloutView.h */,
 				5781EE391BA89EB1007829D4 /* MKAnnotationCalloutView.m */,
+				57F65F611BAB6D08004DE07B /* BSSelectCategoryTableView.h */,
+				57F65F621BAB6D08004DE07B /* BSSelectCategoryTableView.m */,
 				5781EE251B87A73B007829D4 /* BSLocationsTableViewController.h */,
 				5781EE261B87A73B007829D4 /* BSLocationsTableViewController.m */,
 				5781EE281B87BF13007829D4 /* BSSearchTableViewController.h */,
@@ -336,6 +341,7 @@
 				57633F701B878E530044C331 /* AppDelegate.m in Sources */,
 				57633F6D1B878E530044C331 /* main.m in Sources */,
 				5781EE3A1BA89EB2007829D4 /* MKAnnotationCalloutView.m in Sources */,
+				57F65F631BAB6D08004DE07B /* BSSelectCategoryTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

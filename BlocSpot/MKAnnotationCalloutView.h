@@ -11,6 +11,7 @@
 #import <MapKit/MKAnnotation.h>
 
 @class MKAnnotationCalloutView;
+@class BSSelectCategoryTableView;
 
 @protocol MKAnnotationCalloutViewDelegate <NSObject>
 
@@ -20,7 +21,7 @@
 
 @end
 
-@interface MKAnnotationCalloutView : UIView <UITextViewDelegate, UITextFieldDelegate>
+@interface MKAnnotationCalloutView : UIView <UITextViewDelegate>
 
 @property (nonatomic, strong) MKPlacemark* annotation;
 
@@ -40,7 +41,9 @@
 @property (nonatomic, strong) UIImage* visitedButtonImage;
 
 @property (nonatomic, strong) UILabel* headerLabel;
-//@property (nonatomic, strong) NSString* headerText;
+
+@property (nonatomic, strong) BSSelectCategoryTableView *selectCategoryTableView;
+//@property (nonatomic, strong) UITableView *selectCategoryTableView;
 
 @property (nonatomic, weak) NSObject <MKAnnotationCalloutViewDelegate> *delegate;
 @property (nonatomic, assign) BOOL isWritingComment;

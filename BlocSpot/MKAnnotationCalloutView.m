@@ -8,6 +8,7 @@
 
 #import "MKAnnotationCalloutView.h"
 #import "BSDataSource.h"
+#import "BSSelectCategoryTableView.h"
 
 #define directionsImage @"directions"
 #define shareImage @"share"
@@ -59,9 +60,17 @@
     self.buttonsView = [[UIView alloc] init];
     self.buttonsView.backgroundColor = [UIColor whiteColor];
     
+    self.selectCategoryTableView = [[BSSelectCategoryTableView alloc] init];
+    self.selectCategoryTableView.dataSource = self.selectCategoryTableView;
+    self.selectCategoryTableView.delegate = self.selectCategoryTableView;
+    
+    self.layer.cornerRadius = 5;
+    self.layer.masksToBounds = YES;
+    
     [self addSubview:self.headerView];
     [self addSubview:self.textView];
     [self addSubview:self.buttonsView];
+    [self addSubview:self.selectCategoryTableView];
     
 }
 
@@ -232,6 +241,15 @@
 
 - (void) selectCategoryButtonPressed:(UIBarButtonItem *)sender {
     
+    
+    CGFloat selectCategoryTVWidth = (self.buttonsView.bounds.size.width/6)*3;
+    CGFloat selectCategoryTVHeight = MIN((self.buttonsView.bounds.size.height - 10)*[[BSDataSource sharedInstance].categoryItems count], (self.buttonsView.bounds.size.height - 10)*5);
+    [BSDataSource sharedInstance].selectCategoryCellHeight = self.selectCategoryButton.bounds.size.height;
+    CGFloat selectCategoryTVStartX = CGRectGetMinX(self.buttonsView.frame) + 5;
+    CGFloat selectCategoryTVStartY = CGRectGetMaxY(self.buttonsView.frame) - 5 - (selectCategoryTVHeight);
+    
+    self.selectCategoryTableView.frame = CGRectMake(selectCategoryTVStartX, selectCategoryTVStartY, selectCategoryTVWidth, selectCategoryTVHeight);
+    
     NSLog(@"This method ran: selectCategoryButtonPressed");
 }
 
@@ -255,9 +273,20 @@
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent*)event
 {
     UIView* hitView = [super hitTest:point withEvent:event];
-    if (hitView != self && hitView != self.headerView && hitView != self.textView && hitView != self.buttonsView && hitView != self.heartButton && hitView != self.commentButton && hitView != self.selectCategoryButton && hitView != self.directionsButton && hitView != self.shareButton && hitView != self.trashButton)
+    if (hitView != self && hitView != self.headerView && hitView != self.textView && hitView != self.buttonsView && hitView != self.heartButton && hitView != self.commentButton && hitView != self.selectCategoryButton && hitView != self.selectCategoryTableView && hitView != self.directionsButton && hitView != self.shareButton && hitView != self.trashButton)
     {
         [self removeFromSuperview];
+    }
+    
+    if (hitView != self.textView && hitView != self.commentButton) {
+        [self.textView resignFirstResponder];
+        self.commentButton.frame = CGRectMake(CGRectGetWidth(self.textView.bounds) - 100, self.textView.bounds.size.height - 30, 0, 0);
+        self.textView.userInteractionEnabled = YES;
+        [self.delegate textViewDidPressCommentButton:self];
+    }
+    
+    if (hitView != self.selectCategoryTableView && hitView != self.selectCategoryButton) {
+        self.selectCategoryTableView.frame = CGRectMake(0, 0, 0, 0);
     }
     
     NSLog(@"This method ran: MKAnnotationCalloutView hitTest");

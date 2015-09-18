@@ -24,8 +24,6 @@
 
 @implementation BSCategoryTableView
 
-@synthesize displayedObjects = _displayedObjects;
-
 static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier";
 
 - (instancetype) init {
@@ -382,21 +380,5 @@ static NSString *headerReuseIdentifier = @"TableViewSectionHeaderViewIdentifier"
     
     return NO;
 }
-
-//- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
-//    [super setEditing:editing animated:animated];
-//    [self.tableView setEditing:editing animated:animated]; // not needed if super is a UITableViewController
-//
-//    NSMutableArray* paths = [[NSMutableArray alloc] init];
-//
-//    // fill paths of insertion rows here
-//
-//    if( editing )
-//        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
-//    else
-//        [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
-//
-//    [paths release];
-//}
 
 @end

@@ -35,4 +35,6 @@
 @property (nonatomic) CGFloat headerHeight;
 @property (nonatomic) CGFloat cellHeight;
 
+@property (nonatomic) CGFloat selectCategoryCellHeight;
+
 @end

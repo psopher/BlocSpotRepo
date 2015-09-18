@@ -10,9 +10,6 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface BSCategoryTableView : UITableView <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
-{
-    NSMutableArray *_displayedObjects;
-}
 
 @property (nonatomic, retain) NSMutableArray *displayedObjects;
 @property (nonatomic, strong) UITextField *textField;
