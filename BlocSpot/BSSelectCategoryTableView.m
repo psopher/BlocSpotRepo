@@ -14,9 +14,9 @@
 - (instancetype) init {
     
     self = [super init];
-    
+//    
     if (self) {
-//        self.dataSource = self;
+        self.dataSource = self;
         self.delegate = self;
         
         self.layer.cornerRadius = 5;
