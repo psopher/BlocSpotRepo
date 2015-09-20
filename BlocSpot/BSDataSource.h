@@ -14,6 +14,7 @@
 #import <AddressBook/AddressBook.h>
 
 @class BSCategoryData;
+@class BSBlocSpotData;
 
 @interface BSDataSource : NSObject
 
@@ -29,6 +30,8 @@
 @property (strong, nonatomic) BSCategoryData *categories;
 @property (nonatomic, strong) NSArray *colors;
 @property (strong, nonatomic) NSMutableArray *blocSpots;
+@property (strong, nonatomic) NSMutableDictionary *blocSpotDataMutableDictionary;
+@property (nonatomic, strong) BSBlocSpotData *blocSpotData;
 
 @property MKMapView *mapViewCurrent;
 @property MKCoordinateRegion *mapViewCurrentRegion;

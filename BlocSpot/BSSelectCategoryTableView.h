@@ -10,6 +10,4 @@
 
 @interface BSSelectCategoryTableView : UITableView <UITableViewDataSource, UITableViewDelegate>
 
-//@property (nonatomic, assign) NSInteger indexSelected;
-
 @end

@@ -14,11 +14,13 @@
 #import "MKAnnotationViewSubclass.h"
 #import "MKAnnotationCalloutView.h"
 #import "BSSelectCategoryTableView.h"
+#import "BSBlocSpotData.h"
 
 #define categoryImage @"category"
 #define listImage @"list"
 #define currentLocationImage @"globe"
 #define annotationImage @"heart"
+#define visitedImage @"visited"
 
 @interface BSMapViewController () <UIViewControllerTransitioningDelegate>
 
@@ -28,7 +30,6 @@
 @property (nonatomic) CGFloat yOriginCategoryView;
 @property (nonatomic) CGFloat yOriginBackgroundView;
 @property (strong, nonatomic) MKPolygon *transparentGreyPolygon;
-@property (strong, nonatomic) UIPopoverPresentationController *annotationPopover;
 @property (strong, nonatomic) MKAnnotationViewSubclass *MKAnnotationViewSubclass;
 @property (strong, nonatomic) MKAnnotationCalloutView* annotationCalloutView;
 @property (assign, nonatomic) CGPoint calloutStartPoint;
@@ -350,6 +351,10 @@
     
     self.annotationCalloutView.selectCategoryTableView.frame = CGRectMake(0, 0, 0, 0);
     
+    [BSDataSource sharedInstance].blocSpotData.blocSpotCategory = self.annotationCalloutView.selectCategoryButton.currentAttributedTitle;
+    [BSDataSource sharedInstance].blocSpotData.blocSpotColor = self.annotationCalloutView.selectCategoryButton.backgroundColor;
+    [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
+    
     NSLog(@"This method fired: reloadCustomCallout");
 }
 
@@ -434,6 +439,62 @@
         NSLog(@"Annotation Header Text is: %@", self.annotationCalloutView.headerLabel.text);
         
         [view.superview addSubview:self.annotationCalloutView];
+        
+        
+        //Adding Data to Bloc Spot DataSource Dictionary
+        BOOL doesContainKey = 0;
+        NSArray *allKeys = [[BSDataSource sharedInstance].blocSpotDataMutableDictionary allKeys];
+        doesContainKey = [allKeys containsObject:self.annotationCalloutView.headerLabel.text];
+        
+        if (doesContainKey == NO) {
+            [BSDataSource sharedInstance].blocSpotData = [[BSBlocSpotData alloc] initWithBlocSpotName:self.annotationCalloutView.headerLabel.text blocSpotCategory:[BSDataSource sharedInstance].categoryItems[0] blocSpotColor:[BSDataSource sharedInstance].colors[0] blocSpotNotes:nil blocSpotCoordinates:location blocSpotVisited:NO];
+            
+            //Resetting Textview and Category and Visited
+            UIImage* heartButtonImage = [UIImage imageNamed:annotationImage];
+            [self.annotationCalloutView.heartButton setImage:heartButtonImage forState:UIControlStateNormal];
+            self.annotationCalloutView.textView.text = nil;
+            self.annotationCalloutView.selectCategoryButton.backgroundColor = [BSDataSource sharedInstance].colors[0];
+            NSString *baseString = [NSString stringWithFormat:@"%@", [BSDataSource sharedInstance].categoryItems[0]];
+            NSRange range = [baseString rangeOfString:baseString];
+            NSMutableAttributedString *selectCategoryString = [[NSMutableAttributedString alloc] initWithString:baseString];
+            [selectCategoryString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:11] range:range];
+            [selectCategoryString addAttribute:NSKernAttributeName value:@1.3 range:range];
+            [self.annotationCalloutView.selectCategoryButton setAttributedTitle:selectCategoryString forState:UIControlStateNormal];
+            
+            //Populating the Bloc Spots Array and Data Dictionary
+            [[BSDataSource sharedInstance].blocSpotDataMutableDictionary setObject:[BSDataSource sharedInstance].blocSpotData forKey:[BSDataSource sharedInstance].blocSpotData.blocSpotName];
+            
+            [[BSDataSource sharedInstance].blocSpots addObject:self.annotationCalloutView.headerLabel.text];
+        } else {
+            [BSDataSource sharedInstance].blocSpotData = [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text];
+            
+            //This is just for breakpointing
+//            BSBlocSpotData *testData = [[BSBlocSpotData alloc] init];
+//            testData = [BSDataSource sharedInstance].blocSpotData;
+//            NSMutableDictionary *testDictionary = [[BSDataSource sharedInstance].blocSpotDataMutableDictionary mutableCopy];
+//            BSBlocSpotData *testDataTwo = [[BSBlocSpotData alloc] init];
+//            testDataTwo = [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text];
+//            NSMutableArray *testBSArray = [[BSDataSource sharedInstance].blocSpots mutableCopy];
+            
+            
+            //Resetting Textview and Category and Visited
+            if ([BSDataSource sharedInstance].blocSpotData.blocSpotVisited == NO) {
+                UIImage* heartButtonImage = [UIImage imageNamed:annotationImage];
+                [self.annotationCalloutView.heartButton setImage:heartButtonImage forState:UIControlStateNormal];
+            } else {
+                UIImage* visitedButtonImage = [UIImage imageNamed:visitedImage];
+                [self.annotationCalloutView.heartButton setImage:visitedButtonImage forState:UIControlStateNormal];
+            }
+            self.annotationCalloutView.textView.text = [BSDataSource sharedInstance].blocSpotData.blocSpotNotes;
+            self.annotationCalloutView.selectCategoryButton.backgroundColor = [BSDataSource sharedInstance].blocSpotData.blocSpotColor;
+            NSString *baseString = [NSString stringWithFormat:@"%@", [BSDataSource sharedInstance].blocSpotData.blocSpotCategory];
+            NSRange range = [baseString rangeOfString:baseString];
+            NSMutableAttributedString *selectCategoryString = [[NSMutableAttributedString alloc] initWithString:baseString];
+            [selectCategoryString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:11] range:range];
+            [selectCategoryString addAttribute:NSKernAttributeName value:@1.3 range:range];
+            [self.annotationCalloutView.selectCategoryButton setAttributedTitle:selectCategoryString forState:UIControlStateNormal];
+            
+        }
         
 
     }

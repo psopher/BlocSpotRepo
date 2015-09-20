@@ -14,6 +14,7 @@
 		57633F781B878E530044C331 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57633F771B878E530044C331 /* Images.xcassets */; };
 		57633F7B1B878E530044C331 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57633F791B878E530044C331 /* LaunchScreen.xib */; };
 		57633F871B878E530044C331 /* BlocSpotTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 57633F861B878E530044C331 /* BlocSpotTests.m */; };
+		5773DD431BAF061200D4C678 /* BSBlocSpotData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5773DD421BAF061200D4C678 /* BSBlocSpotData.m */; settings = {ASSET_TAGS = (); }; };
 		5781EE271B87A73B007829D4 /* BSLocationsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE261B87A73B007829D4 /* BSLocationsTableViewController.m */; };
 		5781EE2A1B87BF14007829D4 /* BSSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE291B87BF13007829D4 /* BSSearchTableViewController.m */; };
 		5781EE2D1B87BF37007829D4 /* BSCategoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE2C1B87BF37007829D4 /* BSCategoryTableView.m */; };
@@ -49,6 +50,8 @@
 		57633F801B878E530044C331 /* BlocSpotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlocSpotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57633F851B878E530044C331 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57633F861B878E530044C331 /* BlocSpotTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlocSpotTests.m; sourceTree = "<group>"; };
+		5773DD411BAF061200D4C678 /* BSBlocSpotData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSBlocSpotData.h; sourceTree = "<group>"; };
+		5773DD421BAF061200D4C678 /* BSBlocSpotData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSBlocSpotData.m; sourceTree = "<group>"; };
 		5781EE251B87A73B007829D4 /* BSLocationsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSLocationsTableViewController.h; sourceTree = "<group>"; };
 		5781EE261B87A73B007829D4 /* BSLocationsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSLocationsTableViewController.m; sourceTree = "<group>"; };
 		5781EE281B87BF13007829D4 /* BSSearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSSearchTableViewController.h; sourceTree = "<group>"; };
@@ -170,6 +173,8 @@
 			children = (
 				5781EE341BA1F4B6007829D4 /* BSCategoryData.h */,
 				5781EE351BA1F4B6007829D4 /* BSCategoryData.m */,
+				5773DD411BAF061200D4C678 /* BSBlocSpotData.h */,
+				5773DD421BAF061200D4C678 /* BSBlocSpotData.m */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -339,6 +344,7 @@
 				5781EE361BA1F4B6007829D4 /* BSCategoryData.m in Sources */,
 				5781EE2A1B87BF14007829D4 /* BSSearchTableViewController.m in Sources */,
 				57633F701B878E530044C331 /* AppDelegate.m in Sources */,
+				5773DD431BAF061200D4C678 /* BSBlocSpotData.m in Sources */,
 				57633F6D1B878E530044C331 /* main.m in Sources */,
 				5781EE3A1BA89EB2007829D4 /* MKAnnotationCalloutView.m in Sources */,
 				57F65F631BAB6D08004DE07B /* BSSelectCategoryTableView.m in Sources */,

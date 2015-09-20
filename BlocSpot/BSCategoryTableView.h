@@ -11,9 +11,8 @@
 
 @interface BSCategoryTableView : UITableView <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic, retain) NSMutableArray *displayedObjects;
 @property (nonatomic, strong) UITextField *textField;
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

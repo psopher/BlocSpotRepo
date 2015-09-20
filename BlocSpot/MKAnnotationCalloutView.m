@@ -9,6 +9,7 @@
 #import "MKAnnotationCalloutView.h"
 #import "BSDataSource.h"
 #import "BSSelectCategoryTableView.h"
+#import "BSBlocSpotData.h"
 
 #define directionsImage @"directions"
 #define shareImage @"share"
@@ -206,17 +207,14 @@
 
 - (void) heartButtonPressed:(UIBarButtonItem *)sender {
     
-//    if ([self.heartButton.imageView.image  isEqual: self.heartButtonImage]) {
-//        UIImage *visitedButtonImage = [UIImage imageNamed:visitedImage];
-//        [self.heartButton setImage:visitedButtonImage forState:UIControlStateNormal];
-//    } else {
-//        [self.heartButton setImage:self.heartButtonImage forState:UIControlStateNormal];
-//    }
-    
     if ([self.heartButton.imageView.image  isEqual: self.heartButtonImage]) {
         [self.heartButton setImage:self.visitedButtonImage forState:UIControlStateNormal];
+        [BSDataSource sharedInstance].blocSpotData.blocSpotVisited = YES;
+        [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
     } else {
         [self.heartButton setImage:self.heartButtonImage forState:UIControlStateNormal];
+        [BSDataSource sharedInstance].blocSpotData.blocSpotVisited = NO;
+        [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
     }
     
     NSLog(@"This method ran: heartButtonPressed");
@@ -233,6 +231,9 @@
         [self setIsWritingComment:YES animated:YES];
         [self.textView becomeFirstResponder];
     }
+    
+    [BSDataSource sharedInstance].blocSpotData.blocSpotNotes = self.textView.text;
+    [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
     
     NSLog(@"This method ran: commentButtonPressed");
 }

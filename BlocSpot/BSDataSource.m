@@ -8,6 +8,7 @@
 
 #import "BSDataSource.h"
 #import "BSCategoryData.h"
+#import "BSBlocSpotData.h"
 
 @interface BSDataSource ()
 {
@@ -32,7 +33,11 @@
     
     if (self) {
         
-//        self.categoryItems = [NSMutableArray new];
+        self.categoryItems = [[[NSMutableArray alloc] init] mutableCopy];
+        self.categories = [[BSCategoryData alloc] init];
+        self.colors = [[NSArray alloc] init];
+        self.blocSpots = [[[NSMutableArray alloc] init] mutableCopy];
+        self.blocSpotDataMutableDictionary = [[[NSMutableDictionary alloc] init] mutableCopy];
         self.mapViewCurrent = [[MKMapView alloc] init];
         
     }
