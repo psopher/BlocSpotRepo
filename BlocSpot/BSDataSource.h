@@ -28,6 +28,7 @@
 @property (strong, nonatomic) NSMutableArray *categoryItems;
 @property (strong, nonatomic) BSCategoryData *categories;
 @property (nonatomic, strong) NSArray *colors;
+@property (strong, nonatomic) NSMutableArray *blocSpots;
 
 @property MKMapView *mapViewCurrent;
 @property MKCoordinateRegion *mapViewCurrentRegion;

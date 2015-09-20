@@ -100,6 +100,10 @@
     //add the UISearchController's search bar to the header of this table
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
+    //Initialize section indexes array
+    self.sectionTitles = [NSArray arrayWithObjects:@"BlocSpot",
+                          @"Google Results", nil];
+    
 }
 
 - (void)styleTableView {
@@ -133,22 +137,35 @@
 
 #pragma mark - UITableViewDataSource methods
 
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-//    
-//    return [self.tableSections count];
-//}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    return [self.sectionTitles count];
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     NSLog(@"The number of rows in the search view should be %lu", (unsigned long)[self.localSearchResponse.mapItems count]);
     
-    return [self.localSearchResponse.mapItems count];
+    NSInteger numberOfBlocSpots = [[BSDataSource sharedInstance].blocSpots count];
+    NSInteger numberOfGoogleResults = [self.localSearchResponse.mapItems count]-numberOfBlocSpots;
+    
+    if (section == 0) {
+        
+        NSLog(@"The number of rows in the BlocSpots Section should be %lu", (unsigned long)numberOfBlocSpots);
+        
+        return numberOfBlocSpots;
+    } else {
+        
+        NSLog(@"The number of rows in the Google Results Section should be %lu", (unsigned long)numberOfGoogleResults);
+        
+        return numberOfGoogleResults;
+    }
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-//    
-//    return [self.tableSections objectAtIndex:section];
-//}
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    
+    return [self.sectionTitles objectAtIndex:section];
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -161,8 +178,13 @@
     
     MKMapItem *item = self.localSearchResponse.mapItems[indexPath.row];
     
-    cell.textLabel.text = item.name;
-    cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
+    if (indexPath.section == 0 && [[BSDataSource sharedInstance].blocSpots containsObject:item.name]) {
+            cell.textLabel.text = item.name;
+            cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
+    } else if (indexPath.section == 1 && ![[BSDataSource sharedInstance].blocSpots containsObject:item.name]) {
+            cell.textLabel.text = item.name;
+            cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
+    }
     
     return cell;
 }
@@ -172,15 +194,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     MKMapItem *item = self.localSearchResponse.mapItems[indexPath.row];
-//    MKAnnotation* annotation = [[MKAnnotation alloc] init];
-//    annotation setcoo
-//    CLPlacemark* placemark = [[CLPlacemark alloc] init];
     MKPointAnnotation* annotation = [[MKPointAnnotation alloc] init];
     annotation.title = item.placemark.name;
     annotation.coordinate = item.placemark.location.coordinate;
-    
-    
-//    item.placemark.title = item.placemark.name;
     
     
     [self.mapViewReference addAnnotation:annotation];

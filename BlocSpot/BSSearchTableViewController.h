@@ -18,6 +18,8 @@
 @property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) UITableViewController *searchResultsController;
 
+@property (nonatomic, strong) NSArray *sectionTitles;
+
 //@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end
