@@ -30,6 +30,11 @@
     
     if (self) {
         
+        self.objectsInBSSectionName = [[[NSMutableArray alloc] init] mutableCopy];
+        self.objectsInBSSectionAddress = [[[NSMutableArray alloc] init] mutableCopy];
+        self.objectsInGRSectionName = [[[NSMutableArray alloc] init] mutableCopy];
+        self.objectsInGRSectionAddress = [[[NSMutableArray alloc] init] mutableCopy];
+        
         self.mapViewReference = [[MKMapView alloc] init];
         self.localSearchResponse = [[MKLocalSearchResponse alloc] init];
         
@@ -146,19 +151,16 @@
     
     NSLog(@"The number of rows in the search view should be %lu", (unsigned long)[self.localSearchResponse.mapItems count]);
     
-    NSInteger numberOfBlocSpots = [[BSDataSource sharedInstance].blocSpots count];
-    NSInteger numberOfGoogleResults = [self.localSearchResponse.mapItems count]-numberOfBlocSpots;
-    
     if (section == 0) {
         
-        NSLog(@"The number of rows in the BlocSpots Section should be %lu", (unsigned long)numberOfBlocSpots);
+        NSLog(@"The number of rows in the BlocSpots Section should be %lu", (unsigned long)self.objectsInBSSectionName.count);
         
-        return numberOfBlocSpots;
+        return self.objectsInBSSectionName.count;
     } else {
         
-        NSLog(@"The number of rows in the Google Results Section should be %lu", (unsigned long)numberOfGoogleResults);
+        NSLog(@"The number of rows in the Google Results Section should be %lu", (unsigned long)self.objectsInGRSectionName.count);
         
-        return numberOfGoogleResults;
+        return self.localSearchResponse.mapItems.count - self.objectsInBSSectionName.count;
     }
 }
 
@@ -178,13 +180,52 @@
     
     MKMapItem *item = self.localSearchResponse.mapItems[indexPath.row];
     
-    if (indexPath.section == 0 && [[BSDataSource sharedInstance].blocSpots containsObject:item.name]) {
-            cell.textLabel.text = item.name;
-            cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
-    } else if (indexPath.section == 1 && ![[BSDataSource sharedInstance].blocSpots containsObject:item.name]) {
-            cell.textLabel.text = item.name;
-            cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
+    if (self.objectsInBSSectionName.count > 0
+        && [self.objectsInBSSectionName containsObject:item.name]
+        ) {
+        NSString *itemBSName = self.objectsInBSSectionName[self.indexBS];
+        NSString *itemBSAddress = self.objectsInBSSectionAddress[self.indexBS];
+        if (indexPath.section == 0) {
+            cell.textLabel.text= itemBSName;
+            cell.detailTextLabel.text= itemBSAddress;
+            self.indexBS++;
+        }
     }
+    if (self.objectsInGRSectionName.count > 0
+        && [self.objectsInGRSectionName containsObject:item.name]
+        ) {
+        NSString *itemGRName = self.objectsInGRSectionName[self.indexGR];
+        NSString *itemGRAddress = self.objectsInGRSectionAddress[self.indexGR];
+        if (indexPath.section == 1) {
+            cell.textLabel.text= itemGRName;
+            cell.detailTextLabel.text= itemGRAddress;
+            self.indexGR++;
+        }
+    }
+    
+//    BOOL doesContainKey = 0;
+//    NSArray *allKeys = [[BSDataSource sharedInstance].blocSpotDataMutableDictionary allKeys];
+//    doesContainKey = [allKeys containsObject:item.name];
+
+    
+//    if (indexPath.section == 0 && [allKeys containsObject:item.name]) {
+//            cell.textLabel.text = item.name;
+//            cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
+//    } else if (indexPath.section == 1 && ![allKeys containsObject:item.name]) {
+//            cell.textLabel.text = item.name;
+//            cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
+//    }
+//    
+//    if( indexPath.section == 0)
+//    {
+//        cell.textLabel.text= itemBS.name;
+//        cell.detailTextLabel.text= itemBS.placemark.addressDictionary[@"Street"];
+//    }
+//    else
+//    {
+//        cell.textLabel.text= itemGR.name;
+//        cell.detailTextLabel.text= itemGR.placemark.addressDictionary[@"Street"];
+//    }
     
     return cell;
 }
@@ -216,31 +257,7 @@
     [self.navigationController popToRootViewControllerAnimated:YES]; //takes you to root of navigation
     
 }
-//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-//    
-//    //only show section index titles if there is no text in the search bar
-//    if(!self.searchController.searchBar.text.length > 0) {
-//        
-//        NSArray *indexTitles = [Item fetchDistinctItemGroupsInManagedObjectContext:self.managedObjectContext];
-//        
-//        return indexTitles;
-//        
-//    } else {
-//        
-//        return nil;
-//    }
-//}
 
-//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-//{
-//    //background color of section
-//    view.tintColor = [UIColor colorWithRed:100.0f/255.0f green:100.0f/255.0f blue:100.0f/255.0f alpha:1.0f];
-//    
-//    //color of text in header
-//    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-//    
-//    [header.textLabel setTextColor:[UIColor whiteColor]];
-//}
 
 #pragma mark - UISearchResultsUpdating
 
@@ -280,7 +297,36 @@
             }
         
             self.localSearchResponse = response;
+            
+            [self.objectsInBSSectionName removeAllObjects];
+            [self.objectsInBSSectionAddress removeAllObjects];
+            [self.objectsInGRSectionName removeAllObjects];
+            [self.objectsInGRSectionAddress removeAllObjects];
+            
+            NSArray *allKeys = [[BSDataSource sharedInstance].blocSpotDataMutableDictionary allKeys];
+            
+            for (NSInteger i = 0; i < self.localSearchResponse.mapItems.count; i++) {
+                MKMapItem *item = self.localSearchResponse.mapItems[i];
+                if ([allKeys containsObject:item.name]) {
+                    [self.objectsInBSSectionName addObject:self.localSearchResponse.mapItems[i].name];
+                    if (item.placemark.addressDictionary[@"Street"] != nil) {
+                        [self.objectsInBSSectionAddress addObject:item.placemark.addressDictionary[@"Street"]];
+                    } else {
+                        [self.objectsInGRSectionAddress addObject:@"No Address Given"];
+                    }
+                } else {
+                    [self.objectsInGRSectionName addObject:item.name];
+                    if (item.placemark.addressDictionary[@"Street"] != nil) {
+                        [self.objectsInGRSectionAddress addObject:item.placemark.addressDictionary[@"Street"]];
+                    } else {
+                        [self.objectsInGRSectionAddress addObject:@"No Address Given"];
+                    }
+                }
+            }
         
+            self.indexBS = 0;
+            self.indexGR = 0;
+            
             [self.searchResultsController.tableView reloadData];
         }];
     };
@@ -292,13 +338,6 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     
-//    [self.tableSections removeAllObjects];
-//    
-//    [self.tableSectionsAndItems removeAllObjects];
-//    
-//    self.tableSections = [[Item fetchDistinctItemGroupsInManagedObjectContext:self.managedObjectContext] mutableCopy];
-//    
-//    self.tableSectionsAndItems = [[Item fetchItemNamesByGroupInManagedObjectContext:self.managedObjectContext] mutableCopy];
     
     NSLog(@"This method ran: searchBarCancelButtonClicked");
 }

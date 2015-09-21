@@ -19,7 +19,12 @@
 @property (nonatomic, strong) UITableViewController *searchResultsController;
 
 @property (nonatomic, strong) NSArray *sectionTitles;
+@property (nonatomic, strong) NSMutableArray *objectsInBSSectionName;
+@property (nonatomic, strong) NSMutableArray *objectsInBSSectionAddress;
+@property (nonatomic, strong) NSMutableArray *objectsInGRSectionName;
+@property (nonatomic, strong) NSMutableArray *objectsInGRSectionAddress;
 
-//@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (assign, nonatomic) NSInteger indexBS;
+@property (assign, nonatomic) NSInteger indexGR;
 
 @end
