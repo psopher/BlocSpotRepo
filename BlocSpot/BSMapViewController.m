@@ -202,6 +202,11 @@
 #pragma Dealing With Buttons for Navigation Bar
 
 - (void) listPressed:(UIBarButtonItem *)sender {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"locationsListReload"
+                                                            object:nil];
+    });
 
     [self.navigationController pushViewController:self.locationsVC animated:YES];
     
@@ -355,6 +360,9 @@
     [BSDataSource sharedInstance].blocSpotData.blocSpotColor = self.annotationCalloutView.selectCategoryButton.backgroundColor;
     [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
     
+    NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
+    [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
+    
     NSLog(@"This method fired: reloadCustomCallout");
 }
 
@@ -447,7 +455,7 @@
         doesContainKey = [allKeys containsObject:self.annotationCalloutView.headerLabel.text];
         
         if (doesContainKey == NO) {
-            [BSDataSource sharedInstance].blocSpotData = [[BSBlocSpotData alloc] initWithBlocSpotName:self.annotationCalloutView.headerLabel.text blocSpotCategory:[BSDataSource sharedInstance].categoryItems[0] blocSpotColor:[BSDataSource sharedInstance].colors[0] blocSpotNotes:nil blocSpotCoordinates:location blocSpotVisited:NO];
+            [BSDataSource sharedInstance].blocSpotData = [[BSBlocSpotData alloc] initWithBlocSpotName:self.annotationCalloutView.headerLabel.text blocSpotCategory:[BSDataSource sharedInstance].categoryItems[0] blocSpotColor:[BSDataSource sharedInstance].colors[0] blocSpotNotes:@" " blocSpotCoordinates:location blocSpotVisited:NO];
             
             //Resetting Textview and Category and Visited
             UIImage* heartButtonImage = [UIImage imageNamed:annotationImage];
@@ -467,14 +475,6 @@
             [[BSDataSource sharedInstance].blocSpots addObject:self.annotationCalloutView.headerLabel.text];
         } else {
             [BSDataSource sharedInstance].blocSpotData = [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text];
-            
-            //This is just for breakpointing
-//            BSBlocSpotData *testData = [[BSBlocSpotData alloc] init];
-//            testData = [BSDataSource sharedInstance].blocSpotData;
-//            NSMutableDictionary *testDictionary = [[BSDataSource sharedInstance].blocSpotDataMutableDictionary mutableCopy];
-//            BSBlocSpotData *testDataTwo = [[BSBlocSpotData alloc] init];
-//            testDataTwo = [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text];
-//            NSMutableArray *testBSArray = [[BSDataSource sharedInstance].blocSpots mutableCopy];
             
             
             //Resetting Textview and Category and Visited
@@ -496,6 +496,8 @@
             
         }
         
+        NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
+        [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
 
     }
     

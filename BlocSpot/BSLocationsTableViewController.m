@@ -10,6 +10,8 @@
 //#import "BSMapViewController.h"
 #import "BSSearchTableViewController.h"
 #import "BSCategoryTableView.h"
+#import "BSLocationsListTableViewCell.h"
+#import "BSDataSource.h"
 
 #define mapImage @"globe"
 #define categoryImage @"category"
@@ -30,7 +32,7 @@
     
     if (self) {
         
-        self.title = NSLocalizedString(@"List", @"Locations List");
+        self.title = NSLocalizedString(@"Locations", @"Locations List");
         
         self.searchVC = [[BSSearchTableViewController alloc] init];
 //        self.mapVC = [[BSMapViewController alloc] init];
@@ -46,44 +48,56 @@
     
     [self createButtons];
     
+    [self.tableView registerClass:[BSLocationsListTableViewCell class] forCellReuseIdentifier:@"locationsCell"];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadLocationsList:)name:@"locationsListReload"
+                                               object:nil];
+    
 }
 
 #pragma mark - Table view data source
 
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-//    //array is your db, here we just need how many they are
-//    return 1;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    
-//    return [BTDataSource sharedInstance].conversations.count;
-//}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    return [[BSDataSource sharedInstance].blocSpotDataMutableArray count];
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    BSLocationsListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"locationsCell" forIndexPath:indexPath];
+
     
-    UITableViewCell *cell = [[UITableViewCell alloc] init];
+    //Sort by distance from current location HERE
+    
+    cell.locationsItem = [BSDataSource sharedInstance].blocSpotDataMutableArray[indexPath.row];
+    
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    NSLog(@"This method fired: BSLocationsTableViewController cellForRowAtIndexPath");
     
     return cell;
 }
 
-//- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
-//    return UITableViewCellAccessoryDisclosureIndicator;
-//}
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    CGFloat cellHeight = CGRectGetHeight(self.view.frame)/8; //80.875
+    
+    return cellHeight;
+}
 
-//- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    
-//    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
-//    CGFloat padding = 20;
-//    CGFloat tableViewWidth = viewWidth - padding;
-//    
-//    BTConversation *item = [BTDataSource sharedInstance].conversations[indexPath.row];
-//    
-//    return [BTConversationsTableViewCell heightForMediaItem:item width:tableViewWidth];
-//}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewCell* cell = [tableView
+                                  cellForRowAtIndexPath:indexPath];
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+}
 
 #pragma Dealing With Buttons for Navigation Bar
 
@@ -123,22 +137,14 @@
     self.navigationItem.rightBarButtonItems = @[self.categoryButton, searchButton];
 }
 
-#pragma mark - UIViewControllerTransitioningDelegate
+#pragma mark - NSNotifications
 
-//- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-//                                                                  presentingController:(UIViewController *)presenting
-//                                                                      sourceController:(UIViewController *)source {
-//    
-//    BSCategoryTransitionAnimator *animator = [BSCategoryTransitionAnimator new];
-//    animator.presenting = YES;
-////    animator.cellImageView = self.lastTappedImageView;
-//    return animator;
-//}
-//
-//- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-//    BSCategoryTransitionAnimator *animator = [BSCategoryTransitionAnimator new];
-////    animator.cellImageView = self.lastTappedImageView;
-//    return animator;
-//}
+- (void) reloadLocationsList:(NSNotification *)notification {
+    
+    [self.tableView reloadData];
+    
+    NSLog(@"This method fired: reloadLocationsList");
+    
+}
 
 @end

@@ -181,7 +181,7 @@
     MKMapItem *item = self.localSearchResponse.mapItems[indexPath.row];
     
     if (self.objectsInBSSectionName.count > 0
-        && [self.objectsInBSSectionName containsObject:item.name]
+        && [self.objectsInBSSectionName containsObject:item.name] && self.indexBS < self.objectsInBSSectionName.count
         ) {
         NSString *itemBSName = self.objectsInBSSectionName[self.indexBS];
         NSString *itemBSAddress = self.objectsInBSSectionAddress[self.indexBS];
@@ -192,7 +192,7 @@
         }
     }
     if (self.objectsInGRSectionName.count > 0
-        && [self.objectsInGRSectionName containsObject:item.name]
+        && [self.objectsInGRSectionName containsObject:item.name] && self.indexGR < self.objectsInGRSectionName.count
         ) {
         NSString *itemGRName = self.objectsInGRSectionName[self.indexGR];
         NSString *itemGRAddress = self.objectsInGRSectionAddress[self.indexGR];
@@ -202,30 +202,6 @@
             self.indexGR++;
         }
     }
-    
-//    BOOL doesContainKey = 0;
-//    NSArray *allKeys = [[BSDataSource sharedInstance].blocSpotDataMutableDictionary allKeys];
-//    doesContainKey = [allKeys containsObject:item.name];
-
-    
-//    if (indexPath.section == 0 && [allKeys containsObject:item.name]) {
-//            cell.textLabel.text = item.name;
-//            cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
-//    } else if (indexPath.section == 1 && ![allKeys containsObject:item.name]) {
-//            cell.textLabel.text = item.name;
-//            cell.detailTextLabel.text = item.placemark.addressDictionary[@"Street"];
-//    }
-//    
-//    if( indexPath.section == 0)
-//    {
-//        cell.textLabel.text= itemBS.name;
-//        cell.detailTextLabel.text= itemBS.placemark.addressDictionary[@"Street"];
-//    }
-//    else
-//    {
-//        cell.textLabel.text= itemGR.name;
-//        cell.detailTextLabel.text= itemGR.placemark.addressDictionary[@"Street"];
-//    }
     
     return cell;
 }

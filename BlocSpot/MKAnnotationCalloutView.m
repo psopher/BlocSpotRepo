@@ -217,6 +217,9 @@
         [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
     }
     
+    NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
+    [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
+    
     NSLog(@"This method ran: heartButtonPressed");
 }
 
@@ -234,6 +237,9 @@
     
     [BSDataSource sharedInstance].blocSpotData.blocSpotNotes = self.textView.text;
     [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
+    
+    NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
+    [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
     
     NSLog(@"This method ran: commentButtonPressed");
 }

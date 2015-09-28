@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2D603F65C64F34B4FE8A76C8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74BDC0B70337A1F7601EC132 /* libPods.a */; };
+		571A00751BB9923A006602FD /* BSLocationsListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 571A00741BB9923A006602FD /* BSLocationsListTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		57633F6D1B878E530044C331 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 57633F6C1B878E530044C331 /* main.m */; };
 		57633F701B878E530044C331 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 57633F6F1B878E530044C331 /* AppDelegate.m */; };
 		57633F731B878E530044C331 /* BSMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57633F721B878E530044C331 /* BSMapViewController.m */; };
@@ -38,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		237D8D29C39376E63AD32240 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		571A00731BB9923A006602FD /* BSLocationsListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSLocationsListTableViewCell.h; sourceTree = "<group>"; };
+		571A00741BB9923A006602FD /* BSLocationsListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSLocationsListTableViewCell.m; sourceTree = "<group>"; };
 		57633F671B878E530044C331 /* BlocSpot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlocSpot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57633F6B1B878E530044C331 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57633F6C1B878E530044C331 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -128,6 +131,8 @@
 				57F65F621BAB6D08004DE07B /* BSSelectCategoryTableView.m */,
 				5781EE251B87A73B007829D4 /* BSLocationsTableViewController.h */,
 				5781EE261B87A73B007829D4 /* BSLocationsTableViewController.m */,
+				571A00731BB9923A006602FD /* BSLocationsListTableViewCell.h */,
+				571A00741BB9923A006602FD /* BSLocationsListTableViewCell.m */,
 				5781EE281B87BF13007829D4 /* BSSearchTableViewController.h */,
 				5781EE291B87BF13007829D4 /* BSSearchTableViewController.m */,
 				5781EE2B1B87BF37007829D4 /* BSCategoryTableView.h */,
@@ -339,6 +344,7 @@
 				5781EE271B87A73B007829D4 /* BSLocationsTableViewController.m in Sources */,
 				5781EE331B8E0D7C007829D4 /* BSDataSource.m in Sources */,
 				57633F731B878E530044C331 /* BSMapViewController.m in Sources */,
+				571A00751BB9923A006602FD /* BSLocationsListTableViewCell.m in Sources */,
 				5781EE3D1BA8B598007829D4 /* MKAnnotationViewSubclass.m in Sources */,
 				5781EE2D1B87BF37007829D4 /* BSCategoryTableView.m in Sources */,
 				5781EE361BA1F4B6007829D4 /* BSCategoryData.m in Sources */,
