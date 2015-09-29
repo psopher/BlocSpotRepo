@@ -36,7 +36,6 @@
         self.categoryItems = [[[NSMutableArray alloc] init] mutableCopy];
         self.categories = [[BSCategoryData alloc] init];
         self.colors = [[NSArray alloc] init];
-        self.blocSpots = [[[NSMutableArray alloc] init] mutableCopy];
         self.blocSpotDataMutableArray = [[[NSMutableArray alloc] init] mutableCopy];
         self.blocSpotDataMutableDictionary = [[[NSMutableDictionary alloc] init] mutableCopy];
         self.mapViewCurrent = [[MKMapView alloc] init];

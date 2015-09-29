@@ -29,7 +29,6 @@
 @property (strong, nonatomic) NSMutableArray *categoryItems;
 @property (strong, nonatomic) BSCategoryData *categories;
 @property (nonatomic, strong) NSArray *colors;
-@property (strong, nonatomic) NSMutableArray *blocSpots;
 @property (strong, nonatomic) NSMutableArray *blocSpotDataMutableArray;
 @property (strong, nonatomic) NSMutableDictionary *blocSpotDataMutableDictionary;
 @property (nonatomic, strong) BSBlocSpotData *blocSpotData;

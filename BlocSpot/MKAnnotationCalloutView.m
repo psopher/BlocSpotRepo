@@ -270,6 +270,18 @@
 
 - (void) trashButtonPressed:(UIBarButtonItem *)sender {
     
+    [[BSDataSource sharedInstance].blocSpotDataMutableDictionary removeObjectForKey:self.headerLabel.text];
+    
+    NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
+    [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"removeAnnotation"
+                                                            object:nil];
+    });
+    
+    [self removeFromSuperview];
+    
     NSLog(@"This method ran: trashButtonPressed");
 }
 

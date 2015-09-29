@@ -102,6 +102,10 @@
                                              selector:@selector(reloadCustomCallout:)name:@"categoryChanged"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(removeAnnotationFromMap:)name:@"removeAnnotation"
+                                               object:nil];
+    
     NSLog(@"This method ran: BSMapViewController viewDidLoad");
 }
 
@@ -366,6 +370,13 @@
     NSLog(@"This method fired: reloadCustomCallout");
 }
 
+- (void) removeAnnotationFromMap:(NSNotification *)notification {
+    
+    [self.mapView removeAnnotation:self.MKAnnotationViewSubclass.annotation];
+    
+    NSLog(@"This method fired: removeAnnotationFromMap");
+}
+
 -(void)dismissCategoryView {
     
     
@@ -472,7 +483,6 @@
             //Populating the Bloc Spots Array and Data Dictionary
             [[BSDataSource sharedInstance].blocSpotDataMutableDictionary setObject:[BSDataSource sharedInstance].blocSpotData forKey:[BSDataSource sharedInstance].blocSpotData.blocSpotName];
             
-            [[BSDataSource sharedInstance].blocSpots addObject:self.annotationCalloutView.headerLabel.text];
         } else {
             [BSDataSource sharedInstance].blocSpotData = [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text];
             
