@@ -260,6 +260,13 @@
 
 - (void) directionsButtonPressed:(UIBarButtonItem *)sender {
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"directionsFromUserLocation"
+                                                            object:nil];
+    });
+    
+    [self removeFromSuperview];
+    
     NSLog(@"This method ran: directionsButtonPressed");
 }
 

@@ -33,6 +33,13 @@
 @property (strong, nonatomic) MKAnnotationViewSubclass *MKAnnotationViewSubclass;
 @property (strong, nonatomic) MKAnnotationCalloutView* annotationCalloutView;
 @property (assign, nonatomic) CGPoint calloutStartPoint;
+@property (strong, nonatomic) MKRoute *walkingRoute;
+
+@property (strong, nonatomic) UILabel *destinationLabel;
+@property (strong, nonatomic) UILabel *distanceLabel;
+@property (strong, nonatomic) UITextView *steps;
+@property (nonatomic, strong) UIButton *clearDirectionsButton;
+@property (strong, nonatomic) NSString *allSteps;
 
 @end
 
@@ -59,10 +66,18 @@
         
         self.MKAnnotationViewSubclass = [[MKAnnotationViewSubclass alloc] init];
         self.annotationCalloutView = [[MKAnnotationCalloutView alloc] init];
+        
+        self.walkingRoute = [[MKRoute alloc] init];
+        self.destinationLabel = [[UILabel alloc] init];
+        self.distanceLabel = [[UILabel alloc] init];
+        self.steps = [[UITextView alloc] init];
+        self.clearDirectionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.allSteps = [[NSString alloc] init];
     }
     
     
     [self.mapView addSubview:self.categoryTableView];
+    
     
     return self;
 }
@@ -104,6 +119,10 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(removeAnnotationFromMap:)name:@"removeAnnotation"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(directionsFromUserLocation:)name:@"directionsFromUserLocation"
                                                object:nil];
     
     NSLog(@"This method ran: BSMapViewController viewDidLoad");
@@ -228,8 +247,6 @@
     
     if (self.yOriginCategoryView <= self.yOriginBackgroundView) {
         [self createCategoryView];
-//        self.categoryVC.transitioningDelegate = self;
-//        self.categoryVC.modalPresentationStyle = UIModalPresentationCustom;
     } else {
         [self dismissCategoryView];
     };
@@ -377,6 +394,120 @@
     NSLog(@"This method fired: removeAnnotationFromMap");
 }
 
+- (void) directionsFromUserLocation:(NSNotification *)notification {
+    
+    MKDirectionsRequest *walkingRouteRequest = [[MKDirectionsRequest alloc] init];
+    walkingRouteRequest.transportType = MKDirectionsTransportTypeWalking;
+    
+    MKPlacemark *startPlacemark = [[MKPlacemark alloc] initWithCoordinate:self.mapView.userLocation.location.coordinate addressDictionary:nil];
+    MKMapItem *startPoint = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
+    [walkingRouteRequest setSource:startPoint];
+    
+    MKPlacemark *endPlacemark = [[MKPlacemark alloc] initWithCoordinate:[BSDataSource sharedInstance].blocSpotData.blocSpotCoordinates addressDictionary:nil];
+    MKMapItem *endPoint = [[MKMapItem alloc] initWithPlacemark:endPlacemark];
+    [walkingRouteRequest setDestination:endPoint];
+    
+    MKDirections *walkingRouteDirections = [[MKDirections alloc] initWithRequest:walkingRouteRequest];
+    [walkingRouteDirections calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * walkingRouteResponse, NSError *walkingRouteError) {
+        if (walkingRouteError) {
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Walking Route Error",nil)
+                                        message:[walkingRouteError localizedDescription]
+                                       delegate:nil
+                              cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil] show];
+        } else {
+            [self.mapView addSubview:self.destinationLabel];
+            [self.mapView addSubview:self.distanceLabel];
+            [self.mapView addSubview:self.steps];
+            [self.mapView addSubview:self.clearDirectionsButton];
+            
+            self.walkingRoute = walkingRouteResponse.routes[0];
+            [self.mapView addOverlay:self.walkingRoute.polyline];
+            self.destinationLabel.text = self.annotationCalloutView.headerLabel.text;
+            self.distanceLabel.text = [NSString stringWithFormat:@"%0.1f Miles", self.walkingRoute.distance/1609.344];
+            self.allSteps = @"";
+            for (int i = 0; i < self.walkingRoute.steps.count; i++) {
+                MKRouteStep *step = [self.walkingRoute.steps objectAtIndex:i];
+                NSString *newStep = step.instructions;
+                self.allSteps = [self.allSteps stringByAppendingString:newStep];
+                self.allSteps = [self.allSteps stringByAppendingString:@"\n\n"];
+                self.steps.text = self.allSteps;
+            }
+            [self directionsLayoutSubviews];
+        }
+    }];
+    
+    NSLog(@"This method fired: directionsFromUserLocation");
+}
+
+- (void) directionsLayoutSubviews {
+    
+    CGFloat padding = 10;
+    CGFloat labelWidth = self.mapView.frame.size.width - padding - padding;
+    CGFloat labelHeight = 20;
+    CGFloat textViewHeight= 100;
+    CGFloat clearButtonWidth = 150;
+    CGFloat clearButtonStartX = (self.mapView.frame.size.width - clearButtonWidth)/2;
+    
+    
+//    self.destinationLabel.backgroundColor = [[UIColor lightGrayColor]colorWithAlphaComponent:0.4];
+    self.destinationLabel.backgroundColor = [UIColor clearColor];
+    self.destinationLabel.textAlignment = NSTextAlignmentCenter;
+    self.destinationLabel.frame = CGRectMake(padding, self.navigationController.navigationBar.frame.size.height + padding, labelWidth, labelHeight);
+    
+//    self.distanceLabel.backgroundColor = [[UIColor lightGrayColor]colorWithAlphaComponent:0.4];
+    self.distanceLabel.backgroundColor = [UIColor clearColor];
+    self.distanceLabel.textAlignment = NSTextAlignmentCenter;
+    self.distanceLabel.frame = CGRectMake(padding, CGRectGetMaxY(self.destinationLabel.frame) + padding, labelWidth, labelHeight);
+    
+    self.steps.backgroundColor= [[UIColor lightGrayColor]colorWithAlphaComponent:0.4];
+    self.steps.frame = CGRectMake(padding, CGRectGetMaxY(self.distanceLabel.frame) + padding, labelWidth, textViewHeight);
+    self.steps.userInteractionEnabled = YES;
+    
+    self.clearDirectionsButton.backgroundColor = [[UIColor redColor]colorWithAlphaComponent:0.4];
+//    self.clearDirectionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.clearDirectionsButton.frame = CGRectMake(clearButtonStartX, CGRectGetMaxY(self.steps.frame) + padding, clearButtonWidth, labelHeight);
+    NSMutableAttributedString *clearDirectionsString = [[NSMutableAttributedString alloc] initWithString:@"Clear Directions"];
+    [self.clearDirectionsButton setAttributedTitle:clearDirectionsString forState:UIControlStateNormal];
+    [self.clearDirectionsButton addTarget:self action:@selector(clearRoutePressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    NSLog(@"This method fired: directionsLayoutSubviews");
+}
+
+- (void) clearRoutePressed:(UIBarButtonItem *)sender {
+    
+    
+    self.walkingRoute = nil;
+    self.destinationLabel = nil;
+    self.distanceLabel = nil;
+    self.steps = nil;
+    self.clearDirectionsButton = nil;
+    self.allSteps=nil;
+    
+    self.destinationLabel.frame = CGRectMake(0, 0, 0, 0);
+    self.distanceLabel.frame = CGRectMake(0, 0, 0, 0);
+    self.steps.frame = CGRectMake(0, 0, 0, 0);
+    self.clearDirectionsButton.frame = CGRectMake(0, 0, 0, 0);
+    
+    [self.destinationLabel removeFromSuperview];
+    [self.distanceLabel removeFromSuperview];
+    [self.steps removeFromSuperview];
+    [self.clearDirectionsButton removeFromSuperview];
+    
+    [self.destinationLabel performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
+    [self.distanceLabel performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
+    [self.steps performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
+    [self.clearDirectionsButton performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
+    
+    [self.mapView removeOverlay:self.walkingRoute.polyline];
+    
+    [self.mapView reloadInputViews];
+    
+    [self viewWillLayoutSubviews];
+    
+    NSLog(@"This method ran: clearRoutePressed");
+}
+
 -(void)dismissCategoryView {
     
     
@@ -399,13 +530,21 @@
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    if (![overlay isKindOfClass:[MKPolygon class]]) {
-        return nil;
+    if (self.walkingRoute != nil) {
+        MKPolylineRenderer  * routeLineRenderer = [[MKPolylineRenderer alloc] initWithPolyline:self.walkingRoute.polyline];
+        routeLineRenderer.strokeColor = [UIColor redColor];
+        routeLineRenderer.lineWidth = 5;
+        return routeLineRenderer;
+    } else {
+        if (![overlay isKindOfClass:[MKPolygon class]]) {
+            return nil;
+        }
+        MKPolygon *polygon = (MKPolygon *)overlay;
+        MKPolygonRenderer *renderer = [[MKPolygonRenderer alloc] initWithPolygon:polygon];
+        renderer.fillColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.7];
+        return renderer;
     }
-    MKPolygon *polygon = (MKPolygon *)overlay;
-    MKPolygonRenderer *renderer = [[MKPolygonRenderer alloc] initWithPolygon:polygon];
-    renderer.fillColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.7];
-    return renderer;
+    
 }
 
 #pragma mark - MKAnnotationView
