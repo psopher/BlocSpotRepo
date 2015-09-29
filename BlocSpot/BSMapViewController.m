@@ -68,6 +68,7 @@
         self.annotationCalloutView = [[MKAnnotationCalloutView alloc] init];
         
         self.walkingRoute = [[MKRoute alloc] init];
+        self.walkingRoute = nil;
         self.destinationLabel = [[UILabel alloc] init];
         self.distanceLabel = [[UILabel alloc] init];
         self.steps = [[UITextView alloc] init];
@@ -95,6 +96,9 @@
 //        [self.locationManager requestWhenInUseAuthorization];
         [self.locationManager requestAlwaysAuthorization];
     }
+    
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+    self.locationManager.distanceFilter = 50;
     
     [self.locationManager startUpdatingLocation];
     
@@ -210,6 +214,21 @@
     NSLog(@"This method ran: deviceAlt");
     
     return [NSString stringWithFormat:@"%f", self.locationManager.location.altitude];
+}
+
+// Delegate method from the CLLocationManagerDelegate protocol. PROCESSING AN INCOMING LOCATION EVENT
+- (void)locationManager:(CLLocationManager *)manager
+     didUpdateLocations:(NSArray *)locations {
+    // If it's a relatively recent event, turn off updates to save power.
+    CLLocation* location = [locations lastObject];
+    NSDate* eventDate = location.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    if (abs(howRecent) < 15.0) {
+        // If the event is recent, do something with it.
+        NSLog(@"latitude %+.6f, longitude %+.6f\n",
+              location.coordinate.latitude,
+              location.coordinate.longitude);
+    }
 }
 
 #pragma Calling new notifications into the map view
@@ -476,34 +495,14 @@
 
 - (void) clearRoutePressed:(UIBarButtonItem *)sender {
     
-    
-    self.walkingRoute = nil;
-    self.destinationLabel = nil;
-    self.distanceLabel = nil;
-    self.steps = nil;
-    self.clearDirectionsButton = nil;
-    self.allSteps=nil;
-    
-    self.destinationLabel.frame = CGRectMake(0, 0, 0, 0);
-    self.distanceLabel.frame = CGRectMake(0, 0, 0, 0);
-    self.steps.frame = CGRectMake(0, 0, 0, 0);
-    self.clearDirectionsButton.frame = CGRectMake(0, 0, 0, 0);
-    
     [self.destinationLabel removeFromSuperview];
     [self.distanceLabel removeFromSuperview];
     [self.steps removeFromSuperview];
     [self.clearDirectionsButton removeFromSuperview];
     
-    [self.destinationLabel performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
-    [self.distanceLabel performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
-    [self.steps performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
-    [self.clearDirectionsButton performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
-    
     [self.mapView removeOverlay:self.walkingRoute.polyline];
     
-    [self.mapView reloadInputViews];
-    
-    [self viewWillLayoutSubviews];
+    self.walkingRoute = nil;
     
     NSLog(@"This method ran: clearRoutePressed");
 }
