@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class BSLocationTracker;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
+@property BSLocationTracker * locationTracker;
+@property (nonatomic) NSTimer* locationUpdateTimer;
 
 @end
 

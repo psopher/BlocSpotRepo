@@ -15,12 +15,19 @@
 #import "MKAnnotationCalloutView.h"
 #import "BSSelectCategoryTableView.h"
 #import "BSBlocSpotData.h"
+#import "BSLocationTracker.h"
 
 #define categoryImage @"category"
 #define listImage @"list"
 #define currentLocationImage @"globe"
 #define annotationImage @"heart"
 #define visitedImage @"visited"
+
+#define LATITUDE @"latitude"
+#define LONGITUDE @"longitude"
+#define ACCURACY @"theAccuracy"
+
+#define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
 @interface BSMapViewController () <UIViewControllerTransitioningDelegate>
 
@@ -88,7 +95,8 @@
     
     self.mapView.delegate = self;
     
-    self.locationManager = [[CLLocationManager alloc] init];
+//    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager = [BSLocationTracker sharedLocationManager];
     self.locationManager.delegate = self;
 
     if(IS_OS_8_OR_LATER) {

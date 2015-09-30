@@ -12,8 +12,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreLocation/CLLocationManager.h>
 #import <AddressBook/AddressBook.h>
-
-#define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+#import <Foundation/Foundation.h>
 
 @class BSCategoryTableView;
 
@@ -26,6 +25,7 @@
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (nonatomic, strong) BSCategoryTableView *categoryTableView;
+
 
 @end
 
