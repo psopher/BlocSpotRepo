@@ -48,6 +48,8 @@
 @property (nonatomic, strong) UIButton *clearDirectionsButton;
 @property (strong, nonatomic) NSString *allSteps;
 
+@property (assign, nonatomic) CLLocationDistance distance;
+
 @end
 
 @implementation BSMapViewController
@@ -195,6 +197,14 @@
     
     [BSDataSource sharedInstance].mapViewCurrent = self.mapView;
     [BSDataSource sharedInstance].mapViewCurrentRegion = &(mapRegion);
+    
+    //Getting distance from annotations
+    if (mapView.selectedAnnotations.count == 0)
+        //no annotation is currently selected
+        [self updateDistanceToAnnotation:nil];
+    else
+        //first object in array is currently selected annotation
+        [self updateDistanceToAnnotation:[mapView.selectedAnnotations objectAtIndex:0]];
     
     NSLog(@"This method ran: didUpdateUserLocation");
 }
@@ -590,6 +600,8 @@
         
         [view.superview addSubview:self.annotationCalloutView];
         
+        [self updateDistanceToAnnotation:view.annotation];
+        
         
         //Adding Data to Bloc Spot DataSource Dictionary
         BOOL doesContainKey = 0;
@@ -597,7 +609,7 @@
         doesContainKey = [allKeys containsObject:self.annotationCalloutView.headerLabel.text];
         
         if (doesContainKey == NO) {
-            [BSDataSource sharedInstance].blocSpotData = [[BSBlocSpotData alloc] initWithBlocSpotName:self.annotationCalloutView.headerLabel.text blocSpotCategory:[BSDataSource sharedInstance].categoryItems[0] blocSpotColor:[BSDataSource sharedInstance].colors[0] blocSpotNotes:@" " blocSpotCoordinates:location blocSpotVisited:NO];
+            [BSDataSource sharedInstance].blocSpotData = [[BSBlocSpotData alloc] initWithBlocSpotName:self.annotationCalloutView.headerLabel.text blocSpotCategory:[BSDataSource sharedInstance].categoryItems[0] blocSpotColor:[BSDataSource sharedInstance].colors[0] blocSpotNotes:@" " blocSpotCoordinates:location blocSpotDistance:self.distance blocSpotVisited:NO];
             
             //Resetting Textview and Category and Visited
             UIImage* heartButtonImage = [UIImage imageNamed:annotationImage];
@@ -639,14 +651,28 @@
         
         NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
         [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
+        
+        [self updateDistanceToAnnotation:view.annotation];
 
     }
     
     NSLog(@"This method ran: didSelectAnnotationView");
 }
 
-#pragma Monitoring User Location in Background
+#pragma Getting Distance of annotation from user location
 
-
+-(void)updateDistanceToAnnotation:(id<MKAnnotation>)annotation
+{
+    
+    CLLocation *pinLocation = [[CLLocation alloc]
+                               initWithLatitude:annotation.coordinate.latitude
+                               longitude:annotation.coordinate.longitude];
+    
+    CLLocation *userLocation = [[CLLocation alloc]
+                                initWithLatitude:self.mapView.userLocation.coordinate.latitude
+                                longitude:self.mapView.userLocation.coordinate.longitude];
+    
+    self.distance = [pinLocation distanceFromLocation:userLocation]/1000;
+}
 
 @end

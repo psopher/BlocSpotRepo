@@ -22,9 +22,11 @@
     CLLocationDegrees blocSpotCoordinatesLongitude = [aDecoder decodeDoubleForKey:@"blocSpotCoordinatesLongitude"];
     CLLocationCoordinate2D blocSpotCoordinates = CLLocationCoordinate2DMake(blocSpotCoordinatesLatitude, blocSpotCoordinatesLongitude);
     
+    CLLocationDistance blocSpotDistance = [aDecoder decodeDoubleForKey:@"blocSpotDistance"];
+    
     BOOL blocSpotVisited = [aDecoder decodeBoolForKey:@"blocSpotVisited"];
     
-    return [self initWithBlocSpotName:blocSpotName blocSpotCategory:blocSpotCategory blocSpotColor:blocSpotColor blocSpotNotes:blocSpotNotes blocSpotCoordinates:blocSpotCoordinates blocSpotVisited:blocSpotVisited];
+    return [self initWithBlocSpotName:blocSpotName blocSpotCategory:blocSpotCategory blocSpotColor:blocSpotColor blocSpotNotes:blocSpotNotes blocSpotCoordinates:blocSpotCoordinates blocSpotDistance:blocSpotDistance blocSpotVisited:blocSpotVisited];
 }
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
@@ -38,11 +40,13 @@
     [aCoder encodeDouble:self.blocSpotCoordinates.latitude forKey:@"blocSpotCoordinatesLatitude"];
     [aCoder encodeDouble:self.blocSpotCoordinates.longitude forKey:@"blocSpotCoordinatesLongitude"];
     
+    [aCoder encodeDouble:self.blocSpotDistance forKey:@"blocSpotDistance"];
+    
     [aCoder encodeBool:self.blocSpotVisited forKey:@"blocSpotVisited"];
     
 }
 
--(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotVisited:(BOOL)blocSpotVisited;
+-(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotDistance:(CLLocationDistance)blocSpotDistance blocSpotVisited:(BOOL)blocSpotVisited;
 {
     self = [super init];
     
@@ -52,6 +56,7 @@
         self.blocSpotColor = blocSpotColor;
         self.blocSpotNotes = blocSpotNotes;
         self.blocSpotCoordinates = blocSpotCoordinates;
+        self.blocSpotDistance = blocSpotDistance;
         self.blocSpotVisited = blocSpotVisited;
     }
     return self;

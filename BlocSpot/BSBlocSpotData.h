@@ -22,9 +22,10 @@
 @property (strong, nonatomic) UIColor* blocSpotColor;
 @property (strong, nonatomic) NSString* blocSpotNotes;
 @property (assign, nonatomic) CLLocationCoordinate2D blocSpotCoordinates;
+@property (assign, nonatomic) CLLocationDistance blocSpotDistance;
 @property (assign, nonatomic) BOOL blocSpotVisited;
 
--(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotVisited:(BOOL)blocSpotVisited;
+-(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotDistance:(CLLocationDistance)blocSpotDistance blocSpotVisited:(BOOL)blocSpotVisited;
 
 
 @end

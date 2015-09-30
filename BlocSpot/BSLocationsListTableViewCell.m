@@ -92,7 +92,9 @@ static NSParagraphStyle *paragraphStyle;
     
 //    NSString *baseString = [NSString stringWithFormat:@"%f", self.locationsItem.blocSpotNotes];
     
-    NSString *baseString = @"0.1";
+//    NSString *baseString = @"0.1";
+    
+    NSString *baseString = [NSString stringWithFormat:@"%0.1f km", [BSDataSource sharedInstance].blocSpotData.blocSpotDistance];
     
     NSMutableAttributedString *blocSpotMutableDistanceString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : lightFont, NSParagraphStyleAttributeName : paragraphStyle}];
     
@@ -134,12 +136,12 @@ static NSParagraphStyle *paragraphStyle;
     self.blocSpotName.frame = CGRectMake(labelStart, padding, labelWidth, sizeOfBlocSpotNameLabel.height);
     
     CGSize sizeOfBlocSpotNotesLabel = [self sizeOfString:self.blocSpotNotes.attributedText];
-    CGFloat blocSpotNotesYOrigin = CGRectGetMaxY(self.blocSpotName.frame) + padding;
+    CGFloat blocSpotNotesYOrigin = CGRectGetMaxY(self.blocSpotName.frame);
     self.blocSpotNotes.frame = CGRectMake(labelStart, blocSpotNotesYOrigin, labelWidth, sizeOfBlocSpotNotesLabel.height);
     
     CGSize sizeOfBlocSpotDistanceLabel = [self sizeOfString:self.blocSpotDistance.attributedText];
     CGFloat blocSpotDistanceYOrigin = CGRectGetMaxY(self.blocSpotCategory.frame) + padding;
-    self.blocSpotDistance.frame = CGRectMake(padding, blocSpotDistanceYOrigin, heartSquareDimension, sizeOfBlocSpotDistanceLabel.height);
+    self.blocSpotDistance.frame = CGRectMake(0, blocSpotDistanceYOrigin, 60, sizeOfBlocSpotDistanceLabel.height);
     
     NSLog(@"This method fired: BSLocationsTableViewCell layoutSubviews");
 }
