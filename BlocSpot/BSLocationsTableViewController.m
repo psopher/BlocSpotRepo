@@ -12,6 +12,7 @@
 #import "BSCategoryTableView.h"
 #import "BSLocationsListTableViewCell.h"
 #import "BSDataSource.h"
+#import "BSBlocSpotData.h"
 
 #define mapImage @"globe"
 #define categoryImage @"category"
@@ -74,6 +75,24 @@
 
     
     //Sort by distance from current location HERE
+    
+//    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:nil ascending:YES];
+//    [[BSDataSource sharedInstance].blocSpotDataMutableArray sortUsingDescriptors:@[sortDescriptor]];
+    
+    [[BSDataSource sharedInstance].blocSpotDataMutableArray sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            CLLocationDistance numberA = [(BSBlocSpotData*)obj1 blocSpotDistance];
+            CLLocationDistance numberB = [(BSBlocSpotData*)obj2 blocSpotDistance];
+        
+//            int intValueA = [numberA intValue];
+//            int intValueB = [numberB intValue];
+        
+            if (numberA > numberB) {
+                return NSOrderedDescending;
+            } else if (numberA < numberB) {
+                return NSOrderedAscending;
+            }
+            return NSOrderedSame;
+    }];
     
     cell.locationsItem = [BSDataSource sharedInstance].blocSpotDataMutableArray[indexPath.row];
     

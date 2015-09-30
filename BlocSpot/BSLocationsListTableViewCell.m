@@ -94,7 +94,7 @@ static NSParagraphStyle *paragraphStyle;
     
 //    NSString *baseString = @"0.1";
     
-    NSString *baseString = [NSString stringWithFormat:@"%0.1f km", [BSDataSource sharedInstance].blocSpotData.blocSpotDistance];
+    NSString *baseString = [NSString stringWithFormat:@"%0.1f km", self.locationsItem.blocSpotDistance];
     
     NSMutableAttributedString *blocSpotMutableDistanceString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : lightFont, NSParagraphStyleAttributeName : paragraphStyle}];
     
