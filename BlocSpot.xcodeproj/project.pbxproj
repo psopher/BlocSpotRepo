@@ -24,6 +24,9 @@
 		5781EE3A1BA89EB2007829D4 /* MKAnnotationCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE391BA89EB1007829D4 /* MKAnnotationCalloutView.m */; };
 		5781EE3D1BA8B598007829D4 /* MKAnnotationViewSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5781EE3C1BA8B598007829D4 /* MKAnnotationViewSubclass.m */; };
 		578D5ED41B87A05C00997A11 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 578D5ED31B87A05C00997A11 /* MapKit.framework */; };
+		57DD0E2B1BBC24F600E0422B /* BSBackgroundTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DD0E2A1BBC24F600E0422B /* BSBackgroundTaskManager.m */; settings = {ASSET_TAGS = (); }; };
+		57DD0E2E1BBC252100E0422B /* BSLocationShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DD0E2D1BBC252100E0422B /* BSLocationShareModel.m */; settings = {ASSET_TAGS = (); }; };
+		57DD0E311BBC254100E0422B /* BSLocationTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DD0E301BBC254100E0422B /* BSLocationTracker.m */; settings = {ASSET_TAGS = (); }; };
 		57F65F631BAB6D08004DE07B /* BSSelectCategoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 57F65F621BAB6D08004DE07B /* BSSelectCategoryTableView.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
@@ -70,6 +73,12 @@
 		5781EE3B1BA8B598007829D4 /* MKAnnotationViewSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKAnnotationViewSubclass.h; sourceTree = "<group>"; };
 		5781EE3C1BA8B598007829D4 /* MKAnnotationViewSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKAnnotationViewSubclass.m; sourceTree = "<group>"; };
 		578D5ED31B87A05C00997A11 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		57DD0E291BBC24F600E0422B /* BSBackgroundTaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSBackgroundTaskManager.h; sourceTree = "<group>"; };
+		57DD0E2A1BBC24F600E0422B /* BSBackgroundTaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSBackgroundTaskManager.m; sourceTree = "<group>"; };
+		57DD0E2C1BBC252100E0422B /* BSLocationShareModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSLocationShareModel.h; sourceTree = "<group>"; };
+		57DD0E2D1BBC252100E0422B /* BSLocationShareModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSLocationShareModel.m; sourceTree = "<group>"; };
+		57DD0E2F1BBC254100E0422B /* BSLocationTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSLocationTracker.h; sourceTree = "<group>"; };
+		57DD0E301BBC254100E0422B /* BSLocationTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSLocationTracker.m; sourceTree = "<group>"; };
 		57F65F611BAB6D08004DE07B /* BSSelectCategoryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSSelectCategoryTableView.h; sourceTree = "<group>"; };
 		57F65F621BAB6D08004DE07B /* BSSelectCategoryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSSelectCategoryTableView.m; sourceTree = "<group>"; };
 		74BDC0B70337A1F7601EC132 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +148,7 @@
 				5781EE2C1B87BF37007829D4 /* BSCategoryTableView.m */,
 				5781EE311B8E0D7C007829D4 /* BSDataSource.h */,
 				5781EE321B8E0D7C007829D4 /* BSDataSource.m */,
+				57DD0E281BBC24A600E0422B /* Location Data Model */,
 				5781EE371BA470C6007829D4 /* Data Model */,
 				57633F771B878E530044C331 /* Images.xcassets */,
 				57633F791B878E530044C331 /* LaunchScreen.xib */,
@@ -182,6 +192,19 @@
 				5773DD421BAF061200D4C678 /* BSBlocSpotData.m */,
 			);
 			name = "Data Model";
+			sourceTree = "<group>";
+		};
+		57DD0E281BBC24A600E0422B /* Location Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				57DD0E291BBC24F600E0422B /* BSBackgroundTaskManager.h */,
+				57DD0E2A1BBC24F600E0422B /* BSBackgroundTaskManager.m */,
+				57DD0E2C1BBC252100E0422B /* BSLocationShareModel.h */,
+				57DD0E2D1BBC252100E0422B /* BSLocationShareModel.m */,
+				57DD0E2F1BBC254100E0422B /* BSLocationTracker.h */,
+				57DD0E301BBC254100E0422B /* BSLocationTracker.m */,
+			);
+			name = "Location Data Model";
 			sourceTree = "<group>";
 		};
 		6670373624DE57DBE0403DBD /* Frameworks */ = {
@@ -348,12 +371,15 @@
 				5781EE3D1BA8B598007829D4 /* MKAnnotationViewSubclass.m in Sources */,
 				5781EE2D1B87BF37007829D4 /* BSCategoryTableView.m in Sources */,
 				5781EE361BA1F4B6007829D4 /* BSCategoryData.m in Sources */,
+				57DD0E2B1BBC24F600E0422B /* BSBackgroundTaskManager.m in Sources */,
+				57DD0E311BBC254100E0422B /* BSLocationTracker.m in Sources */,
 				5781EE2A1B87BF14007829D4 /* BSSearchTableViewController.m in Sources */,
 				57633F701B878E530044C331 /* AppDelegate.m in Sources */,
 				5773DD431BAF061200D4C678 /* BSBlocSpotData.m in Sources */,
 				57633F6D1B878E530044C331 /* main.m in Sources */,
 				5781EE3A1BA89EB2007829D4 /* MKAnnotationCalloutView.m in Sources */,
 				57F65F631BAB6D08004DE07B /* BSSelectCategoryTableView.m in Sources */,
+				57DD0E2E1BBC252100E0422B /* BSLocationShareModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

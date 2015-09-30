@@ -216,21 +216,6 @@
     return [NSString stringWithFormat:@"%f", self.locationManager.location.altitude];
 }
 
-// Delegate method from the CLLocationManagerDelegate protocol. PROCESSING AN INCOMING LOCATION EVENT
-- (void)locationManager:(CLLocationManager *)manager
-     didUpdateLocations:(NSArray *)locations {
-    // If it's a relatively recent event, turn off updates to save power.
-    CLLocation* location = [locations lastObject];
-    NSDate* eventDate = location.timestamp;
-    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
-    if (abs(howRecent) < 15.0) {
-        // If the event is recent, do something with it.
-        NSLog(@"latitude %+.6f, longitude %+.6f\n",
-              location.coordinate.latitude,
-              location.coordinate.longitude);
-    }
-}
-
 #pragma Calling new notifications into the map view
 
 - (void) reloadMapView:(NSNotification *)notification {
@@ -651,5 +636,9 @@
     
     NSLog(@"This method ran: didSelectAnnotationView");
 }
+
+#pragma Monitoring User Location in Background
+
+
 
 @end
