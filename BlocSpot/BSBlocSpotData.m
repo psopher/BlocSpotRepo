@@ -7,6 +7,7 @@
 //
 
 #import "BSBlocSpotData.h"
+#import "MKAnnotationViewSubclass.h"
 
 @implementation BSBlocSpotData
 
@@ -26,7 +27,9 @@
     
     BOOL blocSpotVisited = [aDecoder decodeBoolForKey:@"blocSpotVisited"];
     
-    return [self initWithBlocSpotName:blocSpotName blocSpotCategory:blocSpotCategory blocSpotColor:blocSpotColor blocSpotNotes:blocSpotNotes blocSpotCoordinates:blocSpotCoordinates blocSpotDistance:blocSpotDistance blocSpotVisited:blocSpotVisited];
+    MKAnnotationViewSubclass *blocSpotAnnotation = [aDecoder decodeObjectForKey:@"blocSpotAnnotation"];
+    
+    return [self initWithBlocSpotName:blocSpotName blocSpotCategory:blocSpotCategory blocSpotColor:blocSpotColor blocSpotNotes:blocSpotNotes blocSpotCoordinates:blocSpotCoordinates blocSpotDistance:blocSpotDistance blocSpotVisited:blocSpotVisited blocSpotAnnotation:blocSpotAnnotation];
 }
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
@@ -44,9 +47,11 @@
     
     [aCoder encodeBool:self.blocSpotVisited forKey:@"blocSpotVisited"];
     
+    [aCoder encodeObject:self.blocSpotAnnotation forKey:@"blocSpotAnnotation"];
+    
 }
 
--(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotDistance:(CLLocationDistance)blocSpotDistance blocSpotVisited:(BOOL)blocSpotVisited;
+-(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotDistance:(CLLocationDistance)blocSpotDistance blocSpotVisited:(BOOL)blocSpotVisited blocSpotAnnotation:(MKAnnotationViewSubclass *)blocSpotAnnotation;
 {
     self = [super init];
     
@@ -58,6 +63,7 @@
         self.blocSpotCoordinates = blocSpotCoordinates;
         self.blocSpotDistance = blocSpotDistance;
         self.blocSpotVisited = blocSpotVisited;
+        self.blocSpotAnnotation = blocSpotAnnotation;
     }
     return self;
 }
@@ -68,6 +74,7 @@
     self.blocSpotCategory = [NSAttributedString new];
     self.blocSpotColor = [UIColor new];
     self.blocSpotNotes = [NSString new];
+    self.blocSpotAnnotation = [MKAnnotationViewSubclass new];
     
     return self;
 }

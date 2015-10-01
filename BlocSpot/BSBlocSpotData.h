@@ -15,6 +15,8 @@
 #import <CoreLocation/CLLocationManager.h>
 #import <AddressBook/AddressBook.h>
 
+@class MKAnnotationViewSubclass;
+
 @interface BSBlocSpotData : NSObject<NSCoding>
 
 @property (strong, nonatomic) NSString* blocSpotName;
@@ -24,8 +26,9 @@
 @property (assign, nonatomic) CLLocationCoordinate2D blocSpotCoordinates;
 @property (assign, nonatomic) CLLocationDistance blocSpotDistance;
 @property (assign, nonatomic) BOOL blocSpotVisited;
+@property (strong, nonatomic) MKAnnotationViewSubclass *blocSpotAnnotation;
 
--(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotDistance:(CLLocationDistance)blocSpotDistance blocSpotVisited:(BOOL)blocSpotVisited;
+-(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotDistance:(CLLocationDistance)blocSpotDistance blocSpotVisited:(BOOL)blocSpotVisited blocSpotAnnotation:(MKAnnotationViewSubclass*)blocSpotAnnotation;
 
 
 @end

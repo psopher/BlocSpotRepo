@@ -220,6 +220,8 @@
     NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
     [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
     
+    [[BSDataSource sharedInstance] saveToDisk];
+    
     NSLog(@"This method ran: heartButtonPressed");
 }
 
@@ -240,6 +242,8 @@
     
     NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
     [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
+    
+    [[BSDataSource sharedInstance] saveToDisk];
     
     NSLog(@"This method ran: commentButtonPressed");
 }
@@ -288,6 +292,8 @@
     });
     
     [self removeFromSuperview];
+    
+    [[BSDataSource sharedInstance] saveToDisk];
     
     NSLog(@"This method ran: trashButtonPressed");
 }

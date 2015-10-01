@@ -119,6 +119,13 @@
     
     [self createButtons];
     
+    for (NSInteger i = 0; i < [BSDataSource sharedInstance].blocSpotDataMutableArray.count; i++) {
+        
+        BSBlocSpotData *annotationToAdd = [[BSBlocSpotData alloc] init];
+        annotationToAdd = [BSDataSource sharedInstance].blocSpotDataMutableArray[i];
+        [self.mapView addAnnotation:annotationToAdd.blocSpotAnnotation.annotation];
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadMapView:)name:@"searchCreatedMapAnnotation"
                                                object:nil];
@@ -165,6 +172,13 @@
     self.calloutStartPoint = CGPointMake(self.mapView.bounds.size.width/10, self.mapView.bounds.size.height/10);
     self.annotationCalloutView.frame = CGRectMake(self.calloutStartPoint.x, self.calloutStartPoint.y, (self.mapView.bounds.size.width/5)*4, (self.mapView.bounds.size.height/2) - self.calloutStartPoint.y);
     self.annotationCalloutView.backgroundColor = [UIColor lightGrayColor];
+    
+//    for (NSInteger i = 0; i < [BSDataSource sharedInstance].blocSpotDataMutableArray.count; i++) {
+//        
+//        BSBlocSpotData *annotationToAdd = [[BSBlocSpotData alloc] init];
+//        annotationToAdd = [BSDataSource sharedInstance].blocSpotDataMutableArray[i];
+//        [self.mapView addAnnotation:annotationToAdd.blocSpotAnnotation.annotation];
+//    }
     
     NSLog(@"This method ran: BSMapViewController viewWillLayoutSubviews");
 }
@@ -406,12 +420,18 @@
     NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
     [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
     
+    [[BSDataSource sharedInstance] saveToDisk];
+    
     NSLog(@"This method fired: reloadCustomCallout");
 }
 
 - (void) removeAnnotationFromMap:(NSNotification *)notification {
     
     [self.mapView removeAnnotation:self.MKAnnotationViewSubclass.annotation];
+    
+    [[BSDataSource sharedInstance].annotationsArray removeObject:self.MKAnnotationViewSubclass.annotation];
+    
+//    [[BSDataSource sharedInstance] saveToDisk];
     
     NSLog(@"This method fired: removeAnnotationFromMap");
 }
@@ -576,6 +596,10 @@
         self.MKAnnotationViewSubclass.canShowCallout = NO;
         self.MKAnnotationViewSubclass.image = [UIImage imageNamed:annotationImage];
         
+        [[BSDataSource sharedInstance].annotationsArray addObject:self.MKAnnotationViewSubclass.annotation];
+        
+//        [[BSDataSource sharedInstance] saveToDisk];
+        
         return self.MKAnnotationViewSubclass;
 
     }
@@ -609,7 +633,7 @@
         doesContainKey = [allKeys containsObject:self.annotationCalloutView.headerLabel.text];
         
         if (doesContainKey == NO) {
-            [BSDataSource sharedInstance].blocSpotData = [[BSBlocSpotData alloc] initWithBlocSpotName:self.annotationCalloutView.headerLabel.text blocSpotCategory:[BSDataSource sharedInstance].categoryItems[0] blocSpotColor:[BSDataSource sharedInstance].colors[0] blocSpotNotes:@" " blocSpotCoordinates:location blocSpotDistance:self.distance blocSpotVisited:NO];
+            [BSDataSource sharedInstance].blocSpotData = [[BSBlocSpotData alloc] initWithBlocSpotName:self.annotationCalloutView.headerLabel.text blocSpotCategory:[BSDataSource sharedInstance].categoryItems[0] blocSpotColor:[BSDataSource sharedInstance].colors[0] blocSpotNotes:@" " blocSpotCoordinates:location blocSpotDistance:self.distance blocSpotVisited:NO blocSpotAnnotation:self.MKAnnotationViewSubclass];
             
             //Resetting Textview and Category and Visited
             UIImage* heartButtonImage = [UIImage imageNamed:annotationImage];
@@ -653,6 +677,8 @@
         [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
         
         [self updateDistanceToAnnotation:view.annotation];
+        
+        [[BSDataSource sharedInstance] saveToDisk];
 
     }
     
