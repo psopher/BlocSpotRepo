@@ -62,7 +62,7 @@ static NSParagraphStyle *paragraphStyle;
     CGFloat usernameFontSize = 15;
     
     // Make a string that says "username caption text"
-    NSString *baseString = [NSString stringWithFormat:@"%@", self.locationsItem.blocSpotName];
+    NSString *baseString = [NSString stringWithFormat:@"%@", self.locationsItem.name];
     
     // Make an attributed string, with the "username" bold
     NSMutableAttributedString *mutableblocSpotNameString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : [lightFont fontWithSize:usernameFontSize], NSParagraphStyleAttributeName : paragraphStyle}];
@@ -79,7 +79,7 @@ static NSParagraphStyle *paragraphStyle;
 
 - (NSAttributedString *) blocSpotNotesString {
     
-    NSString *baseString = [NSString stringWithFormat:@"%@", self.locationsItem.blocSpotNotes];
+    NSString *baseString = [NSString stringWithFormat:@"%@", self.locationsItem.notes];
     
     NSMutableAttributedString *blocSpotNotesMutableString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : lightFont, NSParagraphStyleAttributeName : paragraphStyle}];
     
@@ -90,7 +90,7 @@ static NSParagraphStyle *paragraphStyle;
 
 - (NSAttributedString *) blocSpotDistanceString {
     
-    NSString *baseString = [NSString stringWithFormat:@"%0.1f km", self.locationsItem.blocSpotDistance];
+    NSString *baseString = [NSString stringWithFormat:@"%0.1f km", self.locationsItem.distance];
     
     NSMutableAttributedString *blocSpotMutableDistanceString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : lightFont, NSParagraphStyleAttributeName : paragraphStyle}];
     
@@ -100,7 +100,7 @@ static NSParagraphStyle *paragraphStyle;
 }
 
 - (UIImage *) blocSpotCategoryImage {
-    if (self.locationsItem.blocSpotVisited == YES) {
+    if (self.locationsItem.visited == YES) {
         NSLog(@"This method fired: BSLocationsTableViewCell blocSpotCategoryImage");
         return [UIImage imageNamed:visitedImage];
     } else {

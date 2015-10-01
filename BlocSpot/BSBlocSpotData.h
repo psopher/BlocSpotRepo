@@ -19,16 +19,18 @@
 
 @interface BSBlocSpotData : NSObject<NSCoding>
 
-@property (strong, nonatomic) NSString* blocSpotName;
-@property (strong, nonatomic) NSAttributedString* blocSpotCategory;
-@property (strong, nonatomic) UIColor* blocSpotColor;
-@property (strong, nonatomic) NSString* blocSpotNotes;
-@property (assign, nonatomic) CLLocationCoordinate2D blocSpotCoordinates;
-@property (assign, nonatomic) CLLocationDistance blocSpotDistance;
-@property (assign, nonatomic) BOOL blocSpotVisited;
-@property (strong, nonatomic) MKAnnotationViewSubclass *blocSpotAnnotation;
+@property (strong, nonatomic) NSString* name;
+@property (strong, nonatomic) NSAttributedString* category;
+@property (strong, nonatomic) UIColor* color;
+@property (strong, nonatomic) NSString* notes;
+@property (assign, nonatomic) CLLocationCoordinate2D coordinates;
+@property (assign, nonatomic) CLLocationDistance distance;
+@property (assign, nonatomic) BOOL visited;
+//@property (strong, nonatomic) MKPointAnnotation* annotation;
 
--(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotDistance:(CLLocationDistance)blocSpotDistance blocSpotVisited:(BOOL)blocSpotVisited blocSpotAnnotation:(MKAnnotationViewSubclass*)blocSpotAnnotation;
+//@property (strong, nonatomic) MKAnnotationViewSubclass *blocSpotAnnotation;
+
+-(instancetype)initWithName:(NSString *)name category:(NSAttributedString *)category color:(UIColor *)color notes:(NSString *)notes coordinates:(CLLocationCoordinate2D)coordinates distance:(CLLocationDistance)distance visited:(BOOL)visited annotation:(MKPointAnnotation *)annotation;
 
 
 @end

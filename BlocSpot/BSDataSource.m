@@ -39,7 +39,7 @@
         self.blocSpotDataMutableArray = [[[NSMutableArray alloc] init] mutableCopy];
         self.blocSpotDataMutableDictionary = [[[NSMutableDictionary alloc] init] mutableCopy];
         self.annotationsArray = [[[NSMutableArray alloc] init] mutableCopy];
-        self.mapViewCurrent = [[MKMapView alloc] init];
+//        self.mapViewCurrent = [[MKMapView alloc] init];
         
         [self readFilesAtLaunch];
     }
@@ -118,7 +118,7 @@
                 
                 self.blocSpotDataMutableArray = mutableBlocSpotsArray;
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification" object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"blocSpotDataLoaded" object:nil];
             }
         });
         
@@ -132,23 +132,23 @@
                 
                 self.blocSpotDataMutableDictionary = mutableBlocSpotsDictionary;
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification" object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"blocSpotDataLoaded" object:nil];
             }
         });
         
-        //Reading Annotations Array
-        NSString *fullPathAnnotationsArray = [self pathForFilename:NSStringFromSelector(@selector(annotationsArray))];
-        NSArray *storedAnnotationsArray = [NSKeyedUnarchiver unarchiveObjectWithFile:fullPathAnnotationsArray];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (storedAnnotationsArray.count > 0) {
-                NSMutableArray *mutableAnnotationsArray = [storedAnnotationsArray mutableCopy];
-                
-                self.annotationsArray = mutableAnnotationsArray;
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification" object:nil];
-            }
-        });
+//        //Reading Annotations Array
+//        NSString *fullPathAnnotationsArray = [self pathForFilename:NSStringFromSelector(@selector(annotationsArray))];
+//        NSArray *storedAnnotationsArray = [NSKeyedUnarchiver unarchiveObjectWithFile:fullPathAnnotationsArray];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            if (storedAnnotationsArray.count > 0) {
+//                NSMutableArray *mutableAnnotationsArray = [storedAnnotationsArray mutableCopy];
+//                
+//                self.annotationsArray = mutableAnnotationsArray;
+//                
+//                [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification" object:nil];
+//            }
+//        });
     });
     
     NSLog(@"This method fired: readFilesAtLaunch");

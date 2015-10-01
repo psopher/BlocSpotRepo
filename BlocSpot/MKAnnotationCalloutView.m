@@ -209,12 +209,12 @@
     
     if ([self.heartButton.imageView.image  isEqual: self.heartButtonImage]) {
         [self.heartButton setImage:self.visitedButtonImage forState:UIControlStateNormal];
-        [BSDataSource sharedInstance].blocSpotData.blocSpotVisited = YES;
-        [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
+        self.POI.visited = YES;
+        [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = self.POI;
     } else {
         [self.heartButton setImage:self.heartButtonImage forState:UIControlStateNormal];
-        [BSDataSource sharedInstance].blocSpotData.blocSpotVisited = NO;
-        [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
+        self.POI.visited = NO;
+        [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = self.POI;
     }
     
     NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
@@ -237,8 +237,8 @@
         [self.textView becomeFirstResponder];
     }
     
-    [BSDataSource sharedInstance].blocSpotData.blocSpotNotes = self.textView.text;
-    [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
+    self.POI.notes = self.textView.text;
+    [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.headerLabel.text] = self.POI;
     
     NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
     [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;

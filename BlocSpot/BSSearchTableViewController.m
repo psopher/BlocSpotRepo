@@ -13,7 +13,7 @@
 
 @interface BSSearchTableViewController ()
 
-@property (nonatomic, strong) MKMapView *mapViewReference;
+//@property (nonatomic, strong) MKMapView *mapViewReference;
 @property (nonatomic, assign) MKCoordinateRegion *mapRegionReference;
 
 @property (nonatomic, strong) MKLocalSearch *localSearch;
@@ -35,7 +35,7 @@
         self.objectsInGRSectionName = [[[NSMutableArray alloc] init] mutableCopy];
         self.objectsInGRSectionAddress = [[[NSMutableArray alloc] init] mutableCopy];
         
-        self.mapViewReference = [[MKMapView alloc] init];
+//        self.mapViewReference = [[MKMapView alloc] init];
         self.localSearchResponse = [[MKLocalSearchResponse alloc] init];
         
         self.title = NSLocalizedString(@"Search", @"Search View");
@@ -48,8 +48,8 @@
     
     [super viewDidLoad];
     
-    self.mapViewReference = [BSDataSource sharedInstance].mapViewCurrent;
-    self.mapRegionReference = [BSDataSource sharedInstance].mapViewCurrentRegion;
+//    self.mapViewReference = [BSDataSource sharedInstance].mapViewCurrent;
+//    self.mapRegionReference = [BSDataSource sharedInstance].mapViewCurrentRegion;
     
 //    [self initializeTableContent];
     
@@ -215,15 +215,17 @@
     annotation.title = item.placemark.name;
     annotation.coordinate = item.placemark.location.coordinate;
     
+    BSMapViewController* mapVC = (BSMapViewController*)[self.navigationController viewControllers][0];
     
-    [self.mapViewReference addAnnotation:annotation];
-    [self.mapViewReference selectAnnotation:annotation animated:YES];
     
-    [self.mapViewReference setCenterCoordinate:annotation.coordinate animated:YES];
+    [mapVC.mapView addAnnotation:annotation];
+    [mapVC.mapView selectAnnotation:annotation animated:YES];
     
-    [self.mapViewReference setUserTrackingMode:MKUserTrackingModeNone];
+    [mapVC.mapView setCenterCoordinate:annotation.coordinate animated:YES];
+    
+    [mapVC.mapView setUserTrackingMode:MKUserTrackingModeNone];
 
-    [BSDataSource sharedInstance].mapViewCurrent = self.mapViewReference;
+//    [BSDataSource sharedInstance].mapViewCurrent = self.mapViewReference;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"searchCreatedMapAnnotation"
@@ -241,10 +243,12 @@
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
     if (self.searchController.searchBar.text.length > 0) {
+        
+        BSMapViewController* mapVC = (BSMapViewController*)[self.navigationController viewControllers][0];
         // Perform a new search.
         self.localSearchRequest = [[MKLocalSearchRequest alloc] init];
         self.localSearchRequest.naturalLanguageQuery = self.searchController.searchBar.text;
-        self.localSearchRequest.region = self.mapViewReference.region;
+        self.localSearchRequest.region = mapVC.mapView.region;
     
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         self.localSearch = [[MKLocalSearch alloc] initWithRequest:self.localSearchRequest];

@@ -14,67 +14,67 @@
 -(id)initWithCoder:(NSCoder *)aDecoder
 {
     
-    NSString *blocSpotName = [aDecoder decodeObjectForKey:@"blocSpotName"];
-    NSAttributedString *blocSpotCategory = [aDecoder decodeObjectForKey:@"blocSpotCategory"];
-    UIColor *blocSpotColor = [aDecoder decodeObjectForKey:@"blocSpotColor"];
-    NSString *blocSpotNotes = [aDecoder decodeObjectForKey:@"blocSpotNotes"];
+    NSString *name = [aDecoder decodeObjectForKey:@"name"];
+    NSAttributedString *category = [aDecoder decodeObjectForKey:@"category"];
+    UIColor *color = [aDecoder decodeObjectForKey:@"color"];
+    NSString *notes = [aDecoder decodeObjectForKey:@"notes"];
     
-    CLLocationDegrees blocSpotCoordinatesLatitude = [aDecoder decodeDoubleForKey:@"blocSpotCoordinatesLatitude"];
-    CLLocationDegrees blocSpotCoordinatesLongitude = [aDecoder decodeDoubleForKey:@"blocSpotCoordinatesLongitude"];
-    CLLocationCoordinate2D blocSpotCoordinates = CLLocationCoordinate2DMake(blocSpotCoordinatesLatitude, blocSpotCoordinatesLongitude);
+    CLLocationDegrees coordinatesLatitude = [aDecoder decodeDoubleForKey:@"coordinatesLatitude"];
+    CLLocationDegrees coordinatesLongitude = [aDecoder decodeDoubleForKey:@"coordinatesLongitude"];
+    CLLocationCoordinate2D coordinates = CLLocationCoordinate2DMake(coordinatesLatitude, coordinatesLongitude);
     
-    CLLocationDistance blocSpotDistance = [aDecoder decodeDoubleForKey:@"blocSpotDistance"];
+    CLLocationDistance distance = [aDecoder decodeDoubleForKey:@"distance"];
     
-    BOOL blocSpotVisited = [aDecoder decodeBoolForKey:@"blocSpotVisited"];
+    BOOL visited = [aDecoder decodeBoolForKey:@"visited"];
     
-    MKAnnotationViewSubclass *blocSpotAnnotation = [aDecoder decodeObjectForKey:@"blocSpotAnnotation"];
+//    MKAnnotationViewSubclass *annotation = [aDecoder decodeObjectForKey:@"annotation"];
     
-    return [self initWithBlocSpotName:blocSpotName blocSpotCategory:blocSpotCategory blocSpotColor:blocSpotColor blocSpotNotes:blocSpotNotes blocSpotCoordinates:blocSpotCoordinates blocSpotDistance:blocSpotDistance blocSpotVisited:blocSpotVisited blocSpotAnnotation:blocSpotAnnotation];
+    return [self initWithName:name category:category color:color notes:notes coordinates:coordinates distance:distance visited:visited annotation:nil];
 }
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     
-    [aCoder encodeObject:self.blocSpotName forKey:@"blocSpotName"];
-    [aCoder encodeObject:self.blocSpotCategory forKey:@"blocSpotCategory"];
-    [aCoder encodeObject:self.blocSpotColor forKey:@"blocSpotColor"];
-    [aCoder encodeObject:self.blocSpotNotes forKey:@"blocSpotNotes"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.category forKey:@"category"];
+    [aCoder encodeObject:self.color forKey:@"color"];
+    [aCoder encodeObject:self.notes forKey:@"notes"];
     
-    [aCoder encodeDouble:self.blocSpotCoordinates.latitude forKey:@"blocSpotCoordinatesLatitude"];
-    [aCoder encodeDouble:self.blocSpotCoordinates.longitude forKey:@"blocSpotCoordinatesLongitude"];
+    [aCoder encodeDouble:self.coordinates.latitude forKey:@"coordinatesLatitude"];
+    [aCoder encodeDouble:self.coordinates.longitude forKey:@"coordinatesLongitude"];
     
-    [aCoder encodeDouble:self.blocSpotDistance forKey:@"blocSpotDistance"];
+    [aCoder encodeDouble:self.distance forKey:@"distance"];
     
-    [aCoder encodeBool:self.blocSpotVisited forKey:@"blocSpotVisited"];
+    [aCoder encodeBool:self.visited forKey:@"visited"];
     
-    [aCoder encodeObject:self.blocSpotAnnotation forKey:@"blocSpotAnnotation"];
+//    [aCoder encodeObject:self.annotation forKey:@"annotation"];
     
 }
 
--(instancetype)initWithBlocSpotName:(NSString *)blocSpotName blocSpotCategory:(NSAttributedString *)blocSpotCategory blocSpotColor:(UIColor *)blocSpotColor blocSpotNotes:(NSString *)blocSpotNotes blocSpotCoordinates:(CLLocationCoordinate2D)blocSpotCoordinates blocSpotDistance:(CLLocationDistance)blocSpotDistance blocSpotVisited:(BOOL)blocSpotVisited blocSpotAnnotation:(MKAnnotationViewSubclass *)blocSpotAnnotation;
+-(instancetype)initWithName:(NSString *)name category:(NSAttributedString *)category color:(UIColor *)color notes:(NSString *)notes coordinates:(CLLocationCoordinate2D)coordinates distance:(CLLocationDistance)distance visited:(BOOL)visited annotation:(MKPointAnnotation *)annotation
 {
     self = [super init];
     
     if (self) {
-        self.blocSpotName = blocSpotName;
-        self.blocSpotCategory = blocSpotCategory;
-        self.blocSpotColor = blocSpotColor;
-        self.blocSpotNotes = blocSpotNotes;
-        self.blocSpotCoordinates = blocSpotCoordinates;
-        self.blocSpotDistance = blocSpotDistance;
-        self.blocSpotVisited = blocSpotVisited;
-        self.blocSpotAnnotation = blocSpotAnnotation;
+        self.name = name;
+        self.category = category;
+        self.color = color;
+        self.notes = notes;
+        self.coordinates = coordinates;
+        self.distance = distance;
+        self.visited = visited;
+//        self.annotation = annotation;
     }
     return self;
 }
 
 -(instancetype) init{
     
-    self.blocSpotName = [NSString new];
-    self.blocSpotCategory = [NSAttributedString new];
-    self.blocSpotColor = [UIColor new];
-    self.blocSpotNotes = [NSString new];
-    self.blocSpotAnnotation = [MKAnnotationViewSubclass new];
+    self.name = [NSString new];
+    self.category = [NSAttributedString new];
+    self.color = [UIColor new];
+    self.notes = [NSString new];
+//    self.annotation = [MKPointAnnotation new];
     
     return self;
 }

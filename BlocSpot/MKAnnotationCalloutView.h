@@ -12,6 +12,7 @@
 
 @class MKAnnotationCalloutView;
 @class BSSelectCategoryTableView;
+@class BSBlocSpotData;
 
 @protocol MKAnnotationCalloutViewDelegate <NSObject>
 
@@ -48,6 +49,7 @@
 @property (nonatomic, weak) NSObject <MKAnnotationCalloutViewDelegate> *delegate;
 @property (nonatomic, assign) BOOL isWritingComment;
 @property (nonatomic, strong) NSString *text;
+@property (nonatomic, strong) BSBlocSpotData* POI;
 
 - (void) stopComposingComment;
 

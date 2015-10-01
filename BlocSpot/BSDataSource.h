@@ -31,11 +31,11 @@
 @property (nonatomic, strong) NSArray *colors;
 @property (strong, nonatomic) NSMutableArray *blocSpotDataMutableArray;
 @property (strong, nonatomic) NSMutableDictionary *blocSpotDataMutableDictionary;
-@property (nonatomic, strong) BSBlocSpotData *blocSpotData;
+//@property (nonatomic, strong) BSBlocSpotData *blocSpotData;
 @property (nonatomic, strong) NSMutableArray *annotationsArray;
 
-@property MKMapView *mapViewCurrent;
-@property MKCoordinateRegion *mapViewCurrentRegion;
+//@property MKMapView *mapViewCurrent;
+//@property MKCoordinateRegion *mapViewCurrentRegion;
 
 @property (nonatomic) CGFloat headerHeight;
 @property (nonatomic) CGFloat cellHeight;

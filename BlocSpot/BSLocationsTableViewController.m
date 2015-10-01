@@ -80,8 +80,8 @@
 //    [[BSDataSource sharedInstance].blocSpotDataMutableArray sortUsingDescriptors:@[sortDescriptor]];
     
     [[BSDataSource sharedInstance].blocSpotDataMutableArray sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            CLLocationDistance numberA = [(BSBlocSpotData*)obj1 blocSpotDistance];
-            CLLocationDistance numberB = [(BSBlocSpotData*)obj2 blocSpotDistance];
+            CLLocationDistance numberA = [(BSBlocSpotData*)obj1 distance];
+            CLLocationDistance numberB = [(BSBlocSpotData*)obj2 distance];
         
 //            int intValueA = [numberA intValue];
 //            int intValueB = [numberB intValue];

@@ -49,6 +49,7 @@
 @property (strong, nonatomic) NSString *allSteps;
 
 @property (assign, nonatomic) CLLocationDistance distance;
+@property (strong, nonatomic) BSBlocSpotData* selectedPOI;
 
 @end
 
@@ -119,12 +120,7 @@
     
     [self createButtons];
     
-    for (NSInteger i = 0; i < [BSDataSource sharedInstance].blocSpotDataMutableArray.count; i++) {
-        
-        BSBlocSpotData *annotationToAdd = [[BSBlocSpotData alloc] init];
-        annotationToAdd = [BSDataSource sharedInstance].blocSpotDataMutableArray[i];
-        [self.mapView addAnnotation:annotationToAdd.blocSpotAnnotation.annotation];
-    }
+
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadMapView:)name:@"searchCreatedMapAnnotation"
@@ -146,7 +142,29 @@
                                              selector:@selector(directionsFromUserLocation:)name:@"directionsFromUserLocation"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(blocSpotDataLoaded) name:@"blocSpotDataLoaded"
+                                               object:nil];
+    
     NSLog(@"This method ran: BSMapViewController viewDidLoad");
+}
+
+- (void) blocSpotDataLoaded {
+    
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    
+    for (NSInteger i = 0; i < [BSDataSource sharedInstance].blocSpotDataMutableArray.count; i++) {
+        
+        BSBlocSpotData *POI = [[BSBlocSpotData alloc] init];
+        POI = [BSDataSource sharedInstance].blocSpotDataMutableArray[i];
+        MKPointAnnotation* annotation = [MKPointAnnotation new];
+        annotation.coordinate = POI.coordinates;
+        annotation.title = POI.name;
+        [self.mapView addAnnotation: annotation];
+    }
+    
+    [self.mapView reloadInputViews];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -209,8 +227,7 @@
     
     [mapView setRegion:mapRegion animated: YES];
     
-    [BSDataSource sharedInstance].mapViewCurrent = self.mapView;
-    [BSDataSource sharedInstance].mapViewCurrentRegion = &(mapRegion);
+//    [BSDataSource sharedInstance].mapViewCurrentRegion = &(mapRegion);
     
     //Getting distance from annotations
     if (mapView.selectedAnnotations.count == 0)
@@ -252,7 +269,7 @@
 
 - (void) reloadMapView:(NSNotification *)notification {
     
-    self.mapView = [BSDataSource sharedInstance].mapViewCurrent;
+    [self.mapView reloadInputViews];
     
     NSLog(@"This method fired: reloadMapView");
     
@@ -305,16 +322,16 @@
 
 - (void) createButtons {
     
-    self.listButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:listImage]
-                                                          style:UIBarButtonItemStylePlain
-                                                         target:self
-                                                         action:@selector(listPressed:)];
+//    self.listButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:listImage]
+//                                                          style:UIBarButtonItemStylePlain
+//                                                         target:self
+//                                                         action:@selector(listPressed:)];
     
     self.categoryButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:categoryImage]
                                                           style:UIBarButtonItemStylePlain
                                                          target:self
                                                          action:@selector(categoryPressed:)];
-    
+    self.listButton = [[UIBarButtonItem alloc] initWithTitle:@"hi" style:UIBarButtonItemStylePlain target:self action:@selector(listPressed:)];
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchPressed:)];
     
     self.navigationItem.leftBarButtonItem = self.listButton;
@@ -413,9 +430,9 @@
     
     self.annotationCalloutView.selectCategoryTableView.frame = CGRectMake(0, 0, 0, 0);
     
-    [BSDataSource sharedInstance].blocSpotData.blocSpotCategory = self.annotationCalloutView.selectCategoryButton.currentAttributedTitle;
-    [BSDataSource sharedInstance].blocSpotData.blocSpotColor = self.annotationCalloutView.selectCategoryButton.backgroundColor;
-    [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text] = [BSDataSource sharedInstance].blocSpotData;
+    self.selectedPOI.category = self.annotationCalloutView.selectCategoryButton.currentAttributedTitle;
+    self.selectedPOI.color = self.annotationCalloutView.selectCategoryButton.backgroundColor;
+    [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text] = self.selectedPOI;
     
     NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
     [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
@@ -445,7 +462,7 @@
     MKMapItem *startPoint = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
     [walkingRouteRequest setSource:startPoint];
     
-    MKPlacemark *endPlacemark = [[MKPlacemark alloc] initWithCoordinate:[BSDataSource sharedInstance].blocSpotData.blocSpotCoordinates addressDictionary:nil];
+    MKPlacemark *endPlacemark = [[MKPlacemark alloc] initWithCoordinate:self.selectedPOI.coordinates addressDictionary:nil];
     MKMapItem *endPoint = [[MKMapItem alloc] initWithPlacemark:endPlacemark];
     [walkingRouteRequest setDestination:endPoint];
     
@@ -616,24 +633,15 @@
         CLLocationCoordinate2D location =
         [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
         [mapView setCenterCoordinate:location animated:YES];
-        
-        
-        self.annotationCalloutView.headerLabel.text = [view.annotation title];
-        
-        NSLog(@"Annotation Header Text is: %@", self.annotationCalloutView.headerLabel.text);
-        
-        [view.superview addSubview:self.annotationCalloutView];
-        
-        [self updateDistanceToAnnotation:view.annotation];
-        
+        NSString* name = [view.annotation title];
         
         //Adding Data to Bloc Spot DataSource Dictionary
         BOOL doesContainKey = 0;
         NSArray *allKeys = [[BSDataSource sharedInstance].blocSpotDataMutableDictionary allKeys];
-        doesContainKey = [allKeys containsObject:self.annotationCalloutView.headerLabel.text];
+        doesContainKey = [allKeys containsObject:name];
         
         if (doesContainKey == NO) {
-            [BSDataSource sharedInstance].blocSpotData = [[BSBlocSpotData alloc] initWithBlocSpotName:self.annotationCalloutView.headerLabel.text blocSpotCategory:[BSDataSource sharedInstance].categoryItems[0] blocSpotColor:[BSDataSource sharedInstance].colors[0] blocSpotNotes:@" " blocSpotCoordinates:location blocSpotDistance:self.distance blocSpotVisited:NO blocSpotAnnotation:self.MKAnnotationViewSubclass];
+            self.selectedPOI = [[BSBlocSpotData alloc] initWithName:name category:[BSDataSource sharedInstance].categoryItems[0] color:[BSDataSource sharedInstance].colors[0] notes:@" " coordinates:location distance:self.distance visited:NO annotation:view.annotation];
             
             //Resetting Textview and Category and Visited
             UIImage* heartButtonImage = [UIImage imageNamed:annotationImage];
@@ -648,23 +656,23 @@
             [self.annotationCalloutView.selectCategoryButton setAttributedTitle:selectCategoryString forState:UIControlStateNormal];
             
             //Populating the Bloc Spots Array and Data Dictionary
-            [[BSDataSource sharedInstance].blocSpotDataMutableDictionary setObject:[BSDataSource sharedInstance].blocSpotData forKey:[BSDataSource sharedInstance].blocSpotData.blocSpotName];
+            [[BSDataSource sharedInstance].blocSpotDataMutableDictionary setObject:self.selectedPOI forKey:self.selectedPOI.name];
             
         } else {
-            [BSDataSource sharedInstance].blocSpotData = [BSDataSource sharedInstance].blocSpotDataMutableDictionary[self.annotationCalloutView.headerLabel.text];
+            self.selectedPOI = [BSDataSource sharedInstance].blocSpotDataMutableDictionary[name];
             
             
             //Resetting Textview and Category and Visited
-            if ([BSDataSource sharedInstance].blocSpotData.blocSpotVisited == NO) {
+            if (self.selectedPOI.visited == NO) {
                 UIImage* heartButtonImage = [UIImage imageNamed:annotationImage];
                 [self.annotationCalloutView.heartButton setImage:heartButtonImage forState:UIControlStateNormal];
             } else {
                 UIImage* visitedButtonImage = [UIImage imageNamed:visitedImage];
                 [self.annotationCalloutView.heartButton setImage:visitedButtonImage forState:UIControlStateNormal];
             }
-            self.annotationCalloutView.textView.text = [BSDataSource sharedInstance].blocSpotData.blocSpotNotes;
-            self.annotationCalloutView.selectCategoryButton.backgroundColor = [BSDataSource sharedInstance].blocSpotData.blocSpotColor;
-            NSString *baseString = [NSString stringWithFormat:@"%@", [BSDataSource sharedInstance].blocSpotData.blocSpotCategory];
+            self.annotationCalloutView.textView.text = self.selectedPOI.notes;
+            self.annotationCalloutView.selectCategoryButton.backgroundColor = self.selectedPOI.color;
+            NSString *baseString = [NSString stringWithFormat:@"%@", self.selectedPOI.category];
             NSRange range = [baseString rangeOfString:baseString];
             NSMutableAttributedString *selectCategoryString = [[NSMutableAttributedString alloc] initWithString:baseString];
             [selectCategoryString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:11] range:range];
@@ -672,6 +680,13 @@
             [self.annotationCalloutView.selectCategoryButton setAttributedTitle:selectCategoryString forState:UIControlStateNormal];
             
         }
+        
+        self.annotationCalloutView.headerLabel.text = name;
+        NSLog(@"Annotation Header Text is: %@", self.annotationCalloutView.headerLabel.text);
+        self.annotationCalloutView.POI = self.selectedPOI;
+        [view.superview addSubview:self.annotationCalloutView];
+        
+        [self updateDistanceToAnnotation:view.annotation];
         
         NSMutableArray *blocSpotsMutableArray = [[NSMutableArray alloc] initWithArray:[[BSDataSource sharedInstance].blocSpotDataMutableDictionary allValues]];
         [BSDataSource sharedInstance].blocSpotDataMutableArray = blocSpotsMutableArray;
