@@ -673,6 +673,27 @@
                                 longitude:self.mapView.userLocation.coordinate.longitude];
     
     self.distance = [pinLocation distanceFromLocation:userLocation]/1000;
+    
+    //Setting up local notifications if user is close
+    
+    if (self.distance <= 0.2){
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    
+    
+        NSDate *now = [NSDate date];
+    
+        localNotification.fireDate = now;
+        localNotification.alertBody = [NSString stringWithFormat:@"You are within %0.1f km of %@", self.distance, annotation.title];
+        localNotification.soundName = UILocalNotificationDefaultSoundName;
+        localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+    
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    }
+    
+    NSLog(@"This method fired: updateDistanceToAnnotation");
 }
+
 
 @end

@@ -90,10 +90,6 @@ static NSParagraphStyle *paragraphStyle;
 
 - (NSAttributedString *) blocSpotDistanceString {
     
-//    NSString *baseString = [NSString stringWithFormat:@"%f", self.locationsItem.blocSpotNotes];
-    
-//    NSString *baseString = @"0.1";
-    
     NSString *baseString = [NSString stringWithFormat:@"%0.1f km", self.locationsItem.blocSpotDistance];
     
     NSMutableAttributedString *blocSpotMutableDistanceString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : lightFont, NSParagraphStyleAttributeName : paragraphStyle}];
